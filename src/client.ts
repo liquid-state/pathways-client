@@ -4,12 +4,12 @@ interface IPathwaysClient {
 
 interface IOptions {
   baseUrl?: string;
-  fetch: typeof fetch;
+  fetch?: typeof fetch;
 }
 
 const defaultOptions = {
   baseUrl: "https://pathways.example.com/",
-  fetch: window.fetch.bind(window)
+  fetch: window.fetch
 };
 
 const pathMap: { [key: string]: string } = {
