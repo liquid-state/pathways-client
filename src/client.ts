@@ -4,32 +4,32 @@ interface IPathwaysClient {
 
 interface IOptions {
   baseUrl?: string;
-  fetch: Function;
+  fetch: typeof fetch;
 }
 
 const defaultOptions = {
-  baseUrl: 'https://pathways.example.com/',
-  fetch: window.fetch,
+  baseUrl: "https://pathways.example.com/",
+  fetch: window.fetch.bind(window)
 };
 
 const pathMap: { [key: string]: string } = {
-  me: 'me/',
+  me: "me/"
 };
 
 const PathwaysError = (message: string) => `Pathways Error: ${message}`;
 
 const PathwaysAPIError = (message: string, response: Response) => ({
   message: `Pathways API Error: ${message}`,
-  response,
+  response
 });
 
 class PathwaysClient implements IPathwaysClient {
   private options: IOptions;
-  private fetch: Function;
+  private fetch: typeof fetch;
 
   constructor(private jwt: string, options?: IOptions) {
     if (!jwt) {
-      throw PathwaysError('You must specify a JWT');
+      throw PathwaysError("You must specify a JWT");
     }
     if (!options) {
       this.options = defaultOptions;
@@ -43,15 +43,15 @@ class PathwaysClient implements IPathwaysClient {
   }
 
   me = async () => {
-    const url = this.getUrl('me');
+    const url = this.getUrl("me");
     const resp = await this.fetch(url, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        Authorization: `Bearer ${this.jwt}`,
-      },
+        Authorization: `Bearer ${this.jwt}`
+      }
     });
     if (!resp.ok) {
-      throw PathwaysAPIError('Unable to pathways user details', resp);
+      throw PathwaysAPIError("Unable to pathways user details", resp);
     }
     const content = await resp.json();
     return content;
@@ -65,7 +65,7 @@ class PathwaysClient implements IPathwaysClient {
 
   private sub() {
     // Get the body of the JWT.
-    const payload = this.jwt.split('.')[1];
+    const payload = this.jwt.split(".")[1];
     // Which is base64 encoded.
     const parsed = JSON.parse(atob(payload));
     return parsed.sub;
