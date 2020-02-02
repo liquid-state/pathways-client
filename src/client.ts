@@ -9,7 +9,7 @@ interface IOptions {
 
 const defaultOptions = {
   baseUrl: "https://pathways.example.com/",
-  fetch: window.fetch
+  fetch: undefined
 };
 
 const pathMap: { [key: string]: string } = {
