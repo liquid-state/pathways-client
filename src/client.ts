@@ -42,9 +42,13 @@ class PathwaysClient implements IPathwaysClient {
     this.fetch = this.options.fetch || window.fetch.bind(window);
   }
 
-  me = async () => {
+  me = async (identity_id?: string) => {
     const url = this.getUrl("me");
-    const resp = await this.fetch(url, {
+    let fullURL = url;
+    if (identity_id) {
+      fullURL = `${url}?identity_id=${this.sub()}`;
+    }
+    const resp = await this.fetch(fullURL, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${this.jwt}`
