@@ -2,15 +2,27 @@
   "name": "@liquid-state/pahways-client",
   "version": "0.0.1",
   "description": "Client library for Pathways Service",
-  "main": "index.js",
+  "files": [
+    "dist/"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "yarn format && tsc",
     "format": "prettier --parser typescript --single-quote --trailing-comma es5 --print-width 99 --write \"./src/**/*.ts\"",
     "test": "jest",
-    "prepack": "tsc"
+    "prepack": "jest && tsc"
   },
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liquid-state/pathways-client.git"
+  },
+  "author": "Liquid State <dev@liquid-state.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/liquid-state/pathways-client/issues"
+  },
+  "homepage": "https://github.com/liquid-state/pathways-client#readme",
   "devDependencies": {
     "@types/jest": "^25.1.1",
     "jest": "^25.1.0",
