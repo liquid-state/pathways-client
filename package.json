@@ -1,0 +1,35 @@
+{
+  "name": "@liquid-state/pahways-client",
+  "version": "0.0.1",
+  "description": "Client library for Pathways Service",
+  "main": "index.js",
+  "scripts": {
+    "build": "yarn format && tsc",
+    "format": "prettier --parser typescript --single-quote --trailing-comma es5 --print-width 99 --write \"./src/**/*.ts\"",
+    "test": "jest",
+    "prepack": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^25.1.1",
+    "jest": "^25.1.0",
+    "prettier": "^1.19.1",
+    "ts-jest": "^25.1.0",
+    "typescript": "^3.7.5"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|.*.test)\\.(ts|tsx|js)$",
+    "roots": [
+      "<rootDir>/src"
+    ]
+  }
+}
