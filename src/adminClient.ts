@@ -1,19 +1,19 @@
-interface IPathwaysClient {
-  me(username: string, password?: string): Promise<Response>;
+interface IPathwaysAdminClient {
+  listAppUsers(): Promise<Response>;
 }
 
-interface IOptions {
+interface IAdminClientOptions {
   baseUrl?: string;
   fetch?: typeof fetch;
 }
 
 const defaultOptions = {
-  baseUrl: "https://pathways.example.com/",
+  baseUrl: "https://pathways.example.com/v1/apps/{{app_ubiquity_token}}/",
   fetch: undefined
 };
 
 const pathMap: { [key: string]: string } = {
-  me: "me/"
+  listAppUsers: "appusers/"
 };
 
 const PathwaysError = (message: string) => `Pathways Error: ${message}`;
@@ -23,11 +23,18 @@ const PathwaysAPIError = (message: string, response: Response) => ({
   response
 });
 
-class PathwaysClient implements IPathwaysClient {
-  private options: IOptions;
+class PathwaysAdminClient implements IPathwaysAdminClient {
+  private options: IAdminClientOptions;
   private fetch: typeof fetch;
 
-  constructor(private jwt: string, options?: IOptions) {
+  constructor(
+    private appToken: string,
+    private jwt: string,
+    options?: IAdminClientOptions
+  ) {
+    if (!appToken) {
+      throw PathwaysError("You must specify appToken");
+    }
     if (!jwt) {
       throw PathwaysError("You must specify a JWT");
     }
@@ -40,22 +47,25 @@ class PathwaysClient implements IPathwaysClient {
       }
     }
     this.fetch = this.options.fetch || window.fetch.bind(window);
+    this.options.baseUrl = this.options.baseUrl?.replace(
+      "{{app_ubiquity_token}}",
+      this.appToken
+    );
   }
 
-  me = async (identity_id?: string) => {
-    const url = this.getUrl("me");
-    let fullURL = url;
-    if (identity_id) {
-      fullURL = `${url}?identity_id=${this.sub()}`;
-    }
-    const resp = await this.fetch(fullURL, {
+  listAppUsers = async () => {
+    const url = this.getUrl("listAppUsers");
+    const resp = await this.fetch(url, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${this.jwt}`
       }
     });
     if (!resp.ok) {
-      throw PathwaysAPIError("Unable to get pathways user details", resp);
+      throw PathwaysAPIError(
+        "Unable to get list of App Users from Pathways service",
+        resp
+      );
     }
     const content = await resp.json();
     return content;
@@ -76,5 +86,5 @@ class PathwaysClient implements IPathwaysClient {
   }
 }
 
-export default PathwaysClient;
-export { IPathwaysClient, IOptions };
+export default PathwaysAdminClient;
+export { IPathwaysAdminClient, IAdminClientOptions };
