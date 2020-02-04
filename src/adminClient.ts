@@ -14,6 +14,7 @@ const defaultOptions = {
 
 const pathMap: { [key: string]: string } = {
   createIndexEventType: "index-event-types/",
+  createRule: "rules/",
   listAppUsers: "appusers/",
   listIndexEventTypes: "index-event-types/"
 };
@@ -72,11 +73,22 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
   private apiRequest = async (
     pathKey: string,
     errorMessage: string,
-    method?: string,
+    method: string,
+    queryStringParameters?: { [key: string]: any },
     postData?: { [key: string]: any }
   ) => {
-    const url = this.getUrl(pathKey);
-    const requestMethod = method?.toUpperCase() || "GET";
+    const url = `${this.getUrl(pathKey)}${
+      queryStringParameters
+        ? `?${Object.keys(queryStringParameters).reduce(
+            (acc, key, index, arr) =>
+              `${acc}${key}=${queryStringParameters[key]}${
+                arr[index + 1] ? "&" : ""
+              }`,
+            ""
+          )}`
+        : ""
+    }`;
+    const requestMethod = method.toUpperCase() || "GET";
     let body = undefined;
     if (postData) {
       body = new FormData();
@@ -98,16 +110,27 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     return data;
   };
 
-  private getRequest = async (pathKey: string, errorMessage: string) => {
-    return this.apiRequest(pathKey, errorMessage);
+  private getRequest = async (
+    pathKey: string,
+    errorMessage: string,
+    queryStringParameters?: object
+  ) => {
+    return this.apiRequest(pathKey, errorMessage, "GET", queryStringParameters);
   };
 
   private postRequest = async (
     pathKey: string,
     postData: { [key: string]: any },
-    errorMessage: string
+    errorMessage: string,
+    queryStringParameters?: object
   ) => {
-    return this.apiRequest(pathKey, errorMessage, "POST", postData);
+    return this.apiRequest(
+      pathKey,
+      errorMessage,
+      "POST",
+      queryStringParameters,
+      postData
+    );
   };
 
   createIndexEventType = async (
@@ -123,14 +146,35 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     return this.postRequest(
       "createIndexEventType",
       postData,
-      "Unable to get create Index Event Type"
+      "Unable to create Index Event Type"
     );
   };
 
-  listIndexEventTypes = async (limit: number, offset: number) =>
+  createRule = async (ruleData: {
+    name: string;
+    description: string;
+    who: string;
+    who_detail: object;
+    when: string;
+    when_detail: object;
+    what: string;
+    what_detail: object;
+    metadata?: object;
+  }) => {
+    const postData = {
+      ...ruleData,
+      who_detail: JSON.stringify(ruleData.who_detail),
+      when_detail: JSON.stringify(ruleData.when_detail),
+      what_detail: JSON.stringify(ruleData.what_detail)
+    };
+    return this.postRequest("createRule", postData, "Unable to create Rule");
+  };
+
+  listIndexEventTypes = async (limit?: number, offset?: number) =>
     this.getRequest(
       "listIndexEventTypes",
-      "Unable to get list of Index Events from Pathways service"
+      "Unable to get list of Index Events from Pathways service",
+      { limit, offset }
     );
 
   listAppUsers = async () => {
