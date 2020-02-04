@@ -380,7 +380,10 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       ...ruleData,
       who_detail: JSON.stringify(ruleData.who_detail),
       when_detail: JSON.stringify(ruleData.when_detail),
-      what_detail: JSON.stringify(ruleData.what_detail)
+      what_detail: JSON.stringify(ruleData.what_detail),
+      ...(ruleData.metadata
+        ? { metadata: JSON.stringify(ruleData.metadata) }
+        : {})
     };
     return this.postRequest("createRule", postData, "Unable to create Rule");
   };
