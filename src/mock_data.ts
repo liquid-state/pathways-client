@@ -171,3 +171,35 @@ export const TEST_ADMIN_LIST_INDEX_EVENTS_RESPONSE = {
     }
   ]
 };
+
+export const TEST_ADMIN_LIST_RULES_RESPONSE = {
+  count: 2,
+  next: null,
+  previous: null,
+  results: [
+    {
+      what: "laboris",
+      when: "in",
+      who: "Lorem fugiat pariatur elit aliquip",
+      id: 1,
+      url: "https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/2/",
+      name: "Rule 1",
+      description: "<string>",
+      what_detail: {},
+      when_detail: {},
+      who_detail: {}
+    },
+    {
+      what: "amet sint eu",
+      when: "officia pariatur commodo veniam",
+      who: "occaecat fugiat magna",
+      id: 2,
+      url: "https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/2/",
+      name: "Rule 2",
+      description: "<string>",
+      what_detail: {},
+      when_detail: {},
+      who_detail: {}
+    }
+  ]
+};

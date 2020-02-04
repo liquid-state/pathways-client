@@ -4,7 +4,8 @@ import {
   TEST_APP_TOKEN,
   TEST_BASE_URL,
   TEST_ADMIN_LIST_APPUSERS_RESPONSE,
-  TEST_ADMIN_LIST_INDEX_EVENTS_RESPONSE
+  TEST_ADMIN_LIST_INDEX_EVENTS_RESPONSE,
+  TEST_ADMIN_LIST_RULES_RESPONSE
 } from "./mock_data";
 
 const fetchImpl: any = (response: any, valid: boolean = true) => {
@@ -58,6 +59,22 @@ describe("Pathways client", () => {
     expect(resp).toBe(TEST_ADMIN_LIST_INDEX_EVENTS_RESPONSE);
     expect(f).toHaveBeenCalled();
     expect(f).toHaveBeenCalledWith(`${TEST_BASE_URL}index-event-types/`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${TEST_JWT}`
+      }
+    });
+  });
+
+  it("Should retrieve a list of Rules", async () => {
+    const f = fetchImpl(TEST_ADMIN_LIST_RULES_RESPONSE);
+    const client = new PathwaysAdminClient(TEST_APP_TOKEN, TEST_JWT, {
+      fetch: f
+    });
+    const resp = await client.listRules();
+    expect(resp).toBe(TEST_ADMIN_LIST_RULES_RESPONSE);
+    expect(f).toHaveBeenCalled();
+    expect(f).toHaveBeenCalledWith(`${TEST_BASE_URL}rules/`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${TEST_JWT}`

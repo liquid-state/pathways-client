@@ -7,6 +7,18 @@ interface IAdminClientOptions {
   fetch?: typeof fetch;
 }
 
+interface IRuleData {
+  name: string;
+  description: string;
+  who: string;
+  who_detail: object;
+  when: string;
+  when_detail: object;
+  what: string;
+  what_detail: object;
+  metadata?: object;
+}
+
 const defaultOptions = {
   baseUrl: "https://pathways.example.com/v1/apps/{{app_ubiquity_token}}/",
   fetch: undefined
@@ -16,7 +28,8 @@ const pathMap: { [key: string]: string } = {
   createIndexEventType: "index-event-types/",
   createRule: "rules/",
   listAppUsers: "appusers/",
-  listIndexEventTypes: "index-event-types/"
+  listIndexEventTypes: "index-event-types/",
+  listRules: "rules/"
 };
 
 const PathwaysError = (message: string) => `Pathways Error: ${message}`;
@@ -79,15 +92,13 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
   ) => {
     const url = `${this.getUrl(pathKey)}${
       queryStringParameters
-        ? `?${Object.keys(queryStringParameters).reduce(
-            (acc, key, index, arr) =>
-              `${acc}${key}=${queryStringParameters[key]}${
-                arr[index + 1] ? "&" : ""
-              }`,
-            ""
-          )}`
+        ? Object.keys(queryStringParameters).reduce(
+            (acc, key) => `${acc}${key}=${queryStringParameters[key]}&`,
+            "?"
+          )
         : ""
     }`;
+
     const requestMethod = method.toUpperCase() || "GET";
     let body = undefined;
     if (postData) {
@@ -150,17 +161,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     );
   };
 
-  createRule = async (ruleData: {
-    name: string;
-    description: string;
-    who: string;
-    who_detail: object;
-    when: string;
-    when_detail: object;
-    what: string;
-    what_detail: object;
-    metadata?: object;
-  }) => {
+  createRule = async (ruleData: IRuleData) => {
     const postData = {
       ...ruleData,
       who_detail: JSON.stringify(ruleData.who_detail),
@@ -169,13 +170,6 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     };
     return this.postRequest("createRule", postData, "Unable to create Rule");
   };
-
-  listIndexEventTypes = async (limit?: number, offset?: number) =>
-    this.getRequest(
-      "listIndexEventTypes",
-      "Unable to get list of Index Events from Pathways service",
-      limit && offset ? { limit, offset } : undefined
-    );
 
   listAppUsers = async () => {
     const url = this.getUrl("listAppUsers");
@@ -194,6 +188,20 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     const content = await resp.json();
     return content;
   };
+
+  listIndexEventTypes = async (limit?: number, offset?: number) =>
+    this.getRequest(
+      "listIndexEventTypes",
+      "Unable to get list of Index Events from Pathways service",
+      limit && offset ? { limit, offset } : undefined
+    );
+
+  listRules = async (limit?: number, offset?: number) =>
+    this.getRequest(
+      "listRules",
+      "Unable to get list of Rules from Pathways service",
+      limit && offset ? { limit, offset } : undefined
+    );
 }
 
 export default PathwaysAdminClient;
