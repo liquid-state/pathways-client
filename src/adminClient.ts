@@ -13,6 +13,7 @@ const defaultOptions = {
 };
 
 const pathMap: { [key: string]: string } = {
+  createIndexEventType: "index-event-types/",
   listAppUsers: "appusers/"
 };
 
@@ -53,6 +54,78 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     );
   }
 
+  private getUrl(endpoint: string) {
+    let result;
+    result = `${this.options.baseUrl}${pathMap[endpoint]}`;
+    return result;
+  }
+
+  private sub() {
+    // Get the body of the JWT.
+    const payload = this.jwt.split(".")[1];
+    // Which is base64 encoded.
+    const parsed = JSON.parse(atob(payload));
+    return parsed.sub;
+  }
+
+  private apiRequest = async (
+    pathKey: string,
+    errorMessage: string,
+    method?: string,
+    postData?: { [key: string]: any }
+  ) => {
+    const url = this.getUrl(pathKey);
+    const requestMethod = method?.toUpperCase() || "GET";
+    let body = undefined;
+    if (postData) {
+      body = new FormData();
+      for (let key in postData) {
+        body.append(key, postData[key]);
+      }
+    }
+    const resp = await this.fetch(url, {
+      method: requestMethod,
+      headers: {
+        Authorization: `Bearer ${this.jwt}`
+      },
+      body
+    });
+    if (!resp.ok) {
+      throw PathwaysAPIError(errorMessage, resp);
+    }
+    const data = await resp.json();
+    return data;
+  };
+
+  private getRequest = async (pathKey: string, errorMessage: string) => {
+    return this.apiRequest(pathKey, errorMessage);
+  };
+
+  private postRequest = async (
+    pathKey: string,
+    postData: { [key: string]: any },
+    errorMessage: string
+  ) => {
+    return this.apiRequest(pathKey, errorMessage, "POST", postData);
+  };
+
+  createIndexEventType = async (
+    name: string,
+    slug: string,
+    translatedNames?: object
+  ) => {
+    const postData = {
+      name,
+      slug,
+      translatedNames: JSON.stringify(translatedNames)
+    };
+    return this.postRequest(
+      "createIndexEventType",
+      postData,
+      "Unable to get create Index Event Type"
+    );
+  };
+
   listAppUsers = async () => {
     const url = this.getUrl("listAppUsers");
     const resp = await this.fetch(url, {
@@ -70,20 +143,6 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     const content = await resp.json();
     return content;
   };
-
-  private getUrl(endpoint: string) {
-    let result;
-    result = `${this.options.baseUrl}${pathMap[endpoint]}`;
-    return result;
-  }
-
-  private sub() {
-    // Get the body of the JWT.
-    const payload = this.jwt.split(".")[1];
-    // Which is base64 encoded.
-    const parsed = JSON.parse(atob(payload));
-    return parsed.sub;
-  }
 }
 
 export default PathwaysAdminClient;

@@ -2,6 +2,7 @@ import PathwaysAdminClient from "./adminClient";
 import {
   TEST_JWT,
   TEST_APP_TOKEN,
+  TEST_BASE_URL,
   TEST_ADMIN_LIST_APPUSERS_RESPONSE
 } from "./mock_data";
 
@@ -39,14 +40,11 @@ describe("Pathways client", () => {
     const resp = await client.listAppUsers();
     expect(resp).toBe(TEST_ADMIN_LIST_APPUSERS_RESPONSE);
     expect(f).toHaveBeenCalled();
-    expect(f).toHaveBeenCalledWith(
-      `https://pathways.example.com/v1/apps/${TEST_APP_TOKEN}/appusers/`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${TEST_JWT}`
-        }
+    expect(f).toHaveBeenCalledWith(`${TEST_BASE_URL}appusers/`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${TEST_JWT}`
       }
-    );
+    });
   });
 });

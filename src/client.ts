@@ -42,6 +42,20 @@ class PathwaysClient implements IPathwaysClient {
     this.fetch = this.options.fetch || window.fetch.bind(window);
   }
 
+  private getUrl(endpoint: string) {
+    let result;
+    result = `${this.options.baseUrl}${pathMap[endpoint]}`;
+    return result;
+  }
+
+  private sub() {
+    // Get the body of the JWT.
+    const payload = this.jwt.split(".")[1];
+    // Which is base64 encoded.
+    const parsed = JSON.parse(atob(payload));
+    return parsed.sub;
+  }
+
   me = async (identity_id?: string) => {
     const url = this.getUrl("me");
     let fullURL = url;
@@ -57,23 +71,9 @@ class PathwaysClient implements IPathwaysClient {
     if (!resp.ok) {
       throw PathwaysAPIError("Unable to get pathways user details", resp);
     }
-    const content = await resp.json();
-    return content;
+    const data = await resp.json();
+    return data;
   };
-
-  private getUrl(endpoint: string) {
-    let result;
-    result = `${this.options.baseUrl}${pathMap[endpoint]}`;
-    return result;
-  }
-
-  private sub() {
-    // Get the body of the JWT.
-    const payload = this.jwt.split(".")[1];
-    // Which is base64 encoded.
-    const parsed = JSON.parse(atob(payload));
-    return parsed.sub;
-  }
 }
 
 export default PathwaysClient;
