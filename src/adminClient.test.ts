@@ -5,6 +5,7 @@ import {
   TEST_BASE_URL,
   TEST_ADMIN_LIST_APPUSERS_RESPONSE,
   TEST_ADMIN_LIST_INDEX_EVENTS_RESPONSE,
+  TEST_ADMIN_LIST_PATHWAYS_RESPONSE,
   TEST_ADMIN_LIST_RULES_RESPONSE
 } from "./mock_data";
 
@@ -66,7 +67,27 @@ describe("Pathways client", () => {
     expect(resp).toBe(TEST_ADMIN_LIST_INDEX_EVENTS_RESPONSE);
     expect(f).toHaveBeenCalled();
     expect(f).toHaveBeenCalledWith(
-      `${TEST_BASE_URL}index-event-types/`,
+      `${TEST_BASE_URL}index-event-types/?`,
+      requestParameters()
+    );
+  });
+
+  it("Should retrieve a list of Pathways", async () => {
+    const f = fetchImpl(TEST_ADMIN_LIST_PATHWAYS_RESPONSE);
+    const client = createClient(f);
+    const resp = await client.listPathways();
+    expect(resp).toBe(TEST_ADMIN_LIST_PATHWAYS_RESPONSE);
+    expect(f).toHaveBeenCalled();
+    expect(f).toHaveBeenCalledWith(
+      `${TEST_BASE_URL}pathways/?`,
+      requestParameters()
+    );
+
+    const resp2 = await client.listPathways(10, 0, false);
+    expect(resp2).toBe(TEST_ADMIN_LIST_PATHWAYS_RESPONSE);
+    expect(f).toHaveBeenCalled();
+    expect(f).toHaveBeenCalledWith(
+      `${TEST_BASE_URL}pathways/?limit=10&offset=0&is_deleted=false&`,
       requestParameters()
     );
   });
@@ -78,7 +99,7 @@ describe("Pathways client", () => {
     expect(resp).toBe(TEST_ADMIN_LIST_RULES_RESPONSE);
     expect(f).toHaveBeenCalled();
     expect(f).toHaveBeenCalledWith(
-      `${TEST_BASE_URL}rules/`,
+      `${TEST_BASE_URL}rules/?`,
       requestParameters()
     );
   });

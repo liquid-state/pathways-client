@@ -203,3 +203,327 @@ export const TEST_ADMIN_LIST_RULES_RESPONSE = {
     }
   ]
 };
+
+export const TEST_ADMIN_LIST_PATHWAYS_RESPONSE = {
+  count: 2,
+  next: null,
+  previous: null,
+  results: [
+    {
+      name: "<string>",
+      id: "<integer>",
+      url: "<string>",
+      description: "<string>",
+      is_active: "<boolean>",
+      is_deleted: "<boolean>",
+      index_event_types: [
+        {
+          name: "<string>",
+          slug: "<string>",
+          id: "<integer>",
+          translated_names: "<object>"
+        },
+        {
+          name: "<string>",
+          slug: "<string>",
+          id: "<integer>",
+          translated_names: "<object>"
+        }
+      ],
+      index_events: [
+        {
+          event_type_slug: "<string>",
+          id: "<integer>",
+          url: "<string>",
+          rules: [
+            {
+              what: "eu dolor",
+              when: "non velit fugiat in",
+              who: "et ipsum dolore",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            },
+            {
+              what: "culpa",
+              when: "irure amet enim ut",
+              who: "in",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            }
+          ]
+        },
+        {
+          event_type_slug: "<string>",
+          id: "<integer>",
+          url: "<string>",
+          rules: [
+            {
+              what: "officia ",
+              when: "eu ullamco exercitation",
+              who: "dolore dolor fugiat Ut",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            },
+            {
+              what: "velit quis Duis sed",
+              when: "consectetur ex in ullamco",
+              who: "Excepteur do esse proident",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            }
+          ]
+        }
+      ],
+      stages: [
+        {
+          number: "<integer>",
+          name: "<string>",
+          slug: "<string>",
+          id: "<integer>",
+          url: "<string>",
+          description: "<string>",
+          is_adhoc: "<boolean>",
+          rules: [
+            {
+              what: "esse",
+              when: "quis adipisicing elit",
+              who: "ut cupidatat ut magna quis",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            },
+            {
+              what: "ipsum proident aute do elit",
+              when: "ea sunt laboris proident",
+              who: "cillum aliqua deserunt",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            }
+          ]
+        },
+        {
+          number: "<integer>",
+          name: "<string>",
+          slug: "<string>",
+          id: "<integer>",
+          url: "<string>",
+          description: "<string>",
+          is_adhoc: "<boolean>",
+          rules: [
+            {
+              what: "eiusmod occaecat id irure",
+              when: "irure consectetur",
+              who: "Ut Lorem in sed",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            },
+            {
+              what: "non ea veniam ex",
+              when: "elit nostrud aliquip aliqua",
+              who: "commodo reprehenderit do",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      name: "<string>",
+      id: "<integer>",
+      url: "<string>",
+      description: "<string>",
+      is_active: "<boolean>",
+      is_deleted: "<boolean>",
+      index_event_types: [
+        {
+          name: "<string>",
+          slug: "<string>",
+          id: "<integer>",
+          translated_names: "<object>"
+        },
+        {
+          name: "<string>",
+          slug: "<string>",
+          id: "<integer>",
+          translated_names: "<object>"
+        }
+      ],
+      index_events: [
+        {
+          event_type_slug: "<string>",
+          id: "<integer>",
+          url: "<string>",
+          rules: [
+            {
+              what: "magna nulla consequat Ut est",
+              when: "aliqua cillum irure",
+              who: "eu in magna",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            },
+            {
+              what: "ut aliquip vol",
+              when: "id magna",
+              who: "dolore",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            }
+          ]
+        },
+        {
+          event_type_slug: "<string>",
+          id: "<integer>",
+          url: "<string>",
+          rules: [
+            {
+              what: "ad sunt anim in",
+              when: "laborum do",
+              who: "sunt nulla Duis",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            },
+            {
+              what: "dolor et voluptate mollit nisi",
+              when: "ad sunt ea adipisicing",
+              who: "commodo dolore",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            }
+          ]
+        }
+      ],
+      stages: [
+        {
+          number: "<integer>",
+          name: "<string>",
+          slug: "<string>",
+          id: "<integer>",
+          url: "<string>",
+          description: "<string>",
+          is_adhoc: "<boolean>",
+          rules: [
+            {
+              what: "nostrud aliquip ad",
+              when: "officia ullamco sit laborum",
+              who: "commodo fugiat",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            },
+            {
+              what: "Ut id Duis minim",
+              when: "a",
+              who: "dolor",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            }
+          ]
+        },
+        {
+          number: "<integer>",
+          name: "<string>",
+          slug: "<string>",
+          id: "<integer>",
+          url: "<string>",
+          description: "<string>",
+          is_adhoc: "<boolean>",
+          rules: [
+            {
+              what: "fugiat enim in sit non",
+              when: "magna elit",
+              who: "Lorem",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            },
+            {
+              what: "elit mollit",
+              when: "voluptate ut esse Duis",
+              who: "sed in deserunt fugiat reprehenderit",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};

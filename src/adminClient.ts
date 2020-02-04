@@ -19,6 +19,13 @@ interface IRuleData {
   metadata?: object;
 }
 
+interface IPathwayData {
+  name: string;
+  description: string;
+  isActive: boolean;
+  isDeleted: boolean;
+}
+
 const defaultOptions = {
   baseUrl: "https://pathways.example.com/v1/apps/{{app_ubiquity_token}}/",
   fetch: undefined
@@ -31,7 +38,9 @@ const pathMap: { [key: string]: string } = {
   deleteRule: "rules/",
   listAppUsers: "appusers/",
   listIndexEventTypes: "index-event-types/",
+  listPathways: "pathways/",
   listRules: "rules/",
+  patchPathway: "pathways/",
   patchRules: "rules/"
 };
 
@@ -129,6 +138,16 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     }
     const data = await resp.json();
     return data;
+  };
+
+  private buildQueryStringParameters = (params: { [key: string]: any }) => {
+    return Object.keys(params).reduce((acc: object, key: string) => {
+      return Object.assign(
+        {},
+        acc,
+        params[key] !== undefined ? { [key]: params[key] } : {}
+      );
+    }, {});
   };
 
   private deleteRequest = async (
@@ -263,15 +282,38 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     this.getRequest(
       "listIndexEventTypes",
       "Unable to get list of Index Events from Pathways service",
-      limit && offset ? { limit, offset } : undefined
+      this.buildQueryStringParameters({ limit, offset })
+    );
+
+  listPathways = async (limit?: number, offset?: number, isDeleted?: boolean) =>
+    this.getRequest(
+      "listPathways",
+      "Unable to get list of Pathways from Pathways service",
+      this.buildQueryStringParameters({ limit, offset, is_deleted: isDeleted })
     );
 
   listRules = async (limit?: number, offset?: number) =>
     this.getRequest(
       "listRules",
       "Unable to get list of Rules from Pathways service",
-      limit && offset ? { limit, offset } : undefined
+      this.buildQueryStringParameters({ limit, offset })
     );
+
+  patchPathway = (id: number, pathwayData: IPathwayData) => {
+    const patchData = {
+      name: pathwayData.name,
+      description: pathwayData.description,
+      is_active: pathwayData.isActive,
+      is_deleted: pathwayData.isDeleted
+    };
+
+    return this.patchRequest(
+      "patchPathway",
+      patchData,
+      "Unable to update Pathway",
+      `${id}`
+    );
+  };
 
   patchRule = async (id: number, ruleData: IRuleData) => {
     const patchData = {
