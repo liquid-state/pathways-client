@@ -151,3 +151,23 @@ export const TEST_ADMIN_LIST_APPUSERS_RESPONSE = {
     }
   ]
 };
+
+export const TEST_ADMIN_LIST_INDEX_EVENTS_RESPONSE = {
+  count: 2,
+  next: null,
+  previous: null,
+  results: [
+    {
+      name: "Surgery",
+      slug: "surgery23",
+      id: 1,
+      translated_names: {}
+    },
+    {
+      name: "Admission",
+      slug: "admission23",
+      id: 2,
+      translated_names: {}
+    }
+  ]
+};

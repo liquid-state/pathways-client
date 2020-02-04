@@ -174,7 +174,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     this.getRequest(
       "listIndexEventTypes",
       "Unable to get list of Index Events from Pathways service",
-      { limit, offset }
+      limit && offset ? { limit, offset } : undefined
     );
 
   listAppUsers = async () => {
