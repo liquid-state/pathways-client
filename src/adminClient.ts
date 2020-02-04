@@ -7,6 +7,20 @@ interface IAdminClientOptions {
   fetch?: typeof fetch;
 }
 
+interface IAppUserPathwayData {
+  journeyId: number;
+  originalPathwayId: number;
+  currentStageSlug: string;
+  disabledRuleIds: [number];
+}
+
+interface IPathwayData {
+  name: string;
+  description: string;
+  isActive: boolean;
+  isDeleted: boolean;
+}
+
 interface IRuleData {
   name: string;
   description: string;
@@ -19,11 +33,13 @@ interface IRuleData {
   metadata?: object;
 }
 
-interface IPathwayData {
+interface IStageData {
+  number: number;
   name: string;
+  slug: string;
   description: string;
-  isActive: boolean;
-  isDeleted: boolean;
+  isAdhoc: boolean;
+  rules: [number];
 }
 
 const defaultOptions = {
@@ -32,16 +48,33 @@ const defaultOptions = {
 };
 
 const pathMap: { [key: string]: string } = {
+  createAppUser: "appusers/",
+  createAppUserJourney: "appusers/",
+  createAppUserJourneyIndexEvent: "appusers/",
+  createAppUserPathway: "appusers/",
   createIndexEventType: "index-event-types/",
   createPathway: "pathways/",
+  createPathwayIndexEvent: "pathways/",
+  createPathwayStage: "pathways/",
   createRule: "rules/",
+  deletePathway: "pathways/",
+  deletePathwayIndexEvent: "pathways/",
+  deletePathwayStage: "pathways/",
   deleteRule: "rules/",
+  duplicatePathway: "pathways/",
   listAppUsers: "appusers/",
   listIndexEventTypes: "index-event-types/",
   listPathways: "pathways/",
+  listPathwayIndexEvents: "pathways/",
+  listPathwayStages: "pathways/",
   listRules: "rules/",
+  patchAppUserPathway: "appusers/",
   patchPathway: "pathways/",
-  patchRules: "rules/"
+  patchPathwayIndexEvent: "pathways/",
+  patchPathwayStages: "pathways/",
+  patchRules: "rules/",
+  transitionAppUserToPathwayStage: "appusers/",
+  triggerAdhocRule: "appusers/"
 };
 
 const PathwaysError = (message: string) => `Pathways Error: ${message}`;
@@ -168,9 +201,17 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
   private getRequest = async (
     pathKey: string,
     errorMessage: string,
-    queryStringParameters?: object
+    queryStringParameters?: object,
+    pathParameters?: string
   ) => {
-    return this.apiRequest(pathKey, errorMessage, "GET", queryStringParameters);
+    return this.apiRequest(
+      pathKey,
+      errorMessage,
+      "GET",
+      queryStringParameters,
+      undefined,
+      pathParameters
+    );
   };
 
   private patchRequest = async (
@@ -194,14 +235,68 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     pathKey: string,
     postData: { [key: string]: any },
     errorMessage: string,
-    queryStringParameters?: object
+    queryStringParameters?: object,
+    pathParameters?: string
   ) => {
     return this.apiRequest(
       pathKey,
       errorMessage,
       "POST",
       queryStringParameters,
-      postData
+      postData,
+      pathParameters
+    );
+  };
+
+  createAppUser = (identityId: string) => {
+    return this.postRequest(
+      "createAppUser",
+      { identity_id: identityId },
+      "Unable to create App User for Pathways service"
+    );
+  };
+
+  createAppUserJourney = (appUserId: string, startDate: string) => {
+    return this.postRequest(
+      "createAppUserJourney",
+      { start_date: startDate },
+      "Unable to create App User Journey for Pathways service",
+      undefined,
+      `${appUserId}/journeys`
+    );
+  };
+
+  createAppUserJourneyIndexEvent = (
+    appUserId: string,
+    journeyId: number,
+    startDate: string
+  ) => {
+    return this.postRequest(
+      "createAppUserJourneyIndexEvent",
+      { start_date: startDate },
+      "Unable to create App User Journey Index Event for Pathways service",
+      undefined,
+      `${appUserId}/journeys/${journeyId}/index-events`
+    );
+  };
+
+  createAppUserPathway = (
+    appUserId: string,
+    appUserPathwayData: IAppUserPathwayData
+  ) => {
+    const postData = {
+      journey_id: appUserPathwayData.journeyId,
+      original_pathway_id: appUserPathwayData.originalPathwayId,
+      current_stage_slug: appUserPathwayData.currentStageSlug,
+      disabled_rule_ids: appUserPathwayData.disabledRuleIds
+    };
+
+    return this.postRequest(
+      "createAppUserPathway",
+      postData,
+      "Unable to create App User Pathway for Pathways service",
+      undefined,
+      `${appUserId}/pathways`
     );
   };
 
@@ -242,6 +337,44 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     );
   };
 
+  createPathwayIndexEvent = (
+    id: number,
+    eventTypeSlug: string,
+    rules?: [number]
+  ) => {
+    const postData = {
+      event_type_slug: eventTypeSlug,
+      ...(rules ? { rules } : {})
+    };
+
+    return this.postRequest(
+      "createPathwayIndexEvent",
+      postData,
+      "Unable to create Pathway Index Event",
+      undefined,
+      `${id}/index-events/`
+    );
+  };
+
+  createPathwayStage = (id: number, stageData: IStageData) => {
+    const postData = {
+      number: stageData.number,
+      name: stageData.name,
+      slug: stageData.slug,
+      description: stageData.description,
+      is_adhoc: stageData.isAdhoc,
+      rules: stageData.rules
+    };
+
+    return this.postRequest(
+      "createPathwayStage",
+      postData,
+      "Unable to create Pathway Stage",
+      undefined,
+      `${id}/stages`
+    );
+  };
+
   createRule = async (ruleData: IRuleData) => {
     const postData = {
       ...ruleData,
@@ -257,6 +390,35 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       "deleteRule",
       "Unable to delete Rule from Pathways service",
       `${id}`
+    );
+  };
+
+  deletePathwayIndexEvent = (pathwayId: number, indexEventId: number) => {
+    return this.deleteRequest(
+      "deletePathwayIndexEvent",
+      "Unable to delete Pathway Index Event",
+      `${pathwayId}/index-events/${indexEventId}`
+    );
+  };
+
+  deletePathwayStage = (pathwayId: number, stageId: number) => {
+    return this.deleteRequest(
+      "deletePathwayStage",
+      "Unable to delete Pathway Stage",
+      `${pathwayId}/stages/${stageId}`
+    );
+  };
+
+  duplicatePathway = (id: number, updatedMetadata?: object) => {
+    const postData = {
+      ...(updatedMetadata ? { updatedMetadata } : {})
+    };
+    return this.postRequest(
+      "duplicatePathway",
+      postData,
+      "Unable to duplicate Pathway",
+      undefined,
+      `${id}/duplicate`
     );
   };
 
@@ -292,12 +454,47 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       this.buildQueryStringParameters({ limit, offset, is_deleted: isDeleted })
     );
 
+  listPathwayIndexEvents = (id: number) =>
+    this.getRequest(
+      "listPathwayIndexEvents",
+      "Unable to get list of Pathway Index Events",
+      undefined,
+      `${id}/index-events`
+    );
+
+  listPathwayStages = async (id: number) =>
+    this.getRequest(
+      "listPathways",
+      "Unable to get list of Pathways from Pathways service",
+      undefined,
+      `${id}`
+    );
+
   listRules = async (limit?: number, offset?: number) =>
     this.getRequest(
       "listRules",
       "Unable to get list of Rules from Pathways service",
       this.buildQueryStringParameters({ limit, offset })
     );
+
+  patchAppUserPathway = (
+    appUserId: string,
+    appUserPathwayId: number,
+    currentStageSlug?: string,
+    disabledRuleIds?: [number]
+  ) => {
+    const patchData = {
+      ...(currentStageSlug ? { current_stage_slug: currentStageSlug } : {}),
+      ...(disabledRuleIds ? { disabled_rule_ids: disabledRuleIds } : {})
+    };
+
+    return this.patchRequest(
+      "patchAppUserPathway",
+      patchData,
+      "Unable to update App User Pathway for Pathways service",
+      `${appUserId}/pathways/${appUserPathwayId}`
+    );
+  };
 
   patchPathway = (id: number, pathwayData: IPathwayData) => {
     const patchData = {
@@ -315,6 +512,47 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     );
   };
 
+  patchPathwayIndexEvent = (
+    pathwayId: number,
+    indexEventId: number,
+    eventTypeSlug?: string,
+    rules?: [number]
+  ) => {
+    const patchData = {
+      ...(eventTypeSlug ? { eventTypeSlug } : {}),
+      ...(rules ? { rules } : {})
+    };
+
+    return this.patchRequest(
+      "patchPathwayIndexEvent",
+      patchData,
+      "Unable to update Pathway Index Event",
+      `${pathwayId}/index-events/${indexEventId}`
+    );
+  };
+
+  patchPathwayStages = (
+    pathwayId: number,
+    stageId: number,
+    stageData: IStageData
+  ) => {
+    const patchData = {
+      number: stageData.number,
+      name: stageData.name,
+      slug: stageData.slug,
+      description: stageData.description,
+      is_adhoc: stageData.isAdhoc,
+      rules: stageData.rules
+    };
+
+    return this.patchRequest(
+      "patchPathwayStages",
+      patchData,
+      "Unable to update Pathway Stage",
+      `${pathwayId}/stages/${stageId}`
+    );
+  };
+
   patchRule = async (id: number, ruleData: IRuleData) => {
     const patchData = {
       ...ruleData,
@@ -327,6 +565,34 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       patchData,
       "Unable to update Rule",
       `${id}`
+    );
+  };
+
+  transitionAppUserToPathwayStage = (
+    appUserId: string,
+    appUserPathwayId: number,
+    newStageSlug: string
+  ) => {
+    return this.postRequest(
+      "transitionAppUserToPathwayStage",
+      { new_stage_slug: newStageSlug },
+      "Unable to transition App User to Pathway Stage for Pathways service",
+      undefined,
+      `${appUserId}/pathways/${appUserPathwayId}/transition/`
+    );
+  };
+
+  triggerAdhocRule = (
+    appUserId: string,
+    appUserPathwayId: number,
+    ruleId: number
+  ) => {
+    return this.postRequest(
+      "triggerAdhocRule",
+      { rule_id: ruleId },
+      "Unable to trigger Adhoc Rule for Pathways service",
+      undefined,
+      `${appUserId}/pathways/${appUserPathwayId}/trigger_adhoc_rule`
     );
   };
 }
