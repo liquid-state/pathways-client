@@ -26,10 +26,13 @@ const defaultOptions = {
 
 const pathMap: { [key: string]: string } = {
   createIndexEventType: "index-event-types/",
+  createPathway: "pathways/",
   createRule: "rules/",
+  deleteRule: "rules/",
   listAppUsers: "appusers/",
   listIndexEventTypes: "index-event-types/",
-  listRules: "rules/"
+  listRules: "rules/",
+  patchRules: "rules/"
 };
 
 const PathwaysError = (message: string) => `Pathways Error: ${message}`;
@@ -69,9 +72,22 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     );
   }
 
-  private getUrl(endpoint: string) {
+  private getUrl(
+    endpoint: string,
+    queryStringParameters?: { [key: string]: any },
+    pathParameters?: string
+  ) {
     let result;
-    result = `${this.options.baseUrl}${pathMap[endpoint]}`;
+    result = `${this.options.baseUrl}${pathMap[endpoint]}${
+      pathParameters ? pathParameters : ""
+    }${
+      queryStringParameters
+        ? Object.keys(queryStringParameters).reduce(
+            (acc, key) => `${acc}${key}=${queryStringParameters[key]}&`,
+            "?"
+          )
+        : ""
+    }`;
     return result;
   }
 
@@ -88,16 +104,10 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     errorMessage: string,
     method: string,
     queryStringParameters?: { [key: string]: any },
-    postData?: { [key: string]: any }
+    postData?: { [key: string]: any },
+    pathParameters?: string
   ) => {
-    const url = `${this.getUrl(pathKey)}${
-      queryStringParameters
-        ? Object.keys(queryStringParameters).reduce(
-            (acc, key) => `${acc}${key}=${queryStringParameters[key]}&`,
-            "?"
-          )
-        : ""
-    }`;
+    const url = this.getUrl(pathKey, queryStringParameters, pathParameters);
 
     const requestMethod = method.toUpperCase() || "GET";
     let body = undefined;
@@ -121,12 +131,44 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     return data;
   };
 
+  private deleteRequest = async (
+    pathKey: string,
+    errorMessage: string,
+    pathParameters: string
+  ) => {
+    return this.apiRequest(
+      pathKey,
+      errorMessage,
+      "DELETE",
+      undefined,
+      undefined,
+      pathParameters
+    );
+  };
+
   private getRequest = async (
     pathKey: string,
     errorMessage: string,
     queryStringParameters?: object
   ) => {
     return this.apiRequest(pathKey, errorMessage, "GET", queryStringParameters);
+  };
+
+  private patchRequest = async (
+    pathKey: string,
+    patchData: { [key: string]: any },
+    errorMessage: string,
+    pathParameters: string,
+    queryStringParameters?: object
+  ) => {
+    return this.apiRequest(
+      pathKey,
+      errorMessage,
+      "PATCH",
+      queryStringParameters,
+      patchData,
+      pathParameters
+    );
   };
 
   private postRequest = async (
@@ -161,6 +203,26 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     );
   };
 
+  createPathway = async (
+    name: string,
+    description: string,
+    isActive: boolean,
+    isDeleted: boolean
+  ) => {
+    const postData = {
+      name,
+      description,
+      is_active: isActive,
+      is_deleted: isDeleted
+    };
+
+    return this.postRequest(
+      "createPathway",
+      postData,
+      "Unable to create Pathway"
+    );
+  };
+
   createRule = async (ruleData: IRuleData) => {
     const postData = {
       ...ruleData,
@@ -169,6 +231,14 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       what_detail: JSON.stringify(ruleData.what_detail)
     };
     return this.postRequest("createRule", postData, "Unable to create Rule");
+  };
+
+  deleteRule = async (id: number) => {
+    return this.deleteRequest(
+      "deleteRule",
+      "Unable to delete Rule from Pathways service",
+      `${id}`
+    );
   };
 
   listAppUsers = async () => {
@@ -202,6 +272,21 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       "Unable to get list of Rules from Pathways service",
       limit && offset ? { limit, offset } : undefined
     );
+
+  patchRule = async (id: number, ruleData: IRuleData) => {
+    const patchData = {
+      ...ruleData,
+      who_detail: JSON.stringify(ruleData.who_detail),
+      when_detail: JSON.stringify(ruleData.when_detail),
+      what_detail: JSON.stringify(ruleData.what_detail)
+    };
+    return this.patchRequest(
+      "patchRule",
+      patchData,
+      "Unable to update Rule",
+      `${id}`
+    );
+  };
 }
 
 export default PathwaysAdminClient;

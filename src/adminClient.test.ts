@@ -17,6 +17,19 @@ const fetchImpl: any = (response: any, valid: boolean = true) => {
   });
 };
 
+const createClient = (fetch: any) =>
+  new PathwaysAdminClient(TEST_APP_TOKEN, TEST_JWT, {
+    fetch
+  });
+
+const requestParameters = (method = "GET", extraHeaders = {}) => ({
+  method,
+  headers: {
+    Authorization: `Bearer ${TEST_JWT}`,
+    ...extraHeaders
+  }
+});
+
 describe("Pathways client", () => {
   it("Should throw if appToken is missing", () => {
     try {
@@ -36,49 +49,37 @@ describe("Pathways client", () => {
 
   it("Should retrieve a list of App Users", async () => {
     const f = fetchImpl(TEST_ADMIN_LIST_APPUSERS_RESPONSE);
-    const client = new PathwaysAdminClient(TEST_APP_TOKEN, TEST_JWT, {
-      fetch: f
-    });
+    const client = createClient(f);
     const resp = await client.listAppUsers();
     expect(resp).toBe(TEST_ADMIN_LIST_APPUSERS_RESPONSE);
     expect(f).toHaveBeenCalled();
-    expect(f).toHaveBeenCalledWith(`${TEST_BASE_URL}appusers/`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${TEST_JWT}`
-      }
-    });
+    expect(f).toHaveBeenCalledWith(
+      `${TEST_BASE_URL}appusers/`,
+      requestParameters()
+    );
   });
 
   it("Should retrieve a list of Index Events", async () => {
     const f = fetchImpl(TEST_ADMIN_LIST_INDEX_EVENTS_RESPONSE);
-    const client = new PathwaysAdminClient(TEST_APP_TOKEN, TEST_JWT, {
-      fetch: f
-    });
+    const client = createClient(f);
     const resp = await client.listIndexEventTypes();
     expect(resp).toBe(TEST_ADMIN_LIST_INDEX_EVENTS_RESPONSE);
     expect(f).toHaveBeenCalled();
-    expect(f).toHaveBeenCalledWith(`${TEST_BASE_URL}index-event-types/`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${TEST_JWT}`
-      }
-    });
+    expect(f).toHaveBeenCalledWith(
+      `${TEST_BASE_URL}index-event-types/`,
+      requestParameters()
+    );
   });
 
   it("Should retrieve a list of Rules", async () => {
     const f = fetchImpl(TEST_ADMIN_LIST_RULES_RESPONSE);
-    const client = new PathwaysAdminClient(TEST_APP_TOKEN, TEST_JWT, {
-      fetch: f
-    });
+    const client = createClient(f);
     const resp = await client.listRules();
     expect(resp).toBe(TEST_ADMIN_LIST_RULES_RESPONSE);
     expect(f).toHaveBeenCalled();
-    expect(f).toHaveBeenCalledWith(`${TEST_BASE_URL}rules/`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${TEST_JWT}`
-      }
-    });
+    expect(f).toHaveBeenCalledWith(
+      `${TEST_BASE_URL}rules/`,
+      requestParameters()
+    );
   });
 });
