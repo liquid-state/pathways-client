@@ -14,7 +14,8 @@ const defaultOptions = {
 
 const pathMap: { [key: string]: string } = {
   createIndexEventType: "index-event-types/",
-  listAppUsers: "appusers/"
+  listAppUsers: "appusers/",
+  listIndexEventTypes: "index-event-types/"
 };
 
 const PathwaysError = (message: string) => `Pathways Error: ${message}`;
@@ -125,6 +126,12 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       "Unable to get create Index Event Type"
     );
   };
+
+  listIndexEventTypes = async (limit: number, offset: number) =>
+    this.getRequest(
+      "listIndexEventTypes",
+      "Unable to get list of Index Events from Pathways service"
+    );
 
   listAppUsers = async () => {
     const url = this.getUrl("listAppUsers");
