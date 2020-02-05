@@ -83,11 +83,11 @@ describe("Pathways client", () => {
       requestParameters()
     );
 
-    const resp2 = await client.listPathways(10, 0, false);
+    const resp2 = await client.listPathways(2, false);
     expect(resp2).toBe(TEST_ADMIN_LIST_PATHWAYS_RESPONSE);
     expect(f).toHaveBeenCalled();
     expect(f).toHaveBeenCalledWith(
-      `${TEST_BASE_URL}pathways/?limit=10&offset=0&is_deleted=false&`,
+      `${TEST_BASE_URL}pathways/?page=2&is_deleted=false&`,
       requestParameters()
     );
   });
