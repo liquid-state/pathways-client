@@ -441,18 +441,18 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
         : undefined
     );
 
-  listIndexEventTypes = async (limit?: number, offset?: number) =>
+  listIndexEventTypes = async (page?: number) =>
     this.getRequest(
       "listIndexEventTypes",
       "Unable to get list of Index Events from Pathways service",
-      this.buildQueryStringParameters({ limit, offset })
+      this.buildQueryStringParameters({ page })
     );
 
-  listPathways = async (limit?: number, offset?: number, isDeleted?: boolean) =>
+  listPathways = async (page?: number, isDeleted?: boolean) =>
     this.getRequest(
       "listPathways",
       "Unable to get list of Pathways from Pathways service",
-      this.buildQueryStringParameters({ limit, offset, is_deleted: isDeleted })
+      this.buildQueryStringParameters({ page, is_deleted: isDeleted })
     );
 
   listPathwayIndexEvents = (id: number) =>
@@ -471,11 +471,11 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       `${id}/`
     );
 
-  listRules = async (limit?: number, offset?: number) =>
+  listRules = async (page?: number) =>
     this.getRequest(
       "listRules",
       "Unable to get list of Rules from Pathways service",
-      this.buildQueryStringParameters({ limit, offset })
+      this.buildQueryStringParameters({ page })
     );
 
   patchAppUserPathway = (
