@@ -428,22 +428,14 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     );
   };
 
-  listAppUsers = async () => {
-    const url = this.getUrl("listAppUsers");
-    const resp = await this.fetch(url, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${this.jwt}`
-      }
-    });
-    if (!resp.ok) {
-      throw PathwaysAPIError(
-        "Unable to get list of App Users from Pathways service",
-        resp
-      );
-    }
-    const content = await resp.json();
-    return content;
+  listAppUsers = async (identityId?: string) => {
+    return this.getRequest(
+      "listAppUsers",
+      "Unable to get list of App Users from Pathways service",
+      identityId
+        ? this.buildQueryStringParameters({ identity_id: identityId })
+        : undefined
+    );
   };
 
   listIndexEventTypes = async (limit?: number, offset?: number) =>
