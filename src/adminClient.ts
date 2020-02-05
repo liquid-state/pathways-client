@@ -264,7 +264,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       { start_date: startDate },
       "Unable to create App User Journey for Pathways service",
       undefined,
-      `${appUserId}/journeys`
+      `${appUserId}/journeys/`
     );
   };
 
@@ -279,7 +279,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       { event_type_slug: eventTypeSlug, value },
       "Unable to create App User Journey Index Event for Pathways service",
       undefined,
-      `${appUserId}/journeys/${journeyId}/index-events`
+      `${appUserId}/journeys/${journeyId}/index-events/`
     );
   };
 
@@ -299,7 +299,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       postData,
       "Unable to create App User Pathway for Pathways service",
       undefined,
-      `${appUserId}/pathways`
+      `${appUserId}/pathways/`
     );
   };
 
@@ -374,7 +374,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       postData,
       "Unable to create Pathway Stage",
       undefined,
-      `${id}/stages`
+      `${id}/stages/`
     );
   };
 
@@ -403,7 +403,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     return this.deleteRequest(
       "deletePathwayIndexEvent",
       "Unable to delete Pathway Index Event",
-      `${pathwayId}/index-events/${indexEventId}`
+      `${pathwayId}/index-events/${indexEventId}/`
     );
   };
 
@@ -411,7 +411,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     return this.deleteRequest(
       "deletePathwayStage",
       "Unable to delete Pathway Stage",
-      `${pathwayId}/stages/${stageId}`
+      `${pathwayId}/stages/${stageId}/`
     );
   };
 
@@ -424,7 +424,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       postData,
       "Unable to duplicate Pathway",
       undefined,
-      `${id}/duplicate`
+      `${id}/duplicate/`
     );
   };
 
@@ -465,7 +465,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       "listPathwayIndexEvents",
       "Unable to get list of Pathway Index Events",
       undefined,
-      `${id}/index-events`
+      `${id}/index-events/`
     );
 
   listPathwayStages = async (id: number) =>
@@ -473,7 +473,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       "listPathways",
       "Unable to get list of Pathways from Pathways service",
       undefined,
-      `${id}`
+      `${id}/`
     );
 
   listRules = async (limit?: number, offset?: number) =>
@@ -498,7 +498,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       "patchAppUserPathway",
       patchData,
       "Unable to update App User Pathway for Pathways service",
-      `${appUserId}/pathways/${appUserPathwayId}`
+      `${appUserId}/pathways/${appUserPathwayId}/`
     );
   };
 
@@ -514,7 +514,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       "patchPathway",
       patchData,
       "Unable to update Pathway",
-      `${id}`
+      `${id}/`
     );
   };
 
@@ -533,7 +533,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       "patchPathwayIndexEvent",
       patchData,
       "Unable to update Pathway Index Event",
-      `${pathwayId}/index-events/${indexEventId}`
+      `${pathwayId}/index-events/${indexEventId}/`
     );
   };
 
@@ -555,7 +555,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       "patchPathwayStages",
       patchData,
       "Unable to update Pathway Stage",
-      `${pathwayId}/stages/${stageId}`
+      `${pathwayId}/stages/${stageId}/`
     );
   };
 
@@ -601,7 +601,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       { rule_id: ruleId },
       "Unable to trigger Adhoc Rule for Pathways service",
       undefined,
-      `${appUserId}/pathways/${appUserPathwayId}/trigger_adhoc_rule`
+      `${appUserId}/pathways/${appUserPathwayId}/trigger_adhoc_rule/`
     );
   };
 }
