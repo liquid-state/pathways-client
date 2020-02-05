@@ -72,7 +72,7 @@ const pathMap: { [key: string]: string } = {
   patchPathway: "pathways/",
   patchPathwayIndexEvent: "pathways/",
   patchPathwayStages: "pathways/",
-  patchRules: "rules/",
+  patchRule: "rules/",
   transitionAppUserToPathwayStage: "appusers/",
   triggerAdhocRule: "appusers/"
 };
@@ -169,6 +169,8 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     if (!resp.ok) {
       throw PathwaysAPIError(errorMessage, resp);
     }
+
+    if (requestMethod === "DELETE") return resp.ok;
     const data = await resp.json();
     return data;
   };
@@ -269,11 +271,12 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
   createAppUserJourneyIndexEvent = (
     appUserId: string,
     journeyId: number,
-    startDate: string
+    eventTypeSlug: string,
+    value: string
   ) => {
     return this.postRequest(
       "createAppUserJourneyIndexEvent",
-      { start_date: startDate },
+      { event_type_slug: eventTypeSlug, value },
       "Unable to create App User Journey Index Event for Pathways service",
       undefined,
       `${appUserId}/journeys/${journeyId}/index-events`
@@ -392,7 +395,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     return this.deleteRequest(
       "deleteRule",
       "Unable to delete Rule from Pathways service",
-      `${id}`
+      `${id}/`
     );
   };
 
@@ -561,13 +564,16 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       ...ruleData,
       who_detail: JSON.stringify(ruleData.who_detail),
       when_detail: JSON.stringify(ruleData.when_detail),
-      what_detail: JSON.stringify(ruleData.what_detail)
+      what_detail: JSON.stringify(ruleData.what_detail),
+      ...(ruleData.metadata
+        ? { metadata: JSON.stringify(ruleData.metadata) }
+        : {})
     };
     return this.patchRequest(
       "patchRule",
       patchData,
       "Unable to update Rule",
-      `${id}`
+      `${id}/`
     );
   };
 
