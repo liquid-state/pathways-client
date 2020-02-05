@@ -287,11 +287,15 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     appUserId: string,
     appUserPathwayData: IAppUserPathwayData
   ) => {
+    const ruleIds =
+      typeof appUserPathwayData.disabledRuleIds === "string"
+        ? appUserPathwayData.disabledRuleIds
+        : JSON.stringify(appUserPathwayData.disabledRuleIds);
     const postData = {
       journey_id: appUserPathwayData.journeyId,
       original_pathway_id: appUserPathwayData.originalPathwayId,
       current_stage_slug: appUserPathwayData.currentStageSlug,
-      disabled_rule_ids: appUserPathwayData.disabledRuleIds
+      disabled_rule_ids: ruleIds
     };
 
     return this.postRequest(
