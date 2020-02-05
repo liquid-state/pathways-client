@@ -25,11 +25,11 @@ interface IRuleData {
   name: string;
   description: string;
   who: string;
-  who_detail: object;
+  whoDetail: object;
   when: string;
-  when_detail: object;
+  whenDetail: object;
   what: string;
-  what_detail: object;
+  whatDetail: object;
   metadata?: object;
 }
 
@@ -385,9 +385,9 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
   createRule = async (ruleData: IRuleData) => {
     const postData = {
       ...ruleData,
-      who_detail: JSON.stringify(ruleData.who_detail),
-      when_detail: JSON.stringify(ruleData.when_detail),
-      what_detail: JSON.stringify(ruleData.what_detail),
+      who_detail: JSON.stringify(ruleData.whoDetail),
+      when_detail: JSON.stringify(ruleData.whenDetail),
+      what_detail: JSON.stringify(ruleData.whatDetail),
       ...(ruleData.metadata
         ? { metadata: JSON.stringify(ruleData.metadata) }
         : {})
@@ -557,9 +557,9 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
   patchRule = async (id: number, ruleData: IRuleData) => {
     const patchData = {
       ...ruleData,
-      who_detail: JSON.stringify(ruleData.who_detail),
-      when_detail: JSON.stringify(ruleData.when_detail),
-      what_detail: JSON.stringify(ruleData.what_detail),
+      who_detail: JSON.stringify(ruleData.whoDetail),
+      when_detail: JSON.stringify(ruleData.whenDetail),
+      what_detail: JSON.stringify(ruleData.whatDetail),
       ...(ruleData.metadata
         ? { metadata: JSON.stringify(ruleData.metadata) }
         : {})
