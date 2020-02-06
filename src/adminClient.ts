@@ -543,7 +543,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       slug: stageData.slug,
       description: stageData.description,
       is_adhoc: stageData.isAdhoc,
-      rules: stageData.rules
+      rules: JSON.stringify(stageData.rules)
     };
 
     return this.patchRequest(
