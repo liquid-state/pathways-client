@@ -328,13 +328,13 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     name: string,
     description: string,
     isActive: boolean,
-    isDeleted: boolean
+    metadata: object
   ) => {
     const postData = {
       name,
       description,
       is_active: isActive,
-      is_deleted: isDeleted
+      metadata: JSON.stringify(metadata)
     };
 
     return this.postRequest(
@@ -351,7 +351,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
   ) => {
     const postData = {
       event_type_slug: eventTypeSlug,
-      ...(rules ? { rules } : {})
+      ...(rules ? { rules: JSON.stringify(rules) } : {})
     };
 
     return this.postRequest(
@@ -370,7 +370,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       slug: stageData.slug,
       description: stageData.description,
       is_adhoc: stageData.isAdhoc,
-      rules: stageData.rules
+      rules: JSON.stringify(stageData.rules)
     };
 
     return this.postRequest(
