@@ -19,6 +19,7 @@ interface IPathwayData {
   description: string;
   isActive: boolean;
   isDeleted: boolean;
+  metadata?: object;
 }
 
 interface IRuleData {
@@ -502,7 +503,10 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       name: pathwayData.name,
       description: pathwayData.description,
       is_active: pathwayData.isActive,
-      is_deleted: pathwayData.isDeleted
+      is_deleted: pathwayData.isDeleted,
+      ...(pathwayData.metadata
+        ? { metadata: JSON.stringify(pathwayData.metadata) }
+        : {})
     };
 
     return this.patchRequest(
@@ -520,8 +524,8 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     rules?: [number]
   ) => {
     const patchData = {
-      ...(eventTypeSlug ? { eventTypeSlug } : {}),
-      ...(rules ? { rules } : {})
+      ...(eventTypeSlug ? { event_type_slug: eventTypeSlug } : {}),
+      ...(rules ? { rules: JSON.stringify(rules) } : {})
     };
 
     return this.patchRequest(
