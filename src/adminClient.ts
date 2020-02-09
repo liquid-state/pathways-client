@@ -70,6 +70,7 @@ const pathMap: { [key: string]: string } = {
   listPathwayStages: "pathways/",
   listRules: "rules/",
   patchAppUserPathway: "appusers/",
+  processAppUserPathway: "appusers/",
   patchPathway: "pathways/",
   patchPathwayIndexEvent: "pathways/",
   patchPathwayStages: "pathways/",
@@ -507,6 +508,15 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       patchData,
       "Unable to update App User Pathway for Pathways service",
       `${appUserId}/pathways/${appUserPathwayId}/`
+    );
+  };
+
+  processhAppUserPathway = (appUserId: string, appUserPathwayId: number) => {
+    return this.patchRequest(
+      "patchAppUserPathway",
+      {},
+      "Unable to process App User Pathway for Pathways service",
+      `${appUserId}/pathways/${appUserPathwayId}/process/`
     );
   };
 
