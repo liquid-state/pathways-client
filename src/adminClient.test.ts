@@ -9,10 +9,21 @@ import {
   TEST_ADMIN_LIST_RULES_RESPONSE
 } from "./mock_data";
 
-const fetchImpl: any = (response: any, valid: boolean = true) => {
+const fetchImpl: any = (
+  response: any,
+  valid: boolean = true,
+  contentType: string = "application/json"
+) => {
   return jest.fn().mockImplementation((url: string, init: object) => {
     return {
       ok: valid,
+      headers: {
+        get: (h: string) => {
+          if (h === "content-type") {
+            return contentType;
+          } else return undefined;
+        }
+      },
       json: () => response
     };
   });

@@ -172,8 +172,14 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     }
 
     if (requestMethod === "DELETE") return resp.ok;
-    const data = await resp.json();
-    return data;
+    if (resp.headers) {
+      let ct = resp.headers.get("content-type") || "";
+      if (ct.indexOf("json") !== -1) {
+        const data = await resp.json();
+        return data;
+      }
+    }
+    return resp.text;
   };
 
   public buildQueryStringParameters = (params: { [key: string]: any }) => {
