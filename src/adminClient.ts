@@ -176,7 +176,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     return data;
   };
 
-  private buildQueryStringParameters = (params: { [key: string]: any }) => {
+  public buildQueryStringParameters = (params: { [key: string]: any }) => {
     return Object.keys(params).reduce((acc: object, key: string) => {
       return Object.assign(
         {},
@@ -444,9 +444,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     return this.getRequest(
       "listAppUsers",
       "Unable to get list of App Users from Pathways service",
-      identityId
-        ? this.buildQueryStringParameters(queryStringParameters)
-        : undefined
+      this.buildQueryStringParameters(queryStringParameters)
     );
   };
 

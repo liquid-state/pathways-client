@@ -48,14 +48,29 @@ describe("Pathways client", () => {
     }
   });
 
+  it("Should build query string parameters corrrectly", async () => {
+    const f = fetchImpl(TEST_ADMIN_LIST_APPUSERS_RESPONSE);
+    const client = createClient(f);
+    const page = 1;
+    let params = client.buildQueryStringParameters({ page, foo: undefined });
+    expect(params).toStrictEqual({ page: 1 });
+  });
+
   it("Should retrieve a list of App Users", async () => {
     const f = fetchImpl(TEST_ADMIN_LIST_APPUSERS_RESPONSE);
     const client = createClient(f);
-    const resp = await client.listAppUsers();
-    expect(resp).toBe(TEST_ADMIN_LIST_APPUSERS_RESPONSE);
+    const resp1 = await client.listAppUsers(1);
+    expect(resp1).toBe(TEST_ADMIN_LIST_APPUSERS_RESPONSE);
     expect(f).toHaveBeenCalled();
     expect(f).toHaveBeenCalledWith(
-      `${TEST_BASE_URL}appusers/`,
+      `${TEST_BASE_URL}appusers/?page=1&`,
+      requestParameters()
+    );
+    const resp2 = await client.listAppUsers(undefined, "abc-123");
+    expect(resp2).toBe(TEST_ADMIN_LIST_APPUSERS_RESPONSE);
+    expect(f).toHaveBeenCalled();
+    expect(f).toHaveBeenCalledWith(
+      `${TEST_BASE_URL}appusers/?identity_id=abc-123&`,
       requestParameters()
     );
   });
