@@ -445,7 +445,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       "listAppUsers",
       "Unable to get list of App Users from Pathways service",
       identityId
-        ? this.buildQueryStringParameters({ identity_id: identityId })
+        ? this.buildQueryStringParameters(queryStringParameters)
         : undefined
     );
   };
