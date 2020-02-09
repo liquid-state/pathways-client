@@ -511,11 +511,12 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     );
   };
 
-  processhAppUserPathway = (appUserId: string, appUserPathwayId: number) => {
-    return this.patchRequest(
-      "patchAppUserPathway",
+  processAppUserPathway = (appUserId: string, appUserPathwayId: number) => {
+    return this.postRequest(
+      "processAppUserPathway",
       {},
       "Unable to process App User Pathway for Pathways service",
+      undefined,
       `${appUserId}/pathways/${appUserPathwayId}/process/`
     );
   };
