@@ -1,5 +1,5 @@
 interface IPathwaysAdminClient {
-  listAppUsers(): Promise<Response>;
+  listAppUsers(page?: number, identityId?: string): Promise<Response>;
 }
 
 interface IAdminClientOptions {
@@ -433,14 +433,22 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     );
   };
 
-  listAppUsers = async (identityId?: string) =>
-    this.getRequest(
+  listAppUsers = async (page?: number, identityId?: string) => {
+    let queryStringParameters = {};
+    if (page) {
+      queryStringParameters = { page };
+    }
+    if (identityId) {
+      queryStringParameters = { identity_id: identityId };
+    }
+    return this.getRequest(
       "listAppUsers",
       "Unable to get list of App Users from Pathways service",
       identityId
         ? this.buildQueryStringParameters({ identity_id: identityId })
         : undefined
     );
+  };
 
   listIndexEventTypes = async (page?: number) =>
     this.getRequest(
