@@ -1,61 +1,63 @@
-export const TEST_APP_TOKEN = 'app123';
-export const TEST_JWT = 'test-jwt';
+export const TEST_APP_TOKEN = "app123";
+export const TEST_JWT = "test-jwt";
 export const TEST_BASE_URL = `https://pathways.example.com/v1/apps/${TEST_APP_TOKEN}/`;
 
 export const TEST_APPUSER_ME_RESPONSE = {
   id: 1,
-  identity_id: '80e268c6-42e8-4bd3-97bc-569b5f1d6260',
+  identity_id: "80e268c6-42e8-4bd3-97bc-569b5f1d6260",
   pathways: [
     {
       id: 1,
       original_pathway: {
         id: 1,
-        name: 'Pathway 1',
-        description: 'pathway 1 desc',
+        name: "Pathway 1",
+        description: "pathway 1 desc",
         is_active: true,
-        is_deleted: false,
+        is_deleted: false
       },
-      current_stage_slug: 'stage-0',
-      disabled_rule_ids: [2],
-    },
+      current_stage_slug: "stage-0",
+      disabled_rule_ids: [2]
+    }
   ],
   journeys: [
     {
       id: 1,
-      start_date: '2019-10-03',
+      start_date: "2019-10-03",
       end_date: null,
-      created_on: '2020-02-02T05:58:11.440200Z',
+      created_on: "2020-02-02T05:58:11.440200Z",
       index_events: [],
-      entries: 'https://pathways.example.com/v1/me/journey-entries/1/?format=json',
+      entries:
+        "https://pathways.example.com/v1/me/journey-entries/1/?format=json"
     },
     {
       id: 2,
-      start_date: '2020-01-03',
+      start_date: "2020-01-03",
       end_date: null,
-      created_on: '2020-02-02T05:58:13.072669Z',
+      created_on: "2020-02-02T05:58:13.072669Z",
       index_events: [
         {
           id: 1,
-          event_type_slug: 'admission',
-          value: '2020-02-02T15:58:13.321288Z',
-          updated_on: '2020-02-02T05:58:14.673556Z',
+          event_type_slug: "admission",
+          value: "2020-02-02T15:58:13.321288Z",
+          updated_on: "2020-02-02T05:58:14.673556Z"
         },
         {
           id: 2,
-          event_type_slug: 'discharge',
-          value: '2020-02-05T15:58:13.321288Z',
-          updated_on: '2020-02-02T05:58:16.313494Z',
+          event_type_slug: "discharge",
+          value: "2020-02-05T15:58:13.321288Z",
+          updated_on: "2020-02-02T05:58:16.313494Z"
         },
         {
           id: 3,
-          event_type_slug: 'surgery',
-          value: '2020-02-08T15:58:13.321288Z',
-          updated_on: '2020-02-02T05:58:17.228348Z',
-        },
+          event_type_slug: "surgery",
+          value: "2020-02-08T15:58:13.321288Z",
+          updated_on: "2020-02-02T05:58:17.228348Z"
+        }
       ],
-      entries: 'https://pathways.example.com/v1/me/journey-entries/2/?format=json',
-    },
-  ],
+      entries:
+        "https://pathways.example.com/v1/me/journey-entries/2/?format=json"
+    }
+  ]
 };
 
 export const TEST_ADMIN_LIST_APPUSERS_RESPONSE = {
@@ -65,77 +67,89 @@ export const TEST_ADMIN_LIST_APPUSERS_RESPONSE = {
   results: [
     {
       id: 2,
-      url: 'https://pathways.example.com/v1/apps/f39e5e/appusers/2/',
-      identity_id: '7c60d634-386c-4f79-812c-4e0fc2f3fb2c',
+      url: "https://pathways.example.com/v1/apps/f39e5e/appusers/2/",
+      identity_id: "7c60d634-386c-4f79-812c-4e0fc2f3fb2c",
       pathways: [
         {
           id: 2,
-          url: 'https://pathways.example.com/v1/apps/f39e5e/appusers/2/pathways/2/',
-          original_pathway: 'https://pathways.example.com/v1/apps/f39e5e/pathways/3/',
-          current_stage_slug: 'stage-0',
-          disabled_rule_ids: [14],
-        },
+          url:
+            "https://pathways.example.com/v1/apps/f39e5e/appusers/2/pathways/2/",
+          original_pathway:
+            "https://pathways.example.com/v1/apps/f39e5e/pathways/3/",
+          current_stage_slug: "stage-0",
+          disabled_rule_ids: [14]
+        }
       ],
       journeys: [
         {
           id: 3,
-          url: 'https://pathways.example.com/v1/apps/f39e5e/appusers/2/journeys/3/',
-          start_date: '2019-10-03',
+          url:
+            "https://pathways.example.com/v1/apps/f39e5e/appusers/2/journeys/3/",
+          start_date: "2019-10-03",
           end_date: null,
-          created_on: '2020-02-03T05:28:10.291738Z',
+          created_on: "2020-02-03T05:28:10.291738Z",
           index_events:
-            'https://pathways.example.com/v1/apps/f39e5e/appusers/2/journeys/3/index-events/',
-          entries: 'https://pathways.example.com/v1/apps/f39e5e/appusers/2/journeys/3/entries/',
+            "https://pathways.example.com/v1/apps/f39e5e/appusers/2/journeys/3/index-events/",
+          entries:
+            "https://pathways.example.com/v1/apps/f39e5e/appusers/2/journeys/3/entries/"
         },
         {
           id: 4,
-          url: 'https://pathways.example.com/v1/apps/f39e5e/appusers/2/journeys/4/',
-          start_date: '2020-01-03',
+          url:
+            "https://pathways.example.com/v1/apps/f39e5e/appusers/2/journeys/4/",
+          start_date: "2020-01-03",
           end_date: null,
-          created_on: '2020-02-03T05:28:12.017405Z',
+          created_on: "2020-02-03T05:28:12.017405Z",
           index_events:
-            'https://pathways.example.com/v1/apps/f39e5e/appusers/2/journeys/4/index-events/',
-          entries: 'https://pathways.example.com/v1/apps/f39e5e/appusers/2/journeys/4/entries/',
-        },
-      ],
+            "https://pathways.example.com/v1/apps/f39e5e/appusers/2/journeys/4/index-events/",
+          entries:
+            "https://pathways.example.com/v1/apps/f39e5e/appusers/2/journeys/4/entries/"
+        }
+      ]
     },
     {
       id: 1,
-      url: 'https://pathways.example.com/v1/apps/f39e5e/appusers/1/',
-      identity_id: '5642abd7-3bfb-4b82-9d6f-0cc7c2bf632c',
+      url: "https://pathways.example.com/v1/apps/f39e5e/appusers/1/",
+      identity_id: "5642abd7-3bfb-4b82-9d6f-0cc7c2bf632c",
       pathways: [
         {
           id: 1,
-          url: 'https://pathways.example.com/v1/apps/f39e5e/appusers/1/pathways/1/',
-          original_pathway: 'https://pathways.example.com/v1/apps/f39e5e/pathways/1/',
-          current_stage_slug: 'stage-0',
-          disabled_rule_ids: [2],
-        },
+          url:
+            "https://pathways.example.com/v1/apps/f39e5e/appusers/1/pathways/1/",
+          original_pathway:
+            "https://pathways.example.com/v1/apps/f39e5e/pathways/1/",
+          current_stage_slug: "stage-0",
+          disabled_rule_ids: [2]
+        }
       ],
       journeys: [
         {
           id: 1,
-          url: 'https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/1/',
-          start_date: '2019-10-03',
+          url:
+            "https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/1/",
+          start_date: "2019-10-03",
           end_date: null,
-          created_on: '2020-02-02T05:58:11.440200Z',
+          created_on: "2020-02-02T05:58:11.440200Z",
           index_events:
-            'https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/1/index-events/',
-          entries: 'https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/1/entries/',
+            "https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/1/index-events/",
+          entries:
+            "https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/1/entries/"
         },
         {
           id: 2,
-          url: 'https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/2/',
-          start_date: '2020-01-03',
+          url:
+            "https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/2/",
+          start_date: "2020-01-03",
           end_date: null,
-          created_on: '2020-02-02T05:58:13.072669Z',
+          created_on: "2020-02-02T05:58:13.072669Z",
           index_events:
-            'https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/2/index-events/',
-          entries: 'https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/2/entries/',
-        },
-      ],
-    },
-  ],
+            "https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/2/index-events/",
+          entries:
+            "https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/2/entries/"
+        }
+      ]
+    }
+  ]
 };
 
 export const TEST_ADMIN_LIST_INDEX_EVENTS_RESPONSE = {
@@ -144,18 +158,18 @@ export const TEST_ADMIN_LIST_INDEX_EVENTS_RESPONSE = {
   previous: null,
   results: [
     {
-      name: 'Surgery',
-      slug: 'surgery23',
+      name: "Surgery",
+      slug: "surgery23",
       id: 1,
-      translated_names: {},
+      translated_names: {}
     },
     {
-      name: 'Admission',
-      slug: 'admission23',
+      name: "Admission",
+      slug: "admission23",
       id: 2,
-      translated_names: {},
-    },
-  ],
+      translated_names: {}
+    }
+  ]
 };
 
 export const TEST_ADMIN_LIST_RULES_RESPONSE = {
@@ -164,30 +178,30 @@ export const TEST_ADMIN_LIST_RULES_RESPONSE = {
   previous: null,
   results: [
     {
-      what: 'laboris',
-      when: 'in',
-      who: 'Lorem fugiat pariatur elit aliquip',
+      what: "laboris",
+      when: "in",
+      who: "Lorem fugiat pariatur elit aliquip",
       id: 1,
-      url: 'https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/2/',
-      name: 'Rule 1',
-      description: '<string>',
+      url: "https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/2/",
+      name: "Rule 1",
+      description: "<string>",
       what_detail: {},
       when_detail: {},
-      who_detail: {},
+      who_detail: {}
     },
     {
-      what: 'amet sint eu',
-      when: 'officia pariatur commodo veniam',
-      who: 'occaecat fugiat magna',
+      what: "amet sint eu",
+      when: "officia pariatur commodo veniam",
+      who: "occaecat fugiat magna",
       id: 2,
-      url: 'https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/2/',
-      name: 'Rule 2',
-      description: '<string>',
+      url: "https://pathways.example.com/v1/apps/f39e5e/appusers/1/journeys/2/",
+      name: "Rule 2",
+      description: "<string>",
       what_detail: {},
       when_detail: {},
-      who_detail: {},
-    },
-  ],
+      who_detail: {}
+    }
+  ]
 };
 
 export const TEST_ADMIN_LIST_PATHWAYS_RESPONSE = {
@@ -196,320 +210,362 @@ export const TEST_ADMIN_LIST_PATHWAYS_RESPONSE = {
   previous: null,
   results: [
     {
-      name: '<string>',
-      id: '<integer>',
-      url: '<string>',
-      description: '<string>',
-      is_active: '<boolean>',
-      is_deleted: '<boolean>',
+      name: "<string>",
+      id: "<integer>",
+      url: "<string>",
+      description: "<string>",
+      is_active: "<boolean>",
+      is_deleted: "<boolean>",
       index_event_types: [
         {
-          name: '<string>',
-          slug: '<string>',
-          id: '<integer>',
-          translated_names: '<object>',
+          name: "<string>",
+          slug: "<string>",
+          id: "<integer>",
+          translated_names: "<object>"
         },
         {
-          name: '<string>',
-          slug: '<string>',
-          id: '<integer>',
-          translated_names: '<object>',
-        },
+          name: "<string>",
+          slug: "<string>",
+          id: "<integer>",
+          translated_names: "<object>"
+        }
       ],
       index_events: [
         {
-          event_type_slug: '<string>',
-          id: '<integer>',
-          url: '<string>',
+          event_type_slug: "<string>",
+          id: "<integer>",
+          url: "<string>",
           rules: [
             {
-              what: 'eu dolor',
-              when: 'non velit fugiat in',
-              who: 'et ipsum dolore',
-              id: '<integer>',
-              url: '<string>',
-              name: '<string>',
-              description: '<string>',
-              what_detail: '<object>',
-              when_detail: '<object>',
-              who_detail: '<object>',
+              what: "eu dolor",
+              when: "non velit fugiat in",
+              who: "et ipsum dolore",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
             },
             {
-              what: 'culpa',
-              when: 'irure amet enim ut',
-              who: 'in',
-              id: '<integer>',
-              url: '<string>',
-              name: '<string>',
-              description: '<string>',
-              what_detail: '<object>',
-              when_detail: '<object>',
-              who_detail: '<object>',
-            },
-          ],
+              what: "culpa",
+              when: "irure amet enim ut",
+              who: "in",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            }
+          ]
         },
         {
-          event_type_slug: '<string>',
-          id: '<integer>',
-          url: '<string>',
+          event_type_slug: "<string>",
+          id: "<integer>",
+          url: "<string>",
           rules: [
             {
-              what: 'officia ',
-              when: 'eu ullamco exercitation',
-              who: 'dolore dolor fugiat Ut',
-              id: '<integer>',
-              url: '<string>',
-              name: '<string>',
-              description: '<string>',
-              what_detail: '<object>',
-              when_detail: '<object>',
-              who_detail: '<object>',
+              what: "officia ",
+              when: "eu ullamco exercitation",
+              who: "dolore dolor fugiat Ut",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
             },
             {
-              what: 'velit quis Duis sed',
-              when: 'consectetur ex in ullamco',
-              who: 'Excepteur do esse proident',
-              id: '<integer>',
-              url: '<string>',
-              name: '<string>',
-              description: '<string>',
-              what_detail: '<object>',
-              when_detail: '<object>',
-              who_detail: '<object>',
-            },
-          ],
-        },
+              what: "velit quis Duis sed",
+              when: "consectetur ex in ullamco",
+              who: "Excepteur do esse proident",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            }
+          ]
+        }
       ],
       stages: [
         {
-          number: '<integer>',
-          name: '<string>',
-          slug: '<string>',
-          id: '<integer>',
-          url: '<string>',
-          description: '<string>',
-          is_adhoc: '<boolean>',
+          number: "<integer>",
+          name: "<string>",
+          slug: "<string>",
+          id: "<integer>",
+          url: "<string>",
+          description: "<string>",
+          is_adhoc: "<boolean>",
           rules: [
             {
-              what: 'esse',
-              when: 'quis adipisicing elit',
-              who: 'ut cupidatat ut magna quis',
-              id: '<integer>',
-              url: '<string>',
-              name: '<string>',
-              description: '<string>',
-              what_detail: '<object>',
-              when_detail: '<object>',
-              who_detail: '<object>',
+              what: "esse",
+              when: "quis adipisicing elit",
+              who: "ut cupidatat ut magna quis",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
             },
             {
-              what: 'ipsum proident aute do elit',
-              when: 'ea sunt laboris proident',
-              who: 'cillum aliqua deserunt',
-              id: '<integer>',
-              url: '<string>',
-              name: '<string>',
-              description: '<string>',
-              what_detail: '<object>',
-              when_detail: '<object>',
-              who_detail: '<object>',
-            },
-          ],
+              what: "ipsum proident aute do elit",
+              when: "ea sunt laboris proident",
+              who: "cillum aliqua deserunt",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            }
+          ]
         },
         {
-          number: '<integer>',
-          name: '<string>',
-          slug: '<string>',
-          id: '<integer>',
-          url: '<string>',
-          description: '<string>',
-          is_adhoc: '<boolean>',
+          number: "<integer>",
+          name: "<string>",
+          slug: "<string>",
+          id: "<integer>",
+          url: "<string>",
+          description: "<string>",
+          is_adhoc: "<boolean>",
           rules: [
             {
-              what: 'eiusmod occaecat id irure',
-              when: 'irure consectetur',
-              who: 'Ut Lorem in sed',
-              id: '<integer>',
-              url: '<string>',
-              name: '<string>',
-              description: '<string>',
-              what_detail: '<object>',
-              when_detail: '<object>',
-              who_detail: '<object>',
+              what: "eiusmod occaecat id irure",
+              when: "irure consectetur",
+              who: "Ut Lorem in sed",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
             },
             {
-              what: 'non ea veniam ex',
-              when: 'elit nostrud aliquip aliqua',
-              who: 'commodo reprehenderit do',
-              id: '<integer>',
-              url: '<string>',
-              name: '<string>',
-              description: '<string>',
-              what_detail: '<object>',
-              when_detail: '<object>',
-              who_detail: '<object>',
-            },
-          ],
-        },
-      ],
+              what: "non ea veniam ex",
+              when: "elit nostrud aliquip aliqua",
+              who: "commodo reprehenderit do",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            }
+          ]
+        }
+      ]
     },
     {
-      name: '<string>',
-      id: '<integer>',
-      url: '<string>',
-      description: '<string>',
-      is_active: '<boolean>',
-      is_deleted: '<boolean>',
+      name: "<string>",
+      id: "<integer>",
+      url: "<string>",
+      description: "<string>",
+      is_active: "<boolean>",
+      is_deleted: "<boolean>",
       index_event_types: [
         {
-          name: '<string>',
-          slug: '<string>',
-          id: '<integer>',
-          translated_names: '<object>',
+          name: "<string>",
+          slug: "<string>",
+          id: "<integer>",
+          translated_names: "<object>"
         },
         {
-          name: '<string>',
-          slug: '<string>',
-          id: '<integer>',
-          translated_names: '<object>',
-        },
+          name: "<string>",
+          slug: "<string>",
+          id: "<integer>",
+          translated_names: "<object>"
+        }
       ],
       index_events: [
         {
-          event_type_slug: '<string>',
-          id: '<integer>',
-          url: '<string>',
+          event_type_slug: "<string>",
+          id: "<integer>",
+          url: "<string>",
           rules: [
             {
-              what: 'magna nulla consequat Ut est',
-              when: 'aliqua cillum irure',
-              who: 'eu in magna',
-              id: '<integer>',
-              url: '<string>',
-              name: '<string>',
-              description: '<string>',
-              what_detail: '<object>',
-              when_detail: '<object>',
-              who_detail: '<object>',
+              what: "magna nulla consequat Ut est",
+              when: "aliqua cillum irure",
+              who: "eu in magna",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
             },
             {
-              what: 'ut aliquip vol',
-              when: 'id magna',
-              who: 'dolore',
-              id: '<integer>',
-              url: '<string>',
-              name: '<string>',
-              description: '<string>',
-              what_detail: '<object>',
-              when_detail: '<object>',
-              who_detail: '<object>',
-            },
-          ],
+              what: "ut aliquip vol",
+              when: "id magna",
+              who: "dolore",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            }
+          ]
         },
         {
-          event_type_slug: '<string>',
-          id: '<integer>',
-          url: '<string>',
+          event_type_slug: "<string>",
+          id: "<integer>",
+          url: "<string>",
           rules: [
             {
-              what: 'ad sunt anim in',
-              when: 'laborum do',
-              who: 'sunt nulla Duis',
-              id: '<integer>',
-              url: '<string>',
-              name: '<string>',
-              description: '<string>',
-              what_detail: '<object>',
-              when_detail: '<object>',
-              who_detail: '<object>',
+              what: "ad sunt anim in",
+              when: "laborum do",
+              who: "sunt nulla Duis",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
             },
             {
-              what: 'dolor et voluptate mollit nisi',
-              when: 'ad sunt ea adipisicing',
-              who: 'commodo dolore',
-              id: '<integer>',
-              url: '<string>',
-              name: '<string>',
-              description: '<string>',
-              what_detail: '<object>',
-              when_detail: '<object>',
-              who_detail: '<object>',
-            },
-          ],
-        },
+              what: "dolor et voluptate mollit nisi",
+              when: "ad sunt ea adipisicing",
+              who: "commodo dolore",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            }
+          ]
+        }
       ],
       stages: [
         {
-          number: '<integer>',
-          name: '<string>',
-          slug: '<string>',
-          id: '<integer>',
-          url: '<string>',
-          description: '<string>',
-          is_adhoc: '<boolean>',
+          number: "<integer>",
+          name: "<string>",
+          slug: "<string>",
+          id: "<integer>",
+          url: "<string>",
+          description: "<string>",
+          is_adhoc: "<boolean>",
           rules: [
             {
-              what: 'nostrud aliquip ad',
-              when: 'officia ullamco sit laborum',
-              who: 'commodo fugiat',
-              id: '<integer>',
-              url: '<string>',
-              name: '<string>',
-              description: '<string>',
-              what_detail: '<object>',
-              when_detail: '<object>',
-              who_detail: '<object>',
+              what: "nostrud aliquip ad",
+              when: "officia ullamco sit laborum",
+              who: "commodo fugiat",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
             },
             {
-              what: 'Ut id Duis minim',
-              when: 'a',
-              who: 'dolor',
-              id: '<integer>',
-              url: '<string>',
-              name: '<string>',
-              description: '<string>',
-              what_detail: '<object>',
-              when_detail: '<object>',
-              who_detail: '<object>',
-            },
-          ],
+              what: "Ut id Duis minim",
+              when: "a",
+              who: "dolor",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            }
+          ]
         },
         {
-          number: '<integer>',
-          name: '<string>',
-          slug: '<string>',
-          id: '<integer>',
-          url: '<string>',
-          description: '<string>',
-          is_adhoc: '<boolean>',
+          number: "<integer>",
+          name: "<string>",
+          slug: "<string>",
+          id: "<integer>",
+          url: "<string>",
+          description: "<string>",
+          is_adhoc: "<boolean>",
           rules: [
             {
-              what: 'fugiat enim in sit non',
-              when: 'magna elit',
-              who: 'Lorem',
-              id: '<integer>',
-              url: '<string>',
-              name: '<string>',
-              description: '<string>',
-              what_detail: '<object>',
-              when_detail: '<object>',
-              who_detail: '<object>',
+              what: "fugiat enim in sit non",
+              when: "magna elit",
+              who: "Lorem",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
             },
             {
-              what: 'elit mollit',
-              when: 'voluptate ut esse Duis',
-              who: 'sed in deserunt fugiat reprehenderit',
-              id: '<integer>',
-              url: '<string>',
-              name: '<string>',
-              description: '<string>',
-              what_detail: '<object>',
-              when_detail: '<object>',
-              who_detail: '<object>',
-            },
-          ],
-        },
-      ],
-    },
-  ],
+              what: "elit mollit",
+              when: "voluptate ut esse Duis",
+              who: "sed in deserunt fugiat reprehenderit",
+              id: "<integer>",
+              url: "<string>",
+              name: "<string>",
+              description: "<string>",
+              what_detail: "<object>",
+              when_detail: "<object>",
+              who_detail: "<object>"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 };
+
+export const TEST_ADMIN_CREATE_APP_USER = (identity_id: string) => ({
+  identity_id,
+  id: 3,
+  url: "<string>",
+  pathways: [
+    {
+      id: "<integer>",
+      url: "<string>",
+      original_pathway: "<string>",
+      current_stage_slug: "<string>",
+      disabled_rule_ids: "<object>"
+    },
+    {
+      id: "<integer>",
+      url: "<string>",
+      original_pathway: "<string>",
+      current_stage_slug: "<string>",
+      disabled_rule_ids: "<object>"
+    }
+  ],
+  journeys: [
+    {
+      id: "<integer>",
+      url: "<string>",
+      start_date: "<date>",
+      end_date: "<date>",
+      created_on: "<dateTime>",
+      index_events: "<string>",
+      entries: "<string>"
+    },
+    {
+      id: "<integer>",
+      url: "<string>",
+      start_date: "<date>",
+      end_date: "<date>",
+      created_on: "<dateTime>",
+      index_events: "<string>",
+      entries: "<string>"
+    }
+  ]
+});

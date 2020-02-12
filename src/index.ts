@@ -1,5 +1,8 @@
-import PathwaysClient, { IPathwaysClient, IOptions } from './client';
-import PathwaysAdminClient, { IPathwaysAdminClient, IAdminClientOptions } from './adminClient';
+import PathwaysClient, { IPathwaysClient, IOptions } from "./client";
+import PathwaysAdminClient, {
+  IPathwaysAdminClient,
+  IAdminClientOptions
+} from "./adminClient";
 
 export default PathwaysClient;
 export {
@@ -7,5 +10,5 @@ export {
   IPathwaysClient,
   IOptions,
   IPathwaysAdminClient,
-  IAdminClientOptions,
+  IAdminClientOptions
 };
