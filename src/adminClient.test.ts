@@ -1,4 +1,4 @@
-import PathwaysAdminClient from "./adminClient";
+import PathwaysAdminClient from './adminClient';
 import {
   TEST_JWT,
   TEST_APP_TOKEN,
@@ -6,60 +6,60 @@ import {
   TEST_ADMIN_LIST_APPUSERS_RESPONSE,
   TEST_ADMIN_LIST_INDEX_EVENTS_RESPONSE,
   TEST_ADMIN_LIST_PATHWAYS_RESPONSE,
-  TEST_ADMIN_LIST_RULES_RESPONSE
-} from "./mock_data";
+  TEST_ADMIN_LIST_RULES_RESPONSE,
+} from './mock_data';
 
 const fetchImpl: any = (
   response: any,
   valid: boolean = true,
-  contentType: string = "application/json"
+  contentType: string = 'application/json'
 ) => {
   return jest.fn().mockImplementation((url: string, init: object) => {
     return {
       ok: valid,
       headers: {
         get: (h: string) => {
-          if (h === "content-type") {
+          if (h === 'content-type') {
             return contentType;
           } else return undefined;
-        }
+        },
       },
-      json: () => response
+      json: () => response,
     };
   });
 };
 
 const createClient = (fetch: any) =>
   new PathwaysAdminClient(TEST_APP_TOKEN, TEST_JWT, {
-    fetch
+    fetch,
   });
 
-const requestParameters = (method = "GET", extraHeaders = {}) => ({
+const requestParameters = (method = 'GET', extraHeaders = {}) => ({
   method,
   headers: {
     Authorization: `Bearer ${TEST_JWT}`,
-    ...extraHeaders
-  }
+    ...extraHeaders,
+  },
 });
 
-describe("Pathways client", () => {
-  it("Should throw if appToken is missing", () => {
+describe('Pathways client', () => {
+  it('Should throw if appToken is missing', () => {
     try {
-      new PathwaysAdminClient("", "");
+      new PathwaysAdminClient('', '');
     } catch (e) {
-      expect(e).toBe("Pathways Error: You must specify appToken");
+      expect(e).toBe('Pathways Error: You must specify appToken');
     }
   });
 
-  it("Should throw if JWT is missing", () => {
+  it('Should throw if JWT is missing', () => {
     try {
-      new PathwaysAdminClient(TEST_APP_TOKEN, "");
+      new PathwaysAdminClient(TEST_APP_TOKEN, '');
     } catch (e) {
-      expect(e).toBe("Pathways Error: You must specify a JWT");
+      expect(e).toBe('Pathways Error: You must specify a JWT');
     }
   });
 
-  it("Should build query string parameters corrrectly", async () => {
+  it('Should build query string parameters corrrectly', async () => {
     const f = fetchImpl(TEST_ADMIN_LIST_APPUSERS_RESPONSE);
     const client = createClient(f);
     const page = 1;
@@ -67,17 +67,31 @@ describe("Pathways client", () => {
     expect(params).toStrictEqual({ page: 1 });
   });
 
-  it("Should retrieve a list of App Users", async () => {
+  it('Should build a path without parameters correctly', () => {
+    const f = fetchImpl(TEST_ADMIN_LIST_APPUSERS_RESPONSE);
+    const client = createClient(f);
+    const testPath = 'appusers/';
+    const builtPath = client.buildPath(testPath);
+    expect(builtPath).toStrictEqual('appusers/')
+  })
+
+  it('Should build path parameters correctly', () => {
+    const f = fetchImpl(TEST_ADMIN_LIST_APPUSERS_RESPONSE);
+    const client = createClient(f);
+    const testPath = 'appusers/{{appUserId}}/journeys/{{journeyId}}/index-events/';
+    const testPathParameters = { appUserId: '1234', journeyId: '5678' };
+    const builtPath = client.buildPath(testPath, testPathParameters);
+    expect(builtPath).toStrictEqual('appusers/1234/journeys/5678/index-events/')
+  })
+
+  it('Should retrieve a list of App Users', async () => {
     const f = fetchImpl(TEST_ADMIN_LIST_APPUSERS_RESPONSE);
     const client = createClient(f);
     const resp1 = await client.listAppUsers(1);
     expect(resp1).toBe(TEST_ADMIN_LIST_APPUSERS_RESPONSE);
     expect(f).toHaveBeenCalled();
-    expect(f).toHaveBeenCalledWith(
-      `${TEST_BASE_URL}appusers/?page=1&`,
-      requestParameters()
-    );
-    const resp2 = await client.listAppUsers(undefined, "abc-123");
+    expect(f).toHaveBeenCalledWith(`${TEST_BASE_URL}appusers/?page=1&`, requestParameters());
+    const resp2 = await client.listAppUsers(undefined, 'abc-123');
     expect(resp2).toBe(TEST_ADMIN_LIST_APPUSERS_RESPONSE);
     expect(f).toHaveBeenCalled();
     expect(f).toHaveBeenCalledWith(
@@ -86,28 +100,22 @@ describe("Pathways client", () => {
     );
   });
 
-  it("Should retrieve a list of Index Events", async () => {
+  it('Should retrieve a list of Index Events', async () => {
     const f = fetchImpl(TEST_ADMIN_LIST_INDEX_EVENTS_RESPONSE);
     const client = createClient(f);
     const resp = await client.listIndexEventTypes();
     expect(resp).toBe(TEST_ADMIN_LIST_INDEX_EVENTS_RESPONSE);
     expect(f).toHaveBeenCalled();
-    expect(f).toHaveBeenCalledWith(
-      `${TEST_BASE_URL}index-event-types/?`,
-      requestParameters()
-    );
+    expect(f).toHaveBeenCalledWith(`${TEST_BASE_URL}index-event-types/?`, requestParameters());
   });
 
-  it("Should retrieve a list of Pathways", async () => {
+  it('Should retrieve a list of Pathways', async () => {
     const f = fetchImpl(TEST_ADMIN_LIST_PATHWAYS_RESPONSE);
     const client = createClient(f);
     const resp = await client.listPathways();
     expect(resp).toBe(TEST_ADMIN_LIST_PATHWAYS_RESPONSE);
     expect(f).toHaveBeenCalled();
-    expect(f).toHaveBeenCalledWith(
-      `${TEST_BASE_URL}pathways/?`,
-      requestParameters()
-    );
+    expect(f).toHaveBeenCalledWith(`${TEST_BASE_URL}pathways/?`, requestParameters());
 
     const resp2 = await client.listPathways(2, false);
     expect(resp2).toBe(TEST_ADMIN_LIST_PATHWAYS_RESPONSE);
@@ -118,15 +126,12 @@ describe("Pathways client", () => {
     );
   });
 
-  it("Should retrieve a list of Rules", async () => {
+  it('Should retrieve a list of Rules', async () => {
     const f = fetchImpl(TEST_ADMIN_LIST_RULES_RESPONSE);
     const client = createClient(f);
     const resp = await client.listRules();
     expect(resp).toBe(TEST_ADMIN_LIST_RULES_RESPONSE);
     expect(f).toHaveBeenCalled();
-    expect(f).toHaveBeenCalledWith(
-      `${TEST_BASE_URL}rules/?`,
-      requestParameters()
-    );
+    expect(f).toHaveBeenCalledWith(`${TEST_BASE_URL}rules/?`, requestParameters());
   });
 });
