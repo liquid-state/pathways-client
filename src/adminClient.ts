@@ -204,7 +204,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
         return data;
       }
     }
-    return resp.text;
+    return await resp.text();
   };
 
   public buildQueryStringParameters = (params: { [key: string]: any }) => {
@@ -464,7 +464,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     );
   };
 
-  listAppUsers = async (page?: number, identityId?: string) => {
+  listAppUsers = (page?: number, identityId?: string) => {
     let queryStringParameters = {};
     if (page) {
       queryStringParameters = { page };
@@ -479,14 +479,14 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     );
   };
 
-  listIndexEventTypes = async (page?: number) =>
+  listIndexEventTypes = (page?: number) =>
     this.getRequest(
       "listIndexEventTypes",
       "Unable to get list of Index Events from Pathways service",
       this.buildQueryStringParameters({ page })
     );
 
-  listPathways = async (page?: number, isDeleted?: boolean) =>
+  listPathways = (page?: number, isDeleted?: boolean) =>
     this.getRequest(
       "listPathways",
       "Unable to get list of Pathways from Pathways service",
@@ -501,7 +501,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       { pathwayId: `${pathwayId}` }
     );
 
-  listPathwayStages = async (pathwayId: number) =>
+  listPathwayStages = (pathwayId: number) =>
     this.getRequest(
       "listPathways",
       "Unable to get list of Pathways from Pathways service",
@@ -509,7 +509,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       { pathwayId: `${pathwayId}` }
     );
 
-  listRules = async (page?: number) =>
+  listRules = (page?: number) =>
     this.getRequest(
       "listRules",
       "Unable to get list of Rules from Pathways service",
