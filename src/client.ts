@@ -1,12 +1,43 @@
 interface IPathwaysClient {
-  me(username: string, password?: string): Promise<Response>;
+  me(username: string, password?: string): Promise<IMe>;
+}
+
+export interface IMe {
+  id: number;
+  identity_id: string;
+  pathways: {
+    id: number;
+    original_pathway: {
+      id: number;
+      name: string;
+      description: string;
+      is_active: boolean;
+      is_deleted: boolean;
+    };
+    current_stage_slug: string;
+    disabled_rule_ids: number[];
+    last_processing_time: string;
+    next_processing_time: string;
+  }[];
+  journeys: {
+    id: number;
+    start_date: number;
+    end_date: string;
+    created_on: string;
+    index_events: {
+      id: number;
+      event_type_slug: string;
+      value: string;
+      updated_on: string;
+    }[];
+    entries: string;
+  }[];
 }
 
 interface IOptions {
   baseUrl?: string;
   fetch?: typeof fetch;
 }
-
 const defaultOptions = {
   baseUrl: 'https://pathways.example.com/',
   fetch: undefined,
@@ -72,6 +103,7 @@ class PathwaysClient implements IPathwaysClient {
       throw PathwaysAPIError('Unable to get pathways user details', resp);
     }
     const data = await resp.json();
+
     return data;
   };
 }
