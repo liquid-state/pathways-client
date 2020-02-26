@@ -4,13 +4,13 @@ export interface IOptions {
 }
 
 export enum ContentType {
-  FEATURE_DOCUMENT = "FEATURE_DOCUMENT",
-  FEATURE_FORM = "FEATURE_FORM",
-  MESSAGE = "MESSAGE"
+  FEATURE_DOCUMENT = 'FEATURE_DOCUMENT',
+  FEATURE_FORM = 'FEATURE_FORM',
+  MESSAGE = 'MESSAGE',
 }
 export type ContentTypes = keyof typeof ContentType;
 
-export type RuleWhenType = "STAGE_TRANSITION"; // TODO - add more 'when' types
+export type RuleWhenType = 'STAGE_TRANSITION'; // TODO - add more 'when' types
 
 export interface IJourneyEntryStageTransition {
   pathwayId: number;
