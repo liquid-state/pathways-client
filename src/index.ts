@@ -1,12 +1,11 @@
-import PathwaysClient, { IPathwaysClient, IOptions, IMe } from './client';
-import PathwaysAdminClient, { IPathwaysAdminClient, IAdminClientOptions } from './adminClient';
+import PathwaysClient from './client';
 
 export default PathwaysClient;
+export { IPathwaysClient, IOptions } from './client';
+export { IMe, IJourney, IJourneyEntriesResponse } from './types';
+
 export {
-  IMe,
-  PathwaysAdminClient,
-  IPathwaysClient,
-  IOptions,
+  default as PathwaysAdminClient,
   IPathwaysAdminClient,
   IAdminClientOptions,
-};
+} from './adminClient';

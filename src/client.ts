@@ -1,3 +1,16 @@
+import {
+  IOptions,
+  IMe,
+  IMeRaw,
+  IJourney,
+  IJourneyRaw,
+  IJourneyIndexEvent,
+  IJourneyIndexEventRaw,
+  IJourneyEntriesResponse,
+  IPathway,
+  IPathwayRaw
+} from "./types";
+
 interface IPathwaysClient {
   me(username: string, password?: string): Promise<IMe>;
   entries(
@@ -5,67 +18,6 @@ interface IPathwaysClient {
   ): Promise<IJourneyEntriesResponse>;
 }
 
-export interface IJourneyEntry {
-  id: number;
-  type: string;
-  data: {
-    pathway_id: number;
-    new_stage_name: string;
-    new_stage_slug: string;
-    previous_stage_name: string;
-    previous_stage_slug: string;
-  };
-  event_datetime: string;
-  created_on: string;
-}
-
-export interface IJourneyEntriesResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: IJourneyEntry[];
-}
-
-export interface IPathway {
-  id: number;
-  original_pathway: {
-    id: number;
-    name: string;
-    description: string;
-    is_active: boolean;
-    is_deleted: boolean;
-  };
-  current_stage_slug: string;
-  disabled_rule_ids: number[];
-  last_processing_time: string;
-  next_processing_time: string;
-}
-
-export interface IJourney {
-  id: number;
-  start_date: number;
-  end_date: string;
-  created_on: string;
-  index_events: {
-    id: number;
-    event_type_slug: string;
-    value: string;
-    updated_on: string;
-  }[];
-  entries: string;
-}
-
-export interface IMe {
-  id: number;
-  identity_id: string;
-  pathways: IPathway[];
-  journeys: IJourney[];
-}
-
-interface IOptions {
-  baseUrl?: string;
-  fetch?: typeof fetch;
-}
 const defaultOptions = {
   baseUrl: "https://pathways.example.com/",
   fetch: undefined
@@ -74,6 +26,44 @@ const defaultOptions = {
 const pathMap: { [key: string]: string } = {
   me: "me/"
 };
+
+const parsePathway = (pathway: IPathwayRaw): IPathway => ({
+  id: pathway.id,
+  originalPathway: {
+    id: pathway.original_pathway.id,
+    name: pathway.original_pathway.name,
+    description: pathway.original_pathway.description,
+    isActive: pathway.original_pathway.is_active,
+    isDeleted: pathway.original_pathway.is_deleted
+  },
+  currentStageSlug: pathway.current_stage_slug,
+  disabledRuleIds: pathway.disabled_rule_ids,
+  lastProcessingTime: pathway.last_processing_time,
+  nextProcessingTime: pathway.next_processing_time
+});
+
+const parseIndexEvent = (event: IJourneyIndexEventRaw): IJourneyIndexEvent => ({
+  id: event.id,
+  eventTypeSlug: event.event_type_slug,
+  value: event.value,
+  updatedOn: event.updated_on
+});
+
+const parseJourney = (journey: IJourneyRaw): IJourney => ({
+  id: journey.id,
+  startDate: journey.start_date,
+  endDate: journey.end_date,
+  createdOn: journey.created_on,
+  indexEvents: journey.index_events.map(parseIndexEvent),
+  entries: journey.entries
+});
+
+const parseMe = (me: IMeRaw): IMe => ({
+  id: me.id,
+  identityId: me.identity_id,
+  pathways: me.pathways.map(parsePathway),
+  journeys: me.journeys.map(parseJourney)
+});
 
 const PathwaysError = (message: string) => `Pathways Error: ${message}`;
 
@@ -130,9 +120,9 @@ class PathwaysClient implements IPathwaysClient {
     if (!resp.ok) {
       throw PathwaysAPIError("Unable to get pathways user details", resp);
     }
-    const data = await resp.json();
+    const me: IMeRaw = await resp.json();
 
-    return data;
+    return parseMe(me);
   };
 
   entries = async (
