@@ -129,6 +129,7 @@ class PathwaysClient implements IPathwaysClient {
     journey: IJourney | IJourneyEntriesResponse
   ): Promise<IJourneyEntriesResponse> => {
     if ("entries" in journey) {
+      // need to parse to be IJourney (camelcase) not IJourneyRaw
       const entryResponse: Response = await fetch(journey.entries);
       return entryResponse.json();
     } else {
