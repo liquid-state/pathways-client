@@ -6,7 +6,7 @@ export interface IOptions {
 export enum ContentType {
   FEATURE_DOCUMENT,
   FEATURE_FORM,
-  MESSAGE,
+  MESSAGE
 }
 export type ContentTypes = keyof typeof ContentType;
 
@@ -61,41 +61,6 @@ export interface IJourneyEntryRuleExecution extends IJourneyEntry {
     pathwayId: number;
     ruleWhatType: ContentTypes;
     ruleWhenType: string;
-    // executionDetails: {
-    //   data: object;
-    //   message: string;
-    //   executionType: string;
-    //   currentStageName: string;
-    //   currentStageSlug: string;
-    // };
-    // ruleWhatDetails: {
-    //   id: number;
-    //   app: number;
-    //   key: number;
-    //   name: string;
-    //   description: string;
-    //   slug: string;
-    //   title: string;
-    //   token: string;
-    //   app_id: number;
-    //   metadata: {
-    //     tags: {
-    //       term: string;
-    //       label: string;
-    //       scheme: string;
-    //     }[];
-    //     source: string;
-    //     language: string;
-    //   };
-    //   published: boolean;
-    //   isDeleted: boolean;
-    //   thumbnailUrl: string;
-    //   latestVersion: {
-    //     name: string;
-    //     created: string;
-    //     description: string;
-    //   };
-    // };
   };
 }
 
@@ -128,7 +93,9 @@ export interface IJourneyEntriesResponseRaw {
   count: number;
   next: string | null;
   previous: string | null;
-  results: Array<IJourneyEntryStageTransitionRaw | IJourneyEntryRuleExecutionRaw>;
+  results: Array<
+    IJourneyEntryStageTransitionRaw | IJourneyEntryRuleExecutionRaw
+  >;
 }
 
 export interface IPathway {
