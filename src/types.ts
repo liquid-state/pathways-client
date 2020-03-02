@@ -4,13 +4,14 @@ export interface IOptions {
 }
 
 export enum ContentType {
-  FEATURE_DOCUMENT = "FEATURE_DOCUMENT",
-  FEATURE_FORM = "FEATURE_FORM",
-  MESSAGE = "MESSAGE"
+  FEATURE_DOCUMENT,
+  FEATURE_FORM,
+  MESSAGE,
 }
 export type ContentTypes = keyof typeof ContentType;
 
-export type RuleWhenType = "STAGE_TRANSITION"; // TODO - add more 'when' types
+// TODO - convert to enum if more 'when' types are added
+export type RuleWhenType = 'STAGE_TRANSITION';
 
 export interface IJourneyEntryStageTransition {
   pathwayId: number;
@@ -20,55 +21,11 @@ export interface IJourneyEntryStageTransition {
   previousStageSlug: string;
 }
 
-export interface IJourneyEntryRuleExecution {
-  ruleId: number;
-  ruleName: string;
-  pathwayId: number;
-  ruleWhatType: ContentTypes;
-  ruleWhenType: RuleWhenType;
-  executionDetails: {
-    data: object;
-    message: string;
-    executionType: string;
-    currentStageName: string;
-    currentStageSlug: string;
-  };
-  ruleWhatDetails: {
-    id: number;
-    app: number;
-    key: number;
-    name: string;
-    description: string;
-    slug: string;
-    title: string;
-    token: string;
-    app_id: number;
-    metadata: {
-      tags: {
-        term: string;
-        label: string;
-        scheme: string;
-      }[];
-      source: string;
-      language: string;
-    };
-    published: boolean;
-    isDeleted: boolean;
-    thumbnailUrl: string;
-    latestVersion: {
-      name: string;
-      created: string;
-      description: string;
-    };
-  };
-}
-
 export interface IJourneyEntry {
   id: number;
   type: string;
   eventDatetime: string;
   createdOn: string;
-  data: IJourneyEntryStageTransition | IJourneyEntryRuleExecution;
 }
 
 export interface IJourneyEntryRaw {
@@ -78,8 +35,17 @@ export interface IJourneyEntryRaw {
   created_on: string;
 }
 
+export interface IJourneyEntryStageTransition extends IJourneyEntry {
+  type: 'stage_transition';
+  pathwayId: number;
+  newStageName: string;
+  newStageSlug: string;
+  previousStageName: string;
+  previousStageSlug: string;
+}
+
 export interface IJourneyEntryStageTransitionRaw extends IJourneyEntryRaw {
-  type: "stage_transition";
+  type: 'stage_transition';
   pathway_id: number;
   new_stage_name: string;
   new_stage_slug: string;
@@ -87,26 +53,67 @@ export interface IJourneyEntryStageTransitionRaw extends IJourneyEntryRaw {
   previous_stage_slug: string;
 }
 
+export interface IJourneyEntryRuleExecution extends IJourneyEntry {
+  type: 'rule_execution';
+  data: {
+    ruleId: number;
+    ruleName: string;
+    pathwayId: number;
+    ruleWhatType: ContentTypes;
+    ruleWhenType: string;
+    // executionDetails: {
+    //   data: object;
+    //   message: string;
+    //   executionType: string;
+    //   currentStageName: string;
+    //   currentStageSlug: string;
+    // };
+    // ruleWhatDetails: {
+    //   id: number;
+    //   app: number;
+    //   key: number;
+    //   name: string;
+    //   description: string;
+    //   slug: string;
+    //   title: string;
+    //   token: string;
+    //   app_id: number;
+    //   metadata: {
+    //     tags: {
+    //       term: string;
+    //       label: string;
+    //       scheme: string;
+    //     }[];
+    //     source: string;
+    //     language: string;
+    //   };
+    //   published: boolean;
+    //   isDeleted: boolean;
+    //   thumbnailUrl: string;
+    //   latestVersion: {
+    //     name: string;
+    //     created: string;
+    //     description: string;
+    //   };
+    // };
+  };
+}
+
 export interface IJourneyEntryRuleExecutionRaw extends IJourneyEntryRaw {
-  type: "rule_execution";
+  type: 'rule_execution';
   data: {
     rule_id: number;
     rule_name: string;
     pathway_id: number;
-    rule_what_type: string;
+    rule_what_type: ContentTypes;
     rule_when_type: string;
-    // execution_details
-    // rule_what_details
-  };
-}
-
-export interface IJourneyEntryStageTransitionRaw extends IJourneyEntryRaw {
-  data: {
-    pathway_id: number;
-    new_stage_name: string;
-    new_stage_slug: string;
-    previous_stage_name: string;
-    previous_stage_slug: string;
+    execution_details: {
+      data: object;
+      message: string;
+      execution_type: string;
+      current_stage_name: string;
+      current_stage_slug: string;
+    };
   };
 }
 
@@ -114,7 +121,14 @@ export interface IJourneyEntriesResponse {
   count: number;
   next: string | null;
   previous: string | null;
-  results: IJourneyEntryRaw[];
+  results: Array<IJourneyEntryStageTransition | IJourneyEntryRuleExecution>;
+}
+
+export interface IJourneyEntriesResponseRaw {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Array<IJourneyEntryStageTransitionRaw | IJourneyEntryRuleExecutionRaw>;
 }
 
 export interface IPathway {
@@ -167,7 +181,7 @@ export interface IJourney {
   endDate: string;
   createdOn: string;
   indexEvents: IJourneyIndexEvent[];
-  entries: IJourneyEntry[];
+  entries: string;
 }
 
 export interface IJourneyRaw {
@@ -181,7 +195,7 @@ export interface IJourneyRaw {
     value: string;
     updated_on: string;
   }[];
-  entries: IJourneyEntryRaw[];
+  entries: string;
 }
 
 export interface IMe {
