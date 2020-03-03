@@ -1,5 +1,5 @@
 import PathwaysClient from './client';
-import { TEST_JWT, TEST_APPUSER_ME_RESPONSE } from './mock_data';
+import { TEST_JWT, TEST_APPUSER_ME_RAW, TEST_APPUSER_ME_RESPONSE } from './mock_data';
 
 const fetchImpl: any = (response: any, valid: boolean = true) => {
   return jest.fn().mockImplementation((url: string, init: object) => {
@@ -20,10 +20,10 @@ describe('Pathways client', () => {
   });
 
   it('Should retrieve user details correctly with /me/ endpoint', async () => {
-    const f = fetchImpl(TEST_APPUSER_ME_RESPONSE);
+    const f = fetchImpl(TEST_APPUSER_ME_RAW);
     const client = new PathwaysClient(TEST_JWT, { fetch: f });
     const resp = await client.me();
-    expect(resp).toBe(TEST_APPUSER_ME_RESPONSE);
+    expect(resp).toEqual(TEST_APPUSER_ME_RESPONSE);
     expect(f).toHaveBeenCalled();
     expect(f).toHaveBeenCalledWith('https://pathways.example.com/me/', {
       method: 'GET',

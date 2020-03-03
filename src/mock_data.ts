@@ -2,7 +2,7 @@ export const TEST_APP_TOKEN = 'app123';
 export const TEST_JWT = 'test-jwt';
 export const TEST_BASE_URL = `https://pathways.example.com/v1/apps/${TEST_APP_TOKEN}/`;
 
-export const TEST_APPUSER_ME_RESPONSE = {
+export const TEST_APPUSER_ME_RAW = {
   id: 1,
   identity_id: '80e268c6-42e8-4bd3-97bc-569b5f1d6260',
   pathways: [
@@ -15,6 +15,8 @@ export const TEST_APPUSER_ME_RESPONSE = {
         is_active: true,
         is_deleted: false,
       },
+      last_processing_time: undefined,
+      next_processing_time: undefined,
       current_stage_slug: 'stage-0',
       disabled_rule_ids: [2],
     },
@@ -51,6 +53,64 @@ export const TEST_APPUSER_ME_RESPONSE = {
           event_type_slug: 'surgery',
           value: '2020-02-08T15:58:13.321288Z',
           updated_on: '2020-02-02T05:58:17.228348Z',
+        },
+      ],
+      entries: 'https://pathways.example.com/v1/me/journey-entries/2/?format=json',
+    },
+  ],
+};
+
+export const TEST_APPUSER_ME_RESPONSE = {
+  id: 1,
+  identityId: '80e268c6-42e8-4bd3-97bc-569b5f1d6260',
+  pathways: [
+    {
+      id: 1,
+      originalPathway: {
+        id: 1,
+        name: 'Pathway 1',
+        description: 'pathway 1 desc',
+        isActive: true,
+        isDeleted: false,
+      },
+      lastProcessingTime: undefined,
+      nextProcessingTime: undefined,
+      currentStageSlug: 'stage-0',
+      disabledRuleIds: [2],
+    },
+  ],
+  journeys: [
+    {
+      id: 1,
+      startDate: '2019-10-03',
+      endDate: null,
+      createdOn: '2020-02-02T05:58:11.440200Z',
+      indexEvents: [],
+      entries: 'https://pathways.example.com/v1/me/journey-entries/1/?format=json',
+    },
+    {
+      id: 2,
+      startDate: '2020-01-03',
+      endDate: null,
+      createdOn: '2020-02-02T05:58:13.072669Z',
+      indexEvents: [
+        {
+          id: 1,
+          eventTypeSlug: 'admission',
+          value: '2020-02-02T15:58:13.321288Z',
+          updatedOn: '2020-02-02T05:58:14.673556Z',
+        },
+        {
+          id: 2,
+          eventTypeSlug: 'discharge',
+          value: '2020-02-05T15:58:13.321288Z',
+          updatedOn: '2020-02-02T05:58:16.313494Z',
+        },
+        {
+          id: 3,
+          eventTypeSlug: 'surgery',
+          value: '2020-02-08T15:58:13.321288Z',
+          updatedOn: '2020-02-02T05:58:17.228348Z',
         },
       ],
       entries: 'https://pathways.example.com/v1/me/journey-entries/2/?format=json',
