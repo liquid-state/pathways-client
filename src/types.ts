@@ -6,7 +6,7 @@ export interface IOptions {
 export enum ContentType {
   FEATURE_DOCUMENT,
   FEATURE_FORM,
-  MESSAGE
+  MESSAGE,
 }
 export type ContentTypes = keyof typeof ContentType;
 
@@ -93,9 +93,7 @@ export interface IJourneyEntriesResponseRaw {
   count: number;
   next: string | null;
   previous: string | null;
-  results: Array<
-    IJourneyEntryStageTransitionRaw | IJourneyEntryRuleExecutionRaw
-  >;
+  results: Array<IJourneyEntryStageTransitionRaw | IJourneyEntryRuleExecutionRaw>;
 }
 
 export interface IPathway {

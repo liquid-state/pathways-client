@@ -14,23 +14,21 @@ import {
   IJourneyEntryRuleExecutionRaw,
   IJourneyEntriesResponse,
   IPathway,
-  IPathwayRaw
+  IPathwayRaw,
 } from './types';
 
 interface IPathwaysClient {
   me(username: string, password?: string): Promise<IMe>;
-  entries(
-    journey: IJourney | IJourneyEntriesResponse
-  ): Promise<IJourneyEntriesResponse>;
+  entries(journey: IJourney | IJourneyEntriesResponse): Promise<IJourneyEntriesResponse>;
 }
 
 const defaultOptions = {
   baseUrl: 'https://pathways.example.com/',
-  fetch: undefined
+  fetch: undefined,
 };
 
 const pathMap: { [key: string]: string } = {
-  me: 'me/'
+  me: 'me/',
 };
 
 const parsePathway = (pathway: IPathwayRaw): IPathway => ({
@@ -40,19 +38,19 @@ const parsePathway = (pathway: IPathwayRaw): IPathway => ({
     name: pathway.original_pathway.name,
     description: pathway.original_pathway.description,
     isActive: pathway.original_pathway.is_active,
-    isDeleted: pathway.original_pathway.is_deleted
+    isDeleted: pathway.original_pathway.is_deleted,
   },
   currentStageSlug: pathway.current_stage_slug,
   disabledRuleIds: pathway.disabled_rule_ids,
   lastProcessingTime: pathway.last_processing_time,
-  nextProcessingTime: pathway.next_processing_time
+  nextProcessingTime: pathway.next_processing_time,
 });
 
 const parseIndexEvent = (event: IJourneyIndexEventRaw): IJourneyIndexEvent => ({
   id: event.id,
   eventTypeSlug: event.event_type_slug,
   value: event.value,
-  updatedOn: event.updated_on
+  updatedOn: event.updated_on,
 });
 
 const parseJourneyEntry = (
@@ -69,7 +67,7 @@ const parseJourneyEntry = (
         newStageName: entry.new_stage_name,
         newStageSlug: entry.new_stage_slug,
         previousStageName: entry.previous_stage_name,
-        previousStageSlug: entry.previous_stage_slug
+        previousStageSlug: entry.previous_stage_slug,
       };
     case 'rule_execution':
       return {
@@ -82,8 +80,8 @@ const parseJourneyEntry = (
           ruleName: entry.data.rule_name,
           pathwayId: entry.data.pathway_id,
           ruleWhatType: entry.data.rule_what_type,
-          ruleWhenType: entry.data.rule_when_type
-        }
+          ruleWhenType: entry.data.rule_when_type,
+        },
       };
     default: {
       console.log('unknown entry type found - not parsed', entry);
@@ -96,7 +94,7 @@ const parseEntriesResponse = (entryResponse: any): IJourneyEntriesResponse => ({
   count: entryResponse.count,
   next: entryResponse.next,
   previous: entryResponse.previous,
-  results: entryResponse.results.map(parseJourneyEntry)
+  results: entryResponse.results.map(parseJourneyEntry),
 });
 
 const parseJourney = (journey: IJourneyRaw): IJourney => ({
@@ -105,21 +103,21 @@ const parseJourney = (journey: IJourneyRaw): IJourney => ({
   endDate: journey.end_date,
   createdOn: journey.created_on,
   indexEvents: journey.index_events.map(parseIndexEvent),
-  entries: journey.entries
+  entries: journey.entries,
 });
 
 const parseMe = (me: IMeRaw): IMe => ({
   id: me.id,
   identityId: me.identity_id,
   pathways: me.pathways.map(parsePathway),
-  journeys: me.journeys.map(parseJourney)
+  journeys: me.journeys.map(parseJourney),
 });
 
 const PathwaysError = (message: string) => `Pathways Error: ${message}`;
 
 const PathwaysAPIError = (message: string, response: Response) => ({
   message: `Pathways API Error: ${message}`,
-  response
+  response,
 });
 
 class PathwaysClient implements IPathwaysClient {
@@ -164,8 +162,8 @@ class PathwaysClient implements IPathwaysClient {
     const resp = await this.fetch(fullURL, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${this.jwt}`
-      }
+        Authorization: `Bearer ${this.jwt}`,
+      },
     });
     if (!resp.ok) {
       throw PathwaysAPIError('Unable to get pathways user details', resp);
