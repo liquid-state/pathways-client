@@ -39,6 +39,47 @@ const parsePathway = (pathway: IPathwayRaw): IPathway => ({
     description: pathway.original_pathway.description,
     isActive: pathway.original_pathway.is_active,
     isDeleted: pathway.original_pathway.is_deleted,
+    contentList: {
+      stages: Object.keys(pathway.original_pathway.content_list.stages).reduce((acc, key) => ({
+        ...acc,
+        [key]: pathway.original_pathway.content_list.stages[key].map(content => ({
+          type: content.type,
+          details: {
+            id: content.details.id,
+            app: content.details.app,
+            name: content.details.name,
+            slug: content.details.slug,
+            links: {
+              self: content.details.links.self,
+              versions: content.details.links.versions,
+              variations: content.details.links.variations,
+              publishingStatus: content.details.links.publishing_status,
+            },
+            title: content.details.title,
+            token: content.details.token,
+            appId: content.details.app_id,
+            parent: content.details.parent,
+            appName: content.details.app_name,
+            metadata: {
+              tags: content.details.metadata.tags,
+              source: content.details.metadata.source,
+              language: content.details.metadata.language,
+              sourceUrl: content.details.metadata["source-url"],
+              contentProvider: content.details.metadata["content-provider"],
+              originalAuthors: content.details.metadata["original-authors"]
+            },
+            ownerId: content.details.owner_id,
+            published: content.details.published,
+            isDeleted: content.details.is_deleted,
+            productId: content.details.product_id,
+            description: content.details.description,
+            thumbnailUrl: content.details.thumbnail_url,
+            deletionDatetime: content.details.deletion_datetime,
+            appUserAccessType: content.details.app_user_access_type,
+          }
+        }))
+      }), {})
+    }
   },
   currentStageSlug: pathway.current_stage_slug,
   disabledRuleIds: pathway.disabled_rule_ids,
