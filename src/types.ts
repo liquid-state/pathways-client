@@ -96,7 +96,7 @@ export interface IJourneyEntriesResponseRaw {
   results: Array<IJourneyEntryStageTransitionRaw | IJourneyEntryRuleExecutionRaw>;
 }
 
-export type IPathwayStage = {
+export type IPathwayStageContent = {
   type: string;
   details: {
     id: number;
@@ -149,7 +149,7 @@ export interface IPathway {
     isDeleted: boolean;
     contentList: {
       stages: {
-        [key: string]: IPathwayStage[];
+        [key: string]: IPathwayStageContent[];
       };
     };
   };
@@ -159,7 +159,7 @@ export interface IPathway {
   nextProcessingTime: string;
 }
 
-export type IPathwayStageRaw = {
+export type IPathwayStageContentRaw = {
   type: string;
   details: {
     id: number;
@@ -212,7 +212,7 @@ export interface IPathwayRaw {
     is_deleted: boolean;
     content_list: {
       stages: {
-        [key: string]: IPathwayStageRaw[];
+        [key: string]: IPathwayStageContentRaw[];
       };
     };
   };
