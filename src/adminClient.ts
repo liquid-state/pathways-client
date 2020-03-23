@@ -72,7 +72,7 @@ const pathMap: { [key: string]: string } = {
   patchAppUserPathway: 'appusers/{{appUserId}}/pathways/{{appUserPathwayId}}/',
   patchPathway: 'pathways/{{pathwayId}}/',
   patchPathwayIndexEvent: 'pathways/{{pathwayId}}/index-events/{{indexEventId}}/',
-  patchPathwayStage: 'pathways//{{pathwayId}}/stages/{{stageId}}/',
+  patchPathwayStage: 'pathways/{{pathwayId}}/stages/{{stageId}}/',
   patchRule: 'rules/{{ruleId}}/',
   processAppUserPathway: 'appusers/{{appUserId}}/pathways/{{appUserPathwayId}}/process/',
   transitionAppUserToPathwayStage:
