@@ -97,10 +97,10 @@ export interface IJourneyEntriesResponseRaw {
 }
 
 export type IPathwayStage = {
-  type: string
+  type: string;
   details: {
-    id: number,
-    app: number,
+    id: number;
+    app: number;
     name: string;
     slug: string;
     links: {
@@ -108,20 +108,20 @@ export type IPathwayStage = {
       versions: string;
       variations: string;
       publishingStatus: string;
-    },
+    };
     title: string;
     token: string;
-    appId: number,
-    parent?: string,
-    appName: string,
+    appId: number;
+    parent?: string;
+    appName: string;
     metadata: {
-      tags: string[]
-      source: string,
+      tags: string[];
+      source: string;
       language: string;
       sourceUrl: string;
       contentProvider: string;
       originalAuthors: string;
-    },
+    };
     ownerId?: number;
     published: boolean;
     isDeleted: boolean;
@@ -133,11 +133,11 @@ export type IPathwayStage = {
       name: string;
       created: string;
       description?: string;
-    },
+    };
     deletionDatetime?: string;
     appUserAccessType: string;
-  }
-}
+  };
+};
 
 export interface IPathway {
   id: number;
@@ -149,9 +149,9 @@ export interface IPathway {
     isDeleted: boolean;
     contentList: {
       stages: {
-        [key: string]: IPathwayStage[]
-      }
-    }
+        [key: string]: IPathwayStage[];
+      };
+    };
   };
   currentStageSlug: string;
   disabledRuleIds: number[];
@@ -160,10 +160,10 @@ export interface IPathway {
 }
 
 export type IPathwayStageRaw = {
-  type: string
+  type: string;
   details: {
-    id: number,
-    app: number,
+    id: number;
+    app: number;
     name: string;
     slug: string;
     links: {
@@ -171,20 +171,20 @@ export type IPathwayStageRaw = {
       versions: string;
       variations: string;
       publishing_status: string;
-    },
+    };
     title: string;
     token: string;
-    app_id: number,
-    parent?: string,
-    app_name: string,
+    app_id: number;
+    parent?: string;
+    app_name: string;
     metadata: {
-      tags: string[]
-      source: string,
+      tags: string[];
+      source: string;
       language: string;
       'source-url': string;
       'content-provider': string;
       'original-authors': string;
-    },
+    };
     owner_id?: number;
     published: boolean;
     is_deleted: boolean;
@@ -196,11 +196,11 @@ export type IPathwayStageRaw = {
       name: string;
       created: string;
       description?: string;
-    },
-    'deletion_datetime'?: string;
-    'app_user_access_type': string;
-  }
-}
+    };
+    deletion_datetime?: string;
+    app_user_access_type: string;
+  };
+};
 
 export interface IPathwayRaw {
   id: number;
@@ -212,9 +212,9 @@ export interface IPathwayRaw {
     is_deleted: boolean;
     content_list: {
       stages: {
-        [key: string]: IPathwayStageRaw[]
-      }
-    }
+        [key: string]: IPathwayStageRaw[];
+      };
+    };
   };
   current_stage_slug: string;
   disabled_rule_ids: number[];
