@@ -39,18 +39,7 @@ const parsePathway = (pathway: IPathwayRaw): IPathway => ({
     description: pathway.original_pathway.description,
     isActive: pathway.original_pathway.is_active,
     isDeleted: pathway.original_pathway.is_deleted,
-    contentList: {
-      stages: Object.keys(pathway.original_pathway.content_list.stages).reduce(
-        (acc, key) => ({
-          ...acc,
-          [key]: pathway.original_pathway.content_list.stages[key].map(content => ({
-            type: content.type,
-            details: content.details
-          })),
-        }),
-        {}
-      ),
-    },
+    contentList: pathway.original_pathway.content_list,
   },
   currentStageSlug: pathway.current_stage_slug,
   disabledRuleIds: pathway.disabled_rule_ids,
