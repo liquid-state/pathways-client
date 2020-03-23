@@ -99,43 +99,7 @@ export interface IJourneyEntriesResponseRaw {
 export type IPathwayStageContent = {
   type: string;
   details: {
-    id: number;
-    app: number;
-    name: string;
-    slug: string;
-    links: {
-      self: string;
-      versions: string;
-      variations: string;
-      publishingStatus: string;
-    };
-    title: string;
-    token: string;
-    appId: number;
-    parent?: string;
-    appName: string;
-    metadata: {
-      tags: string[];
-      source: string;
-      language: string;
-      sourceUrl: string;
-      contentProvider: string;
-      originalAuthors: string;
-    };
-    ownerId?: number;
-    published: boolean;
-    isDeleted: boolean;
-    productId: string;
-    description: string;
-    thumbnailUrl: string;
-    hasVariations: boolean;
-    latestVersion: {
-      name: string;
-      created: string;
-      description?: string;
-    };
-    deletionDatetime?: string;
-    appUserAccessType: string;
+    [key: string]: any,
   };
 };
 
@@ -162,43 +126,7 @@ export interface IPathway {
 export type IPathwayStageContentRaw = {
   type: string;
   details: {
-    id: number;
-    app: number;
-    name: string;
-    slug: string;
-    links: {
-      self: string;
-      versions: string;
-      variations: string;
-      publishing_status: string;
-    };
-    title: string;
-    token: string;
-    app_id: number;
-    parent?: string;
-    app_name: string;
-    metadata: {
-      tags: string[];
-      source: string;
-      language: string;
-      'source-url': string;
-      'content-provider': string;
-      'original-authors': string;
-    };
-    owner_id?: number;
-    published: boolean;
-    is_deleted: boolean;
-    product_id: string;
-    description: string;
-    thumbnail_url: string;
-    has_variations: boolean;
-    latest_version: {
-      name: string;
-      created: string;
-      description?: string;
-    };
-    deletion_datetime?: string;
-    app_user_access_type: string;
+    [key: string]: any,
   };
 };
 
