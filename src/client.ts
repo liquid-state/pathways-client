@@ -39,6 +39,7 @@ const parsePathway = (pathway: IPathwayRaw): IPathway => ({
     description: pathway.original_pathway.description,
     isActive: pathway.original_pathway.is_active,
     isDeleted: pathway.original_pathway.is_deleted,
+    contentList: pathway.original_pathway.content_list,
   },
   currentStageSlug: pathway.current_stage_slug,
   disabledRuleIds: pathway.disabled_rule_ids,
