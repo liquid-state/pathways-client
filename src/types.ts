@@ -99,7 +99,7 @@ export interface IJourneyEntriesResponseRaw {
 export type IPathwayStageContent = {
   type: string;
   details: {
-    [key: string]: any,
+    [key: string]: any;
   };
 };
 
@@ -126,7 +126,7 @@ export interface IPathway {
 export type IPathwayStageContentRaw = {
   type: string;
   details: {
-    [key: string]: any,
+    [key: string]: any;
   };
 };
 
@@ -199,4 +199,16 @@ export interface IMeRaw {
   identity_id: string;
   pathways: IPathwayRaw[];
   journeys: IJourneyRaw[];
+}
+
+export interface IOriginalPathway {
+  id: number;
+  url: string;
+  name: string;
+  description: string;
+  stages: {
+    name: string;
+    slug: string;
+    description: string;
+  }[];
 }

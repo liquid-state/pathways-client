@@ -6,15 +6,14 @@ import {
   IJourneyRaw,
   IJourneyIndexEvent,
   IJourneyIndexEventRaw,
-  IJourneyEntry,
   IJourneyEntryStageTransition,
-  ContentTypes,
   IJourneyEntryRuleExecution,
   IJourneyEntryStageTransitionRaw,
   IJourneyEntryRuleExecutionRaw,
   IJourneyEntriesResponse,
   IPathway,
   IPathwayRaw,
+  IOriginalPathway,
 } from './types';
 
 interface IPathwaysClient {
@@ -29,6 +28,7 @@ const defaultOptions = {
 
 const pathMap: { [key: string]: string } = {
   me: 'me/',
+  originalPathway: 'apps/{{appToken}}/pathways/{{pathwayId}}/',
 };
 
 const parsePathway = (pathway: IPathwayRaw): IPathway => ({
@@ -114,6 +114,18 @@ const parseMe = (me: IMeRaw): IMe => ({
   journeys: me.journeys.map(parseJourney),
 });
 
+const parseOriginalPathway = (pathway: any): IOriginalPathway => ({
+  id: pathway.id,
+  url: pathway.url,
+  name: pathway.name,
+  description: pathway.description,
+  stages: pathway.stages.map((stage: any) => ({
+    name: stage.name,
+    slug: stage.slug,
+    description: stage.description,
+  })),
+});
+
 const PathwaysError = (message: string) => `Pathways Error: ${message}`;
 
 const PathwaysAPIError = (message: string, response: Response) => ({
@@ -141,9 +153,7 @@ class PathwaysClient implements IPathwaysClient {
   }
 
   private getUrl(endpoint: string) {
-    let result;
-    result = `${this.options.baseUrl}${pathMap[endpoint]}`;
-    return result;
+    return `${this.options.baseUrl}${pathMap[endpoint]}`;
   }
 
   private sub() {
@@ -185,6 +195,16 @@ class PathwaysClient implements IPathwaysClient {
       const entryResponse: Response = await fetch(journey.next!);
       return parseEntriesResponse(await entryResponse.json());
     }
+  };
+
+  originalPathway = async (appToken: string, pathway: IPathway | number) => {
+    const pathwayId = typeof pathway === 'number' ? pathway : pathway.originalPathway.id;
+    const baseUrl = this.getUrl('originalPathway');
+    const finalUrl = baseUrl
+      .replace('{{appToken}}', appToken)
+      .replace('{{pathwayId}}', pathwayId.toString());
+    const resp = await this.fetch(finalUrl);
+    return parseOriginalPathway(await resp.json());
   };
 }
 
