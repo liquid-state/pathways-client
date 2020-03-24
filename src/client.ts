@@ -82,6 +82,8 @@ const parseJourneyEntry = (
           pathwayId: entry.data.pathway_id,
           ruleWhatType: entry.data.rule_what_type,
           ruleWhenType: entry.data.rule_when_type,
+          executionDetails: entry.data.execution_details,
+          ruleWhatDetails: entry.data.rule_what_details,
         },
       };
     default: {
