@@ -61,8 +61,8 @@ export interface IJourneyEntryRuleExecution extends IJourneyEntry {
     pathwayId: number;
     ruleWhatType: ContentTypes;
     ruleWhenType: string;
-    executionDetails: object;
-    ruleWhatDetails: object;
+    executionDetails: any;
+    ruleWhatDetails: any;
   };
 }
 
@@ -74,8 +74,8 @@ export interface IJourneyEntryRuleExecutionRaw extends IJourneyEntryRaw {
     pathway_id: number;
     rule_what_type: ContentTypes;
     rule_when_type: string;
-    execution_details: object;
-    rule_what_details: object;
+    execution_details: any;
+    rule_what_details: any;
   };
 }
 
