@@ -9,6 +9,7 @@ export {
   IJourneyEntry,
   IJourneyEntriesResponse,
   IPathway,
+  IOriginalPathway,
 } from './types';
 
 export {
