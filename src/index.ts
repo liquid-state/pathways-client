@@ -16,4 +16,6 @@ export {
   default as PathwaysAdminClient,
   IPathwaysAdminClient,
   IAdminClientOptions,
-} from './adminClient';
+} from './admin/client';
+
+export { default as PathwaysAdminService } from './admin/service';
