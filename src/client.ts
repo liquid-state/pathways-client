@@ -55,7 +55,7 @@ const parseIndexEvent = (event: IJourneyIndexEventRaw): IJourneyIndexEvent => ({
 });
 
 const parseJourneyEntry = (
-  entry: IJourneyEntryStageTransitionRaw | IJourneyEntryRuleExecutionRaw
+  entry: IJourneyEntryStageTransitionRaw | IJourneyEntryRuleExecutionRaw,
 ): IJourneyEntryStageTransition | IJourneyEntryRuleExecution => {
   switch (entry.type) {
     case 'stage_transition':
@@ -187,7 +187,7 @@ class PathwaysClient implements IPathwaysClient {
   };
 
   entries = async (
-    journey: IJourney | IJourneyEntriesResponse
+    journey: IJourney | IJourneyEntriesResponse,
   ): Promise<IJourneyEntriesResponse> => {
     if ('entries' in journey) {
       // need to parse to be IJourney (camelcase) not IJourneyRaw

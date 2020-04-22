@@ -62,10 +62,10 @@ export interface IJourneyEntryRuleExecution extends IJourneyEntry {
     ruleWhatType: ContentTypes;
     ruleWhenType: string;
     executionDetails: {
-      [key: string]: any
+      [key: string]: any;
     };
     ruleWhatDetails: {
-      [key: string]: any
+      [key: string]: any;
     };
   };
 }
@@ -79,10 +79,10 @@ export interface IJourneyEntryRuleExecutionRaw extends IJourneyEntryRaw {
     rule_what_type: ContentTypes;
     rule_when_type: string;
     execution_details: {
-      [key: string]: any
+      [key: string]: any;
     };
     rule_what_details: {
-      [key: string]: any
+      [key: string]: any;
     };
   };
 }

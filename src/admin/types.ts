@@ -38,7 +38,7 @@ export interface IPathwaysAdminClient {
   deleteRule(ruleId: number): Promise<boolean>;
   deletePathwayIndexEvent(pathwayId: number, indexEventId: number): Promise<boolean>;
   deletePathwayStage(pathwayId: number, stageId: number): Promise<boolean>;
-  duplicatePathway(pathwayId: number, updatedMetadata?: object): Promise<IRawPathway>;
+  duplicatePathway(pathwayId: number, updatedMetadata?: object): Promise<Response>;
   listAppUsers(page?: number, identityId?: string): Promise<IRawAppUser[]>;
   listIndexEventTypes(page?: number): Promise<IRawIndexEvent[]>;
   listPathways(page?: number, isDeleted?: boolean): Promise<IRawPathway[]>;
@@ -99,7 +99,7 @@ export interface IPathwaysAdminService {
   deleteRule(ruleId: number): Promise<boolean>;
   deletePathwayIndexEvent(pathwayId: number, indexEventId: number): Promise<boolean>;
   deletePathwayStage(pathwayId: number, stageId: number): Promise<boolean>;
-  duplicatePathway(pathwayId: number, updatedMetadata?: object): Promise<IPathway>;
+  duplicatePathway(pathwayId: number, updatedMetadata?: object): Promise<Response>;
   listAppUsers(page?: number, identityId?: string): Promise<IAppUser[]>;
   listIndexEventTypes(page?: number): Promise<IIndexEvent[]>;
   listPathways(page?: number, isDeleted?: boolean): Promise<IPathway[]>;

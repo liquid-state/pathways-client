@@ -385,19 +385,17 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     });
   };
 
-  duplicatePathway = async (pathwayId: number, updatedMetadata?: object): Promise<IRawPathway> => {
+  duplicatePathway = async (pathwayId: number, updatedMetadata?: object): Promise<Response> => {
     const postData = {
       ...(updatedMetadata ? { updatedMetadata } : {}),
     };
-    return (
-      await this.postRequest(
-        'duplicatePathway',
-        postData,
-        'Unable to duplicate Pathway',
-        undefined,
-        { pathwayId: `${pathwayId}` },
-      )
-    ).json();
+    return await this.postRequest(
+      'duplicatePathway',
+      postData,
+      'Unable to duplicate Pathway',
+      undefined,
+      { pathwayId: `${pathwayId}` },
+    );
   };
 
   listAppUsers = async (page?: number, identityId?: string): Promise<IRawAppUser[]> => {
