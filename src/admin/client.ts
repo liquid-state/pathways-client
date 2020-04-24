@@ -510,7 +510,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     const patchData = {
       name,
       slug,
-      translatedNames: JSON.stringify(translatedNames),
+      translated_names: JSON.stringify(translatedNames),
     };
     return (
       await this.patchRequest(
