@@ -52,6 +52,12 @@ export interface IPathwaysAdminClient {
     disabledRuleIds?: [number],
   ): Promise<IRawAppUserPathway>;
   processAppUserPathway(appUserId: string, appUserPathwayId: number): Promise<string>;
+  patchIndexEventType(
+    indexEventId: number,
+    name: string,
+    slug: string,
+    translatedNames: { [key: string]: string },
+  ): Promise<IRawIndexEvent>;
   patchPathway(pathwayId: number, pathwayData: IPathway): Promise<IRawPathway>;
   patchPathwayIndexEvent(
     pathwayId: number,
@@ -113,6 +119,7 @@ export interface IPathwaysAdminService {
     disabledRuleIds?: [number],
   ): Promise<IAppUserPathway>;
   processAppUserPathway(appUserId: string, appUserPathwayId: number): Promise<string>;
+  patchIndexEventType(indexEvent: IIndexEvent): Promise<IIndexEvent>;
   patchPathway(pathwayId: number, pathwayData: IPathway): Promise<IPathway>;
   patchPathwayIndexEvent(
     pathwayId: number,

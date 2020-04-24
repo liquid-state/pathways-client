@@ -44,6 +44,7 @@ const pathMap: { [key: string]: string } = {
   listPathwayStages: 'pathways/{{pathwayId}}/stages/',
   listRules: 'rules/',
   patchAppUserPathway: 'appusers/{{appUserId}}/pathways/{{appUserPathwayId}}/',
+  patchIndexEventType: 'index-event-types/{{indexEventId}}/',
   patchPathway: 'pathways/{{pathwayId}}/',
   patchPathwayIndexEvent: 'pathways/{{pathwayId}}/index-events/{{indexEventId}}/',
   patchPathwayStage: 'pathways/{{pathwayId}}/stages/{{stageId}}/',
@@ -496,6 +497,27 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
         'Unable to process App User Pathway for Pathways service',
         undefined,
         { appUserId: `${appUserId}`, appUserPathwayId: `${appUserPathwayId}` },
+      )
+    ).json();
+  };
+
+  patchIndexEventType = async (
+    indexEventId: number,
+    name: string,
+    slug: string,
+    translatedNames: { [key: string]: string },
+  ): Promise<IRawIndexEvent> => {
+    const patchData = {
+      name,
+      slug,
+      translatedNames: JSON.stringify(translatedNames),
+    };
+    return (
+      await this.patchRequest(
+        'patchIndexEventType',
+        patchData,
+        'Unable to update Index Event Type',
+        { indexEventId: `${indexEventId}` },
       )
     ).json();
   };
