@@ -32,6 +32,7 @@ const pathMap: { [key: string]: string } = {
   createPathwayIndexEvent: 'pathways/{{pathwayId}}/index-events/',
   createPathwayStage: 'pathways/{{pathwayId}}/stages/',
   createRule: 'rules/',
+  deleteIndexEventType: 'index-event-types/{{indexEventId}}/',
   deletePathway: 'pathways/{{pathwayId}}/',
   deletePathwayIndexEvent: 'pathways/{{pathwayId}}/index-events/{{indexEventId}}/',
   deletePathwayStage: 'pathways/{{pathwayId}}/stages/{{stageId}}/',
@@ -364,6 +365,12 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       ...(ruleData.metadata ? { metadata: JSON.stringify(ruleData.metadata) } : {}),
     };
     return (await this.postRequest('createRule', postData, 'Unable to create Rule')).json();
+  };
+
+  deleteIndexEventType = (indexEventId: number): Promise<boolean> => {
+    return this.deleteRequest('deleteIndexEventType', 'Unable to delete Index Event Type', {
+      indexEventId: `${indexEventId}`,
+    });
   };
 
   deleteRule = (ruleId: number): Promise<boolean> => {
