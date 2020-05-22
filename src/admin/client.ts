@@ -45,6 +45,8 @@ const pathMap: { [key: string]: string } = {
   listPathwayStages: 'pathways/{{pathwayId}}/stages/',
   listRules: 'rules/',
   patchAppUserPathway: 'appusers/{{appUserId}}/pathways/{{appUserPathwayId}}/',
+  patchAppUserJourneyIndexEvent:
+    'appusers/{{appUserId}}/journeys/{{journeyId}}/index-events/{{indexEventId}}/',
   patchIndexEventType: 'index-event-types/{{indexEventId}}/',
   patchPathway: 'pathways/{{pathwayId}}/',
   patchPathwayIndexEvent: 'pathways/{{pathwayId}}/index-events/{{indexEventId}}/',
@@ -480,10 +482,12 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     appUserPathwayId: number,
     currentStageSlug?: string,
     disabledRuleIds?: [number],
+    isActive?: boolean,
   ): Promise<IRawAppUserPathway> => {
     const patchData = {
       ...(currentStageSlug ? { current_stage_slug: currentStageSlug } : {}),
       ...(disabledRuleIds ? { disabled_rule_ids: disabledRuleIds } : {}),
+      ...(isActive === undefined ? {} : { is_active: isActive }),
     };
 
     return (
@@ -492,6 +496,24 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
         patchData,
         'Unable to update App User Pathway for Pathways service',
         { appUserId: `${appUserId}`, appUserPathwayId: `${appUserPathwayId}` },
+      )
+    ).json();
+  };
+
+  patchAppUserJourneyIndexEvent = async (
+    appUserId: string,
+    journeyId: number,
+    indexEventId: number,
+    indexEventDate: string,
+  ) => {
+    const patchData = { value: indexEventDate };
+
+    return (
+      await this.patchRequest(
+        'patchAppUserJourneyIndexEvent',
+        patchData,
+        'Unable to update App User Journey Index Event for Pathways service',
+        { appUserId, journeyId: `${journeyId}`, indexEventId: `${indexEventId}` },
       )
     ).json();
   };

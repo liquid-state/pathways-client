@@ -146,7 +146,10 @@ class PathwaysAdminService implements IPathwaysAdminService {
     return this.mapRawAppUser(rawAppUser);
   };
 
-  createAppUserJourney = async (appUserId: string, startDate: string): Promise<IAppUserJourney> => {
+  createAppUserJourney = async (
+    appUserId: string,
+    startDate: string,
+  ): Promise<IAppUserJourney> => {
     const rawAppUserJourney = await this.client.createAppUserJourney(appUserId, startDate);
 
     return this.mapRawAppUserJourney(rawAppUserJourney);
@@ -172,7 +175,10 @@ class PathwaysAdminService implements IPathwaysAdminService {
     appUserId: string,
     appUserPathwayData: IAppUserPathwayData,
   ): Promise<IAppUserPathway> => {
-    const rawAppUserPathway = await this.client.createAppUserPathway(appUserId, appUserPathwayData);
+    const rawAppUserPathway = await this.client.createAppUserPathway(
+      appUserId,
+      appUserPathwayData,
+    );
 
     return this.mapRawAppUserPathway(rawAppUserPathway);
   };
