@@ -120,7 +120,7 @@ export interface IPathwaysAdminService {
     currentStageSlug?: string,
     disabledRuleIds?: [number],
   ): Promise<IAppUserPathway>;
-  processAppUserPathway(appUserId: string, appUserPathwayId: number): Promise<string>;
+  processAppUserPathway(appUserId: string, appUserPathwayId: number): Promise<Response>;
   patchIndexEventType(indexEvent: IIndexEvent): Promise<IIndexEvent>;
   patchPathway(pathwayId: number, pathwayData: IPathway): Promise<IPathway>;
   patchPathwayIndexEvent(
