@@ -52,7 +52,7 @@ export interface IPathwaysAdminClient {
     currentStageSlug?: string,
     disabledRuleIds?: [number],
   ): Promise<IRawAppUserPathway>;
-  processAppUserPathway(appUserId: string, appUserPathwayId: number): Promise<string>;
+  processAppUserPathway(appUserId: string, appUserPathwayId: number): Promise<Response>;
   patchIndexEventType(
     indexEventId: number,
     name: string,

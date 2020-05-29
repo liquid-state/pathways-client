@@ -518,16 +518,17 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     ).json();
   };
 
-  processAppUserPathway = async (appUserId: string, appUserPathwayId: number): Promise<string> => {
-    return (
-      await this.postRequest(
-        'processAppUserPathway',
-        {},
-        'Unable to process App User Pathway for Pathways service',
-        undefined,
-        { appUserId: `${appUserId}`, appUserPathwayId: `${appUserPathwayId}` },
-      )
-    ).json();
+  processAppUserPathway = async (
+    appUserId: string,
+    appUserPathwayId: number,
+  ): Promise<Response> => {
+    return await this.postRequest(
+      'processAppUserPathway',
+      {},
+      'Unable to process App User Pathway for Pathways service',
+      undefined,
+      { appUserId: `${appUserId}`, appUserPathwayId: `${appUserPathwayId}` },
+    );
   };
 
   patchIndexEventType = async (
