@@ -14,6 +14,10 @@ import {
   IPathway,
   IPathwayRaw,
   IOriginalPathway,
+  IJourneyEntryAdhocMessageRaw,
+  IJourneyEntryFormSubmitted,
+  IJourneyEntryFormSubmittedRaw,
+  IJourneyEntryAdhocMessage,
 } from './types';
 
 interface IPathwaysClient {
@@ -52,11 +56,22 @@ const parseIndexEvent = (event: IJourneyIndexEventRaw): IJourneyIndexEvent => ({
   eventTypeSlug: event.event_type_slug,
   value: event.value,
   updatedOn: event.updated_on,
+  name: event.event_type_name,
+  translatedNames: event.event_type_translated_names,
+  orderIndex: event.event_type_order_index,
 });
 
 const parseJourneyEntry = (
-  entry: IJourneyEntryStageTransitionRaw | IJourneyEntryRuleExecutionRaw,
-): IJourneyEntryStageTransition | IJourneyEntryRuleExecution => {
+  entry:
+    | IJourneyEntryStageTransitionRaw
+    | IJourneyEntryRuleExecutionRaw
+    | IJourneyEntryAdhocMessageRaw
+    | IJourneyEntryFormSubmittedRaw,
+):
+  | IJourneyEntryStageTransition
+  | IJourneyEntryRuleExecution
+  | IJourneyEntryAdhocMessage
+  | IJourneyEntryFormSubmitted => {
   switch (entry.type) {
     case 'stage_transition':
       return {
@@ -64,11 +79,11 @@ const parseJourneyEntry = (
         type: entry.type,
         eventDatetime: entry.event_datetime,
         createdOn: entry.created_on,
-        pathwayId: entry.pathway_id,
-        newStageName: entry.new_stage_name,
-        newStageSlug: entry.new_stage_slug,
-        previousStageName: entry.previous_stage_name,
-        previousStageSlug: entry.previous_stage_slug,
+        pathwayId: entry.data.pathway_id,
+        newStageName: entry.data.new_stage_name,
+        newStageSlug: entry.data.new_stage_slug,
+        previousStageName: entry.data.previous_stage_name,
+        previousStageSlug: entry.data.previous_stage_slug,
       };
     case 'rule_execution':
       return {
@@ -85,6 +100,18 @@ const parseJourneyEntry = (
           executionDetails: entry.data.execution_details,
           ruleWhatDetails: entry.data.rule_what_details,
         },
+      };
+    case 'adhoc_message':
+      return {
+        eventDatetime: entry.event_datetime,
+        createdOn: entry.created_on,
+        ...entry,
+      };
+    case 'form_submitted':
+      return {
+        eventDatetime: entry.event_datetime,
+        createdOn: entry.created_on,
+        ...entry,
       };
     default: {
       console.log('unknown entry type found - not parsed', entry);
