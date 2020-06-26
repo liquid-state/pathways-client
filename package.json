@@ -1,6 +1,6 @@
 {
   "name": "@liquid-state/pathways-client",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "description": "Client library for Pathways Service",
   "files": [
     "dist/"
