@@ -46,11 +46,13 @@ export interface IJourneyEntryStageTransition extends IJourneyEntry {
 
 export interface IJourneyEntryStageTransitionRaw extends IJourneyEntryRaw {
   type: 'stage_transition';
-  pathway_id: number;
-  new_stage_name: string;
-  new_stage_slug: string;
-  previous_stage_name: string;
-  previous_stage_slug: string;
+  data: {
+    pathway_id: number;
+    new_stage_name: string;
+    new_stage_slug: string;
+    previous_stage_name: string;
+    previous_stage_slug: string;
+  };
 }
 
 export interface IJourneyEntryRuleExecution extends IJourneyEntry {
@@ -85,6 +87,26 @@ export interface IJourneyEntryRuleExecutionRaw extends IJourneyEntryRaw {
       [key: string]: any;
     };
   };
+}
+
+export interface IJourneyEntryAdhocMessageRaw extends IJourneyEntryRaw {
+  type: 'adhoc_message';
+  [key: string]: any;
+}
+
+export interface IJourneyEntryAdhocMessage extends IJourneyEntry {
+  type: 'adhoc_message';
+  [key: string]: any;
+}
+
+export interface IJourneyEntryFormSubmittedRaw extends IJourneyEntryRaw {
+  type: 'form_submitted';
+  [key: string]: any;
+}
+
+export interface IJourneyEntryFormSubmitted extends IJourneyEntry {
+  type: 'form_submitted';
+  [key: string]: any;
 }
 
 export interface IJourneyEntriesResponse {
@@ -160,6 +182,9 @@ export interface IJourneyIndexEvent {
   eventTypeSlug: string;
   value: string;
   updatedOn: string;
+  name: string;
+  translatedNames: { [key: string]: string };
+  orderIndex: number;
 }
 
 export interface IJourneyIndexEventRaw {
@@ -167,6 +192,9 @@ export interface IJourneyIndexEventRaw {
   event_type_slug: string;
   value: string;
   updated_on: string;
+  event_type_name: string;
+  event_type_translated_names: { [key: string]: string };
+  event_type_order_index: number;
 }
 
 export interface IJourney {
@@ -183,12 +211,7 @@ export interface IJourneyRaw {
   start_date: string;
   end_date: string;
   created_on: string;
-  index_events: {
-    id: number;
-    event_type_slug: string;
-    value: string;
-    updated_on: string;
-  }[];
+  index_events: IJourneyIndexEventRaw[];
   entries: string;
 }
 
