@@ -384,7 +384,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
   deletePathwayIndexEvent = (pathwayId: number, indexEventId: number): Promise<boolean> => {
     return this.deleteRequest('deletePathwayIndexEvent', 'Unable to delete Pathway Index Event', {
       pathwayId: `${pathwayId}`,
-      indexEventId: `${indexEventId}/`,
+      indexEventId: `${indexEventId}`,
     });
   };
 
