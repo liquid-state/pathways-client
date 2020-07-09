@@ -6,6 +6,8 @@ import {
   IJourneyRaw,
   IJourneyIndexEvent,
   IJourneyIndexEventRaw,
+  IUpdatedJourneyIndexEvent,
+  IUpdatedJourneyIndexEventRaw,
   IJourneyEntryStageTransition,
   IJourneyEntryRuleExecution,
   IJourneyEntryStageTransitionRaw,
@@ -32,6 +34,7 @@ const defaultOptions = {
 
 const pathMap: { [key: string]: string } = {
   me: 'me/',
+  meJourneyIndexEvent: 'me/journeys/{{journeyId}}/index-events/{{indexEventId}}/',
   originalPathway: 'apps/{{appToken}}/pathways/{{pathwayId}}/',
 };
 
@@ -59,6 +62,14 @@ const parseIndexEvent = (event: IJourneyIndexEventRaw): IJourneyIndexEvent => ({
   name: event.event_type_name,
   translatedNames: event.event_type_translated_names,
   orderIndex: event.event_type_order_index,
+});
+
+const parseUpdatedIndexEvent = (
+  event: IUpdatedJourneyIndexEvent,
+): IUpdatedJourneyIndexEventRaw => ({
+  id: event.id,
+  event_type_slug: event.eventTypeSlug,
+  value: event.value,
 });
 
 const parseJourneyEntry = (
@@ -234,6 +245,32 @@ class PathwaysClient implements IPathwaysClient {
       .replace('{{pathwayId}}', pathwayId.toString());
     const resp = await this.fetch(finalUrl);
     return parseOriginalPathway(await resp.json());
+  };
+
+  updateIndexEvents = async (journeyId: number, indexEventDates: IUpdatedJourneyIndexEvent[]) => {
+    indexEventDates.forEach(async ie => {
+      const updateIndexEvent = parseUpdatedIndexEvent(ie);
+      const baseUrl = this.getUrl('meJourneyIndexEvent');
+      const finalUrl = baseUrl
+        .replace('{{journeyId}}', journeyId.toString())
+        .replace('{{indexEventId}}', updateIndexEvent.id.toString());
+      const fullURL = `${finalUrl}?identity_id=${this.sub()}`;
+      const body = new FormData();
+      body.append('event_type_slug', updateIndexEvent.event_type_slug);
+      // if (updateIndexEvent.value) {
+      body.append('value', updateIndexEvent.value || '');
+      // }
+      const resp = await this.fetch(fullURL, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${this.jwt}`,
+        },
+        body,
+      });
+      if (!resp.ok) {
+        throw PathwaysAPIError('Unable to update index event', resp);
+      }
+    });
   };
 }
 

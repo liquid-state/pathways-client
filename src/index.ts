@@ -10,6 +10,7 @@ export {
   IJourneyEntriesResponse,
   IPathway,
   IOriginalPathway,
+  IUpdatedJourneyIndexEvent,
 } from './types';
 
 export {

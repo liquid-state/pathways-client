@@ -197,6 +197,18 @@ export interface IJourneyIndexEventRaw {
   event_type_order_index: number;
 }
 
+export interface IUpdatedJourneyIndexEvent {
+  id: number;
+  eventTypeSlug: string;
+  value: string;
+}
+
+export interface IUpdatedJourneyIndexEventRaw {
+  id: number;
+  event_type_slug: string;
+  value: string;
+}
+
 export interface IJourney {
   id: number;
   startDate: string;
