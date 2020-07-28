@@ -38,6 +38,7 @@ const pathMap: { [key: string]: string } = {
   deletePathwayStage: 'pathways/{{pathwayId}}/stages/{{stageId}}/',
   deleteRule: 'rules/{{ruleId}}/',
   duplicatePathway: 'pathways/{{pathwayId}}/duplicate/',
+  getPathway: 'pathways/{{pathwayId}}',
   listAppUsers: 'appusers/',
   listIndexEventTypes: 'index-event-types/',
   listPathways: 'pathways/',
@@ -91,7 +92,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       path = path.replace(match[0], pathParameters[match[1]]);
     }
 
-    return path;
+    return path[path.length - 1] === '/' ? path : `${path}/`;
   }
 
   private getUrl(
@@ -406,6 +407,17 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       undefined,
       { pathwayId: `${pathwayId}` },
     );
+  };
+
+  getPathway = async (pathwayId: number): Promise<IRawPathway> => {
+    return (
+      await this.getRequest(
+        'getPathway',
+        `Unable to get data for Pathway ID ${pathwayId}`,
+        undefined,
+        { pathwayId: `${pathwayId}` },
+      )
+    ).json();
   };
 
   listAppUsers = async (page?: number, identityId?: string): Promise<IRawAppUser[]> => {
