@@ -25,6 +25,10 @@ import {
 interface IPathwaysClient {
   me(username: string, password?: string): Promise<IMe>;
   entries(journey: IJourney | IJourneyEntriesResponse): Promise<IJourneyEntriesResponse>;
+  updateIndexEvents(
+    journeyId: number,
+    indexEventDates: IUpdatedJourneyIndexEvent[],
+  ): Promise<object>;
 }
 
 const defaultOptions = {
@@ -247,8 +251,8 @@ class PathwaysClient implements IPathwaysClient {
     return parseOriginalPathway(await resp.json());
   };
 
-  updateIndexEvents = async (journeyId: number, indexEventDates: IUpdatedJourneyIndexEvent[]) => {
-    indexEventDates.forEach(async ie => {
+  updateIndexEvents = async (journeyId: number, indexEventDates: IUpdatedJourneyIndexEvent[]): Promise<object> => {
+    return Promise.all(indexEventDates.map(async ie => {
       const updateIndexEvent = parseUpdatedIndexEvent(ie);
       const baseUrl = this.getUrl('meJourneyIndexEvent');
       const finalUrl = baseUrl
@@ -270,7 +274,9 @@ class PathwaysClient implements IPathwaysClient {
       if (!resp.ok) {
         throw PathwaysAPIError('Unable to update index event', resp);
       }
-    });
+
+      return resp;
+    }));
   };
 }
 
