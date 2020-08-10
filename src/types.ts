@@ -1,3 +1,5 @@
+export type MethodType = 'DELETE' | 'GET' | 'PATCH' | 'POST';
+
 export interface IOptions {
   baseUrl?: string;
   fetch?: typeof fetch;
@@ -198,13 +200,17 @@ export interface IJourneyIndexEventRaw {
 }
 
 export interface IUpdatedJourneyIndexEvent {
-  id: number;
+  id?: number;
   eventTypeSlug: string;
+  name: string;
+  orderIndex: number;
+  translatedNames: { [key: string]: string };
+  updatedOn: string;
   value: string;
 }
 
 export interface IUpdatedJourneyIndexEventRaw {
-  id: number;
+  id?: number;
   event_type_slug: string;
   value: string;
 }
