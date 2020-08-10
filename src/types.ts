@@ -198,8 +198,12 @@ export interface IJourneyIndexEventRaw {
 }
 
 export interface IUpdatedJourneyIndexEvent {
-  id: number;
+  id?: number;
   eventTypeSlug: string;
+  name: string;
+  orderIndex: number;
+  translatedNames: { [key: string]: string };
+  updatedOn: string;
   value: string;
 }
 
