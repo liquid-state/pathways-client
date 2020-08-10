@@ -1,4 +1,5 @@
 import {
+  MethodType,
   IOptions,
   IMe,
   IMeRaw,
@@ -26,6 +27,8 @@ interface IPathwaysClient {
   me(username: string, password?: string): Promise<IMe>;
   entries(journey: IJourney | IJourneyEntriesResponse): Promise<IJourneyEntriesResponse>;
   updateIndexEvents(
+    appToken: string,
+    appUserId: string,
     journeyId: number,
     indexEventDates: IUpdatedJourneyIndexEvent[],
   ): Promise<object>;
@@ -38,7 +41,9 @@ const defaultOptions = {
 
 const pathMap: { [key: string]: string } = {
   me: 'me/',
-  meJourneyIndexEvent: 'me/journeys/{{journeyId}}/index-events/{{indexEventId}}/',
+  createAppUserJourneyIndexEvent:
+    'apps/{{appToken}}/appusers/{{appUserId}}/journeys/{{journeyId}}/index-events/',
+  patchAppUserJourneyIndexEvent: 'me/journeys/{{journeyId}}/index-events/{{indexEventId}}/',
   originalPathway: 'apps/{{appToken}}/pathways/{{pathwayId}}/',
 };
 
@@ -196,9 +201,84 @@ class PathwaysClient implements IPathwaysClient {
     this.fetch = this.options.fetch || window.fetch.bind(window);
   }
 
-  private getUrl(endpoint: string) {
-    return `${this.options.baseUrl}${pathMap[endpoint]}`;
+  public buildPath(pathTemplate: string, pathParameters?: { [key: string]: string }): string {
+    if (!pathParameters) return pathTemplate;
+    const re = /{{([A-Za-z]+)}}/;
+
+    let path = pathTemplate;
+    let match;
+    while ((match = re.exec(path)) !== null) {
+      path = path.replace(match[0], pathParameters[match[1]]);
+    }
+
+    return path[path.length - 1] === '/' ? path : `${path}/`;
   }
+
+  private getUrl(
+    endpoint: string,
+    queryStringParameters?: { [key: string]: any },
+    pathParameters?: { [key: string]: string },
+  ): string {
+    let result;
+    result = `${this.options.baseUrl}${this.buildPath(pathMap[endpoint], pathParameters)}${
+      queryStringParameters
+        ? Object.keys(queryStringParameters).reduce(
+          (acc, key) => `${acc}${key}=${queryStringParameters[key]}&`,
+          '?',
+        )
+        : ''
+      }`;
+    return result;
+  }
+
+  private apiRequest = async (
+    pathKey: string,
+    errorMessage: string,
+    requestMethod: MethodType,
+    queryStringParameters?: { [key: string]: any },
+    postData?: { [key: string]: any },
+    pathParameters?: { [key: string]: string },
+  ): Promise<Response> => {
+    const url = this.getUrl(pathKey, queryStringParameters, pathParameters);
+
+    let body = undefined;
+    if (postData) {
+      body = new FormData();
+      for (let key in postData) {
+        body.append(key, postData[key]);
+      }
+    }
+
+    const resp = await this.fetch(url, {
+      method: requestMethod,
+      headers: {
+        Authorization: `Bearer ${this.jwt}`,
+      },
+      body,
+    });
+    if (!resp.ok) {
+      throw PathwaysAPIError(errorMessage, resp);
+    }
+
+    return resp;
+  };
+
+  private postRequest = (
+    pathKey: string,
+    postData: { [key: string]: any },
+    errorMessage: string,
+    queryStringParameters?: object,
+    pathParameters?: { [key: string]: string },
+  ) => {
+    return this.apiRequest(
+      pathKey,
+      errorMessage,
+      'POST',
+      queryStringParameters,
+      postData,
+      pathParameters,
+    );
+  };
 
   private sub() {
     // Get the body of the JWT.
@@ -251,32 +331,72 @@ class PathwaysClient implements IPathwaysClient {
     return parseOriginalPathway(await resp.json());
   };
 
-  updateIndexEvents = async (journeyId: number, indexEventDates: IUpdatedJourneyIndexEvent[]): Promise<object> => {
-    return Promise.all(indexEventDates.map(async ie => {
-      const updateIndexEvent = parseUpdatedIndexEvent(ie);
-      const baseUrl = this.getUrl('meJourneyIndexEvent');
-      const finalUrl = baseUrl
-        .replace('{{journeyId}}', journeyId.toString())
-        .replace('{{indexEventId}}', updateIndexEvent.id.toString());
-      const fullURL = `${finalUrl}?identity_id=${this.sub()}`;
-      const body = new FormData();
-      body.append('event_type_slug', updateIndexEvent.event_type_slug);
-      // if (updateIndexEvent.value) {
-      body.append('value', updateIndexEvent.value || '');
-      // }
-      const resp = await this.fetch(fullURL, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${this.jwt}`,
-        },
-        body,
-      });
-      if (!resp.ok) {
-        throw PathwaysAPIError('Unable to update index event', resp);
-      }
+  createAppUserJourneyIndexEvent = async (
+    appToken: string,
+    appUserId: string,
+    journeyId: number,
+    eventTypeSlug: string,
+    value: string,
+  ): Promise<IUpdatedJourneyIndexEventRaw> => {
+    return (
+      await this.postRequest(
+        'createAppUserJourneyIndexEvent',
+        { event_type_slug: eventTypeSlug, value },
+        'Unable to create App User Journey Index Event for Pathways service',
+        undefined,
+        { appToken, appUserId, journeyId: `${journeyId}` },
+      )
+    ).json();
+  };
 
-      return resp;
-    }));
+  updateIndexEvents = async (
+    appToken: string,
+    appUserId: string,
+    journeyId: number,
+    indexEventDates: IUpdatedJourneyIndexEvent[],
+  ): Promise<object> => {
+    return Promise.all(
+      indexEventDates.map(async ie => {
+        const updateIndexEvent = parseUpdatedIndexEvent(ie);
+        if (updateIndexEvent.value) {
+          if (!updateIndexEvent.id) {
+            return await this.createAppUserJourneyIndexEvent(
+              appToken,
+              appUserId,
+              journeyId,
+              ie.eventTypeSlug,
+              ie.value,
+            );
+          }
+
+          if (updateIndexEvent.id) {
+            const baseUrl = this.getUrl('patchAppUserJourneyIndexEvent');
+
+            const finalUrl = baseUrl
+              .replace('{{journeyId}}', journeyId.toString())
+              .replace('{{indexEventId}}', updateIndexEvent.id.toString());
+            const fullURL = `${finalUrl}?identity_id=${this.sub()}`;
+            const body = new FormData();
+            body.append('event_type_slug', updateIndexEvent.event_type_slug);
+            // if (updateIndexEvent.value) {
+            body.append('value', updateIndexEvent.value || '');
+            // }
+            const resp = await this.fetch(fullURL, {
+              method: 'PUT',
+              headers: {
+                Authorization: `Bearer ${this.jwt}`,
+              },
+              body,
+            });
+            if (!resp.ok) {
+              throw PathwaysAPIError('Unable to update index event', resp);
+            }
+
+            return resp;
+          }
+        }
+      }),
+    );
   };
 }
 
