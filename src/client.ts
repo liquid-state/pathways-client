@@ -32,6 +32,12 @@ interface IPathwaysClient {
     journeyId: number,
     indexEventDates: IUpdatedJourneyIndexEvent[],
   ): Promise<object>;
+  transitionAppUserToPathwayStage(
+    appToken: string,
+    appUserId: string,
+    appUserPathwayId: number,
+    newStageSlug: string,
+  ): Promise<string>;
 }
 
 const defaultOptions = {
@@ -45,6 +51,8 @@ const pathMap: { [key: string]: string } = {
     'apps/{{appToken}}/appusers/{{appUserId}}/journeys/{{journeyId}}/index-events/',
   patchAppUserJourneyIndexEvent: 'me/journeys/{{journeyId}}/index-events/{{indexEventId}}/',
   originalPathway: 'apps/{{appToken}}/pathways/{{pathwayId}}/',
+  transitionAppUserToPathwayStage:
+    'apps/{{appToken}}/appusers/{{appUserId}}/pathways/{{appUserPathwayId}}/transition/',
 };
 
 const parsePathway = (pathway: IPathwayRaw): IPathway => ({
@@ -354,8 +362,8 @@ class PathwaysClient implements IPathwaysClient {
     appUserId: string,
     journeyId: number,
     indexEventDates: IUpdatedJourneyIndexEvent[],
-  ): Promise<object> => {
-    return Promise.all(
+  ): Promise<object> =>
+    Promise.all(
       indexEventDates.map(async ie => {
         const updateIndexEvent = parseUpdatedIndexEvent(ie);
         if (updateIndexEvent.value) {
@@ -397,6 +405,23 @@ class PathwaysClient implements IPathwaysClient {
         }
       }),
     );
+
+  transitionAppUserToPathwayStage = async (
+    appToken: string,
+    appUserId: string,
+    appUserPathwayId: number,
+    newStageSlug: string,
+  ): Promise<string> => {
+    console.log('transitionAppUserToPathwayStage');
+    return (
+      await this.postRequest(
+        'transitionAppUserToPathwayStage',
+        { new_stage_slug: newStageSlug },
+        'Unable to transition App User to Pathway Stage for Pathways service',
+        undefined,
+        { appToken, appUserId: `${appUserId}`, appUserPathwayId: `${appUserPathwayId}` },
+      )
+    ).text();
   };
 }
 
