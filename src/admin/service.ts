@@ -119,11 +119,12 @@ class PathwaysAdminService implements IPathwaysAdminService {
   };
 
   private mapRawIndexEvent = (rawIndexEvent: IRawIndexEvent): IIndexEvent => {
-    const { translated_names, ...rest } = rawIndexEvent;
+    const { translated_names: translatedNames, order_index: order, ...rest } = rawIndexEvent;
 
     return {
       ...rest,
-      translatedNames: translated_names,
+      order,
+      translatedNames,
     };
   };
 

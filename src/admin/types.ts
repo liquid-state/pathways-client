@@ -272,6 +272,7 @@ export interface IStage {
 export interface IIndexEvent {
   id: number;
   name: string;
+  order: number;
   slug: string;
   translatedNames: {
     [key: string]: string;
@@ -281,6 +282,7 @@ export interface IIndexEvent {
 export interface IRawIndexEvent {
   id: number;
   name: string;
+  order_index: number;
   slug: string;
   translated_names: {
     [key: string]: string;

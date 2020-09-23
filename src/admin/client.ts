@@ -545,14 +545,16 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
 
   patchIndexEventType = async (
     indexEventId: number,
-    name: string,
-    slug: string,
-    translatedNames: { [key: string]: string },
+    name?: string,
+    slug?: string,
+    translatedNames?: { [key: string]: string },
+    order?: number,
   ): Promise<IRawIndexEvent> => {
     const patchData = {
-      name,
-      slug,
-      translated_names: JSON.stringify(translatedNames),
+      ...(name ? { name } : {}),
+      ...(slug ? { slug } : {}),
+      ...(translatedNames ? { translated_names: JSON.stringify(translatedNames) } : {}),
+      ...(order ? { order_index: order } : {}),
     };
     return (
       await this.patchRequest(

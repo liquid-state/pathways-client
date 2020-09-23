@@ -231,11 +231,11 @@ class PathwaysClient implements IPathwaysClient {
     result = `${this.options.baseUrl}${this.buildPath(pathMap[endpoint], pathParameters)}${
       queryStringParameters
         ? Object.keys(queryStringParameters).reduce(
-          (acc, key) => `${acc}${key}=${queryStringParameters[key]}&`,
-          '?',
-        )
+            (acc, key) => `${acc}${key}=${queryStringParameters[key]}&`,
+            '?',
+          )
         : ''
-      }`;
+    }`;
     return result;
   }
 
