@@ -117,13 +117,16 @@ describe('Pathways client', () => {
     const resp = await client.listPathways();
     expect(resp).toBe(TEST_ADMIN_LIST_PATHWAYS_RESPONSE);
     expect(f).toHaveBeenCalled();
-    expect(f).toHaveBeenCalledWith(`${TEST_BASE_URL}pathways/?`, requestParameters());
+    expect(f).toHaveBeenCalledWith(
+      `${TEST_BASE_URL}pathways/?with_rules=true&`,
+      requestParameters(),
+    );
 
-    const resp2 = await client.listPathways(2, false);
+    const resp2 = await client.listPathways(2, false, false);
     expect(resp2).toBe(TEST_ADMIN_LIST_PATHWAYS_RESPONSE);
     expect(f).toHaveBeenCalled();
     expect(f).toHaveBeenCalledWith(
-      `${TEST_BASE_URL}pathways/?page=2&is_deleted=false&`,
+      `${TEST_BASE_URL}pathways/?page=2&is_deleted=false&with_rules=false&`,
       requestParameters(),
     );
   });
