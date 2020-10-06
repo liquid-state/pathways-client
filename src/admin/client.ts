@@ -39,6 +39,7 @@ const pathMap: { [key: string]: string } = {
   deleteRule: 'rules/{{ruleId}}/',
   duplicatePathway: 'pathways/{{pathwayId}}/duplicate/',
   getPathway: 'pathways/{{pathwayId}}',
+  getRule: 'rules/{{ruleId}}',
   listAppUsers: 'appusers/',
   listIndexEventTypes: 'index-event-types/',
   listPathways: 'pathways/',
@@ -409,14 +410,22 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     );
   };
 
-  getPathway = async (pathwayId: number): Promise<IRawPathway> => {
+  getPathway = async (pathwayId: number, withRules = true): Promise<IRawPathway> => {
     return (
       await this.getRequest(
         'getPathway',
         `Unable to get data for Pathway ID ${pathwayId}`,
-        undefined,
+        { with_rules: withRules },
         { pathwayId: `${pathwayId}` },
       )
+    ).json();
+  };
+
+  getRule = async (ruleId: number): Promise<IRawRule> => {
+    return (
+      await this.getRequest('getRule', `Unable to get data for Rule ID ${ruleId}`, undefined, {
+        ruleId: `${ruleId}`,
+      })
     ).json();
   };
 
@@ -447,12 +456,16 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     ).json();
   };
 
-  listPathways = async (page?: number, isDeleted?: boolean): Promise<IRawPathway[]> => {
+  listPathways = async (
+    page?: number,
+    withRules = true,
+    isDeleted?: boolean,
+  ): Promise<IRawPathway[]> => {
     return (
       await this.getRequest(
         'listPathways',
         'Unable to get list of Pathways from Pathways service',
-        this.buildQueryStringParameters({ page, is_deleted: isDeleted }),
+        this.buildQueryStringParameters({ page, is_deleted: isDeleted, with_rules: withRules }),
       )
     ).json();
   };

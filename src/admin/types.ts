@@ -40,9 +40,11 @@ export interface IPathwaysAdminClient {
   deletePathwayIndexEvent(pathwayId: number, indexEventId: number): Promise<boolean>;
   deletePathwayStage(pathwayId: number, stageId: number): Promise<boolean>;
   duplicatePathway(pathwayId: number, updatedMetadata?: object): Promise<Response>;
+  getPathway(pathwayId: number, withRules?: boolean): Promise<IRawPathway>;
+  getRule(ruleId: number): Promise<IRawRule>;
   listAppUsers(page?: number, identityId?: string): Promise<IRawAppUser[]>;
   listIndexEventTypes(page?: number): Promise<IRawIndexEvent[]>;
-  listPathways(page?: number, isDeleted?: boolean): Promise<IRawPathway[]>;
+  listPathways(page?: number, withRules?: boolean, isDeleted?: boolean): Promise<IRawPathway[]>;
   listPathwayIndexEvents(pathwayId: number): Promise<IRawPathwayIndexEvent[]>;
   listPathwayStages(pathwayId: number): Promise<IRawStage[]>;
   listRules(page?: number): Promise<IRawRule[]>;
