@@ -615,6 +615,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       description: stageData.description,
       is_adhoc: stageData.isAdhoc,
       rules: JSON.stringify(stageData.rules),
+      ...(stageData.isDeleted ? { is_deleted: true } : {}),
     };
 
     return (

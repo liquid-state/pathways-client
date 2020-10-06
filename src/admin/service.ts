@@ -84,12 +84,13 @@ class PathwaysAdminService implements IPathwaysAdminService {
   };
 
   private mapRawStage = (rawStage: IRawStage): IStage => {
-    const { rules, is_adhoc, ...rest } = rawStage;
+    const { rules, is_adhoc, is_deleted, ...rest } = rawStage;
 
     return {
       ...rest,
       isAdhoc: is_adhoc,
       rules: rules.map(rule => this.mapRawRule(rule)),
+      isDeleted: is_deleted,
     };
   };
 

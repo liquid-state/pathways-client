@@ -267,6 +267,7 @@ export interface IStage {
   description: string;
   rules: IRule[];
   isAdhoc: boolean;
+  isDeleted: boolean;
 }
 
 export interface IIndexEvent {
@@ -298,6 +299,7 @@ export interface IRawStage {
   description: string;
   rules: Array<IRawRule>;
   is_adhoc: boolean;
+  is_deleted: boolean;
 }
 
 export interface IRawPathwayIndexEvent {
