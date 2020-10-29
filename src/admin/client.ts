@@ -446,6 +446,41 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     ).json();
   };
 
+  listEntriesForJourney = async (journey: { entries: string }): Promise<any[]> => {
+    let results: any[] = [];
+    let next = journey.entries;
+    while (next) {
+      const resp = await this.fetch(journey.entries, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.jwt}`,
+        },
+      });
+      if (!resp.ok) {
+        throw 'Unable to list entries for journey';
+      }
+      const data = await resp.json();
+      next = data.next;
+      results = results.concat(data.results);
+    }
+
+    return results;
+  };
+
+  listIndexEventsForJourney = async (journey: { index_events: string }): Promise<any[]> => {
+    const resp = await this.fetch(journey.index_events, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.jwt}`,
+      },
+    });
+    if (!resp.ok) {
+      throw 'Unable to list index events for journey';
+    }
+    const data = await resp.json();
+    return data.results;
+  };
+
   listIndexEventTypes = async (page?: number): Promise<IRawIndexEvent[]> => {
     return (
       await this.getRequest(

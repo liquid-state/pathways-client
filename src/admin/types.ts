@@ -43,6 +43,8 @@ export interface IPathwaysAdminClient {
   getPathway(pathwayId: number, withRules?: boolean): Promise<IRawPathway>;
   getRule(ruleId: number): Promise<IRawRule>;
   listAppUsers(page?: number, identityId?: string): Promise<IRawAppUser[]>;
+  listEntriesForJourney(journey: { entries: string }): Promise<any[]>;
+  listIndexEventsForJourney(journey: { index_events: string }): Promise<any[]>;
   listIndexEventTypes(page?: number): Promise<IRawIndexEvent[]>;
   listPathways(page?: number, withRules?: boolean, isDeleted?: boolean): Promise<IRawPathway[]>;
   listPathwayIndexEvents(pathwayId: number): Promise<IRawPathwayIndexEvent[]>;
