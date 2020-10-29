@@ -321,11 +321,29 @@ class PathwaysClient implements IPathwaysClient {
   ): Promise<IJourneyEntriesResponse> => {
     if ('entries' in journey) {
       // need to parse to be IJourney (camelcase) not IJourneyRaw
-      const entryResponse: Response = await fetch(journey.entries);
-      return parseEntriesResponse(await entryResponse.json());
+      const resp = await this.fetch(journey.entries, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.jwt}`,
+        },
+      });
+      if (!resp.ok) {
+        throw PathwaysAPIError('Unable to get pathways user details', resp);
+      }
+      const entryResponse: Response = await resp.json();
+      return parseEntriesResponse(entryResponse);
     } else {
-      const entryResponse: Response = await fetch(journey.next!);
-      return parseEntriesResponse(await entryResponse.json());
+      const resp = await this.fetch(journey.next!, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.jwt}`,
+        },
+      });
+      if (!resp.ok) {
+        throw PathwaysAPIError('Unable to get pathways user details', resp);
+      }
+      const entryResponse: Response = await resp.json();
+      return parseEntriesResponse(entryResponse);
     }
   };
 
@@ -335,7 +353,15 @@ class PathwaysClient implements IPathwaysClient {
     const finalUrl = baseUrl
       .replace('{{appToken}}', appToken)
       .replace('{{pathwayId}}', pathwayId.toString());
-    const resp = await this.fetch(finalUrl);
+    const resp = await this.fetch(finalUrl, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.jwt}`,
+      },
+    });
+    if (!resp.ok) {
+      throw PathwaysAPIError('Unable to get original pathway', resp);
+    }
     return parseOriginalPathway(await resp.json());
   };
 
