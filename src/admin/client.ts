@@ -450,7 +450,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     let results: any[] = [];
     let next = journey.entries;
     while (next) {
-      const resp = await this.fetch(journey.entries, {
+      const resp = await this.fetch(next, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${this.jwt}`,
