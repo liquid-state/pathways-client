@@ -148,6 +148,7 @@ export interface IPathway {
   };
   currentStageSlug: string;
   disabledRuleIds: number[];
+  isActive: boolean;
   lastProcessingTime: string;
   nextProcessingTime: string;
 }
@@ -175,6 +176,7 @@ export interface IPathwayRaw {
   };
   current_stage_slug: string;
   disabled_rule_ids: number[];
+  is_active: boolean;
   last_processing_time: string;
   next_processing_time: string;
 }

@@ -67,6 +67,7 @@ const parsePathway = (pathway: IPathwayRaw): IPathway => ({
   },
   currentStageSlug: pathway.current_stage_slug,
   disabledRuleIds: pathway.disabled_rule_ids,
+  isActive: pathway.is_active,
   lastProcessingTime: pathway.last_processing_time,
   nextProcessingTime: pathway.next_processing_time,
 });
