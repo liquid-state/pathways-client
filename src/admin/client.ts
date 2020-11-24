@@ -307,12 +307,14 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     description: string,
     isActive: boolean,
     metadata: object,
+    ownerId?: string,
   ): Promise<IRawPathway> => {
     const postData = {
       name,
       description,
       is_active: isActive,
       metadata: JSON.stringify(metadata),
+      owner_id: ownerId || undefined,
     };
 
     return (await this.postRequest('createPathway', postData, 'Unable to create Pathway')).json();
@@ -367,6 +369,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       when_detail: JSON.stringify(ruleData.whenDetail),
       what_detail: JSON.stringify(ruleData.whatDetail),
       ...(ruleData.metadata ? { metadata: JSON.stringify(ruleData.metadata) } : {}),
+      owner_id: ruleData.ownerId,
     };
     return (await this.postRequest('createRule', postData, 'Unable to create Rule')).json();
   };
@@ -397,9 +400,14 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     });
   };
 
-  duplicatePathway = async (pathwayId: number, updatedMetadata?: object): Promise<Response> => {
+  duplicatePathway = async (
+    pathwayId: number,
+    updatedMetadata?: object,
+    ownerId?: string,
+  ): Promise<Response> => {
     const postData = {
-      ...(updatedMetadata ? { updatedMetadata } : {}),
+      ...(updatedMetadata ? { updated_metadata: JSON.stringify(updatedMetadata) } : {}),
+      owner_id: ownerId || undefined,
     };
     return await this.postRequest(
       'duplicatePathway',
@@ -495,12 +503,18 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     page?: number,
     withRules = true,
     isDeleted?: boolean,
+    ownerId?: string,
   ): Promise<IRawPathway[]> => {
     return (
       await this.getRequest(
         'listPathways',
         'Unable to get list of Pathways from Pathways service',
-        this.buildQueryStringParameters({ page, is_deleted: isDeleted, with_rules: withRules }),
+        this.buildQueryStringParameters({
+          page,
+          is_deleted: isDeleted,
+          with_rules: withRules,
+          owner_id: ownerId,
+        }),
       )
     ).json();
   };
@@ -527,12 +541,12 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     ).json();
   };
 
-  listRules = async (page?: number): Promise<IRawRule[]> => {
+  listRules = async (page?: number, ownerId?: string): Promise<IRawRule[]> => {
     return (
       await this.getRequest(
         'listRules',
         'Unable to get list of Rules from Pathways service',
-        this.buildQueryStringParameters({ page }),
+        this.buildQueryStringParameters({ page, owner_id: ownerId }),
       )
     ).json();
   };

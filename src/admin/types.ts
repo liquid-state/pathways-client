@@ -27,6 +27,7 @@ export interface IPathwaysAdminClient {
     description: string,
     isActive: boolean,
     metadata: object,
+    ownerId?: string,
   ): Promise<IRawPathway>;
   createPathwayIndexEvent(
     pathwayId: number,
@@ -39,17 +40,26 @@ export interface IPathwaysAdminClient {
   deleteRule(ruleId: number): Promise<boolean>;
   deletePathwayIndexEvent(pathwayId: number, indexEventId: number): Promise<boolean>;
   deletePathwayStage(pathwayId: number, stageId: number): Promise<boolean>;
-  duplicatePathway(pathwayId: number, updatedMetadata?: object): Promise<Response>;
+  duplicatePathway(
+    pathwayId: number,
+    updatedMetadata?: object,
+    ownerId?: string,
+  ): Promise<Response>;
   getPathway(pathwayId: number, withRules?: boolean): Promise<IRawPathway>;
   getRule(ruleId: number): Promise<IRawRule>;
   listAppUsers(page?: number, identityId?: string): Promise<IRawAppUser[]>;
   listEntriesForJourney(journey: { entries: string }): Promise<any[]>;
   listIndexEventsForJourney(journey: { index_events: string }): Promise<any[]>;
   listIndexEventTypes(page?: number): Promise<IRawIndexEvent[]>;
-  listPathways(page?: number, withRules?: boolean, isDeleted?: boolean): Promise<IRawPathway[]>;
+  listPathways(
+    page?: number,
+    withRules?: boolean,
+    isDeleted?: boolean,
+    ownerId?: string,
+  ): Promise<IRawPathway[]>;
   listPathwayIndexEvents(pathwayId: number): Promise<IRawPathwayIndexEvent[]>;
   listPathwayStages(pathwayId: number): Promise<IRawStage[]>;
-  listRules(page?: number): Promise<IRawRule[]>;
+  listRules(page?: number, ownerId?: string): Promise<IRawRule[]>;
   patchAppUserPathway(
     appUserId: string,
     appUserPathwayId: number,
@@ -240,6 +250,7 @@ export interface IRuleData {
   whenDetail: { [key: string]: any };
   who: WhoType;
   whoDetail: { [key: string]: any };
+  ownerId?: string;
 }
 
 export interface IRule {
