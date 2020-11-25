@@ -32,6 +32,8 @@ const pathMap: { [key: string]: string } = {
   createPathwayIndexEvent: 'pathways/{{pathwayId}}/index-events/',
   createPathwayStage: 'pathways/{{pathwayId}}/stages/',
   createRule: 'rules/',
+  deleteAppUserJourneyIndexEvent:
+    'appusers/{{appUserId}}/journeys/{{journeyId}}/index-events/{{indexEventId}}/',
   deleteIndexEventType: 'index-event-types/{{indexEventId}}/',
   deletePathway: 'pathways/{{pathwayId}}/',
   deletePathwayIndexEvent: 'pathways/{{pathwayId}}/index-events/{{indexEventId}}/',
@@ -374,6 +376,18 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     return (await this.postRequest('createRule', postData, 'Unable to create Rule')).json();
   };
 
+  deleteAppUserJourneyIndexEvent = (
+    appUserId: string,
+    journeyId: string,
+    indexEventId: string,
+  ): Promise<boolean> => {
+    return this.deleteRequest(
+      'deleteAppUserJourneyIndexEvent',
+      'Unable to delete App User Journey Index Event',
+      { appUserId, journeyId, indexEventId },
+    );
+  };
+
   deleteIndexEventType = (indexEventId: number): Promise<boolean> => {
     return this.deleteRequest('deleteIndexEventType', 'Unable to delete Index Event Type', {
       indexEventId: `${indexEventId}`,
@@ -407,7 +421,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
   ): Promise<Response> => {
     const postData = {
       ...(updatedMetadata ? { updated_metadata: JSON.stringify(updatedMetadata) } : {}),
-      owner_id: ownerId || undefined,
+      updated_owner_id: ownerId || undefined,
     };
     return await this.postRequest(
       'duplicatePathway',

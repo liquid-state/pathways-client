@@ -36,6 +36,11 @@ export interface IPathwaysAdminClient {
   ): Promise<IRawPathwayIndexEvent>;
   createPathwayStage(pathwayId: number, stageData: IStage): Promise<IRawStage>;
   createRule(ruleData: IRuleData): Promise<IRawRule>;
+  deleteAppUserJourneyIndexEvent(
+    appUserId: string,
+    journeyId: string,
+    indexEventId: string,
+  ): Promise<boolean>;
   deleteIndexEventType(indexEventId: number): Promise<boolean>;
   deleteRule(ruleId: number): Promise<boolean>;
   deletePathwayIndexEvent(pathwayId: number, indexEventId: number): Promise<boolean>;
