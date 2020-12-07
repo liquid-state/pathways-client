@@ -181,6 +181,7 @@ const parseOriginalPathway = (pathway: any): IOriginalPathway => ({
     name: stage.name,
     slug: stage.slug,
     description: stage.description,
+    isAdhoc: stage.is_adhoc,
   })),
 });
 
