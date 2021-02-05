@@ -254,9 +254,11 @@ export interface IOriginalPathway {
   url: string;
   name: string;
   description: string;
+  isDeleted: boolean;
   stages: {
     name: string;
     slug: string;
     description: string;
+    isDeleted: boolean;
   }[];
 }

@@ -177,13 +177,17 @@ const parseOriginalPathway = (pathway: any): IOriginalPathway => ({
   url: pathway.url,
   name: pathway.name,
   description: pathway.description,
+  isDeleted: pathway.is_deleted,
   stages: pathway.stages.map((stage: any) => ({
     name: stage.name,
     slug: stage.slug,
     description: stage.description,
     isAdhoc: stage.is_adhoc,
+    isDeleted: stage.is_deleted,
   })),
 });
+
+const i = 0;
 
 const PathwaysError = (message: string) => `Pathways Error: ${message}`;
 
