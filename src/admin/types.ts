@@ -70,6 +70,8 @@ export interface IPathwaysAdminClient {
     appUserPathwayId: number,
     currentStageSlug?: string,
     disabledRuleIds?: [number],
+    isActive?: boolean,
+    ownerId?: string,
   ): Promise<IRawAppUserPathway>;
   processAppUserPathway(appUserId: string, appUserPathwayId: number): Promise<Response>;
   patchIndexEventType(
@@ -138,6 +140,8 @@ export interface IPathwaysAdminService {
     appUserPathwayId: number,
     currentStageSlug?: string,
     disabledRuleIds?: [number],
+    isActive?: boolean,
+    ownerId?: string,
   ): Promise<IAppUserPathway>;
   processAppUserPathway(appUserId: string, appUserPathwayId: number): Promise<Response>;
   patchIndexEventType(indexEvent: IIndexEvent): Promise<IIndexEvent>;
@@ -183,6 +187,7 @@ export interface IRawAppUserPathway {
   original_pathway: number;
   current_stage_slug: string;
   disabled_rule_ids: number[];
+  owner_id: string;
 }
 
 export interface IAppUserPathway {
@@ -191,6 +196,7 @@ export interface IAppUserPathway {
   originalPathway: number;
   currentStageSlug: string;
   disabledRuleIds: number[];
+  ownerId?: string;
 }
 
 export interface IRawAppUserJourney {
@@ -222,6 +228,7 @@ export interface IAppUserPathwayData {
   originalPathway: number;
   currentStageSlug: string;
   disabledRuleIds: number[];
+  ownerId?: string;
 }
 
 export interface IPathway {
