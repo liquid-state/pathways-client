@@ -276,6 +276,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       original_pathway_id: appUserPathwayData.originalPathway,
       current_stage_slug: appUserPathwayData.currentStageSlug,
       disabled_rule_ids: ruleIds,
+      owner_id: appUserPathwayData.ownerId,
     };
 
     return (
@@ -571,11 +572,13 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     currentStageSlug?: string,
     disabledRuleIds?: [number],
     isActive?: boolean,
+    ownerId?: string,
   ): Promise<IRawAppUserPathway> => {
     const patchData = {
       ...(currentStageSlug ? { current_stage_slug: currentStageSlug } : {}),
       ...(disabledRuleIds ? { disabled_rule_ids: disabledRuleIds } : {}),
       ...(isActive === undefined ? {} : { is_active: isActive }),
+      ...(ownerId ? { owner_id: ownerId } : {}),
     };
 
     return (

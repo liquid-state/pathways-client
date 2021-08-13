@@ -38,6 +38,7 @@ class PathwaysAdminService implements IPathwaysAdminService {
       original_pathway,
       current_stage_slug,
       disabled_rule_ids,
+      owner_id,
       ...rest
     } = rawAppUserPathway;
 
@@ -47,6 +48,7 @@ class PathwaysAdminService implements IPathwaysAdminService {
       originalPathway: original_pathway,
       currentStageSlug: current_stage_slug,
       disabledRuleIds: disabled_rule_ids,
+      ownerId: owner_id,
     };
   };
 
@@ -295,12 +297,16 @@ class PathwaysAdminService implements IPathwaysAdminService {
     appUserPathwayId: number,
     currentStageSlug?: string,
     disabledRuleIds?: [number],
+    isActive?: boolean,
+    ownerId?: string,
   ): Promise<IAppUserPathway> => {
     const rawAppUserPathway = await this.client.patchAppUserPathway(
       appUserId,
       appUserPathwayId,
       currentStageSlug,
       disabledRuleIds,
+      isActive,
+      ownerId,
     );
 
     return this.mapRawAppUserPathway(rawAppUserPathway);
