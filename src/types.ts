@@ -144,6 +144,9 @@ export interface IPathway {
       stages: {
         [key: string]: IPathwayStageContent[];
       };
+      index_events: {
+        [key: string]: IPathwayStageContent[];
+      };
     };
   };
   currentStageSlug: string;
@@ -170,6 +173,9 @@ export interface IPathwayRaw {
     is_deleted: boolean;
     content_list: {
       stages: {
+        [key: string]: IPathwayStageContentRaw[];
+      };
+      index_events: {
         [key: string]: IPathwayStageContentRaw[];
       };
     };
