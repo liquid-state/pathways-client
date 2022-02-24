@@ -39,6 +39,7 @@ class PathwaysAdminService implements IPathwaysAdminService {
       current_stage_slug,
       disabled_rule_ids,
       owner_id,
+      external_id,
       ...rest
     } = rawAppUserPathway;
 
@@ -48,7 +49,7 @@ class PathwaysAdminService implements IPathwaysAdminService {
       originalPathway: original_pathway,
       currentStageSlug: current_stage_slug,
       disabledRuleIds: disabled_rule_ids,
-      ownerId: owner_id,
+      externalId: external_id,
     };
   };
 

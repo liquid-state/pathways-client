@@ -277,6 +277,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       current_stage_slug: appUserPathwayData.currentStageSlug,
       disabled_rule_ids: ruleIds,
       owner_id: appUserPathwayData.ownerId,
+      external_id: appUserPathwayData.externalId,
     };
 
     return (
@@ -311,13 +312,14 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     isActive: boolean,
     metadata: object,
     ownerId?: string,
+    externalId?: string,
   ): Promise<IRawPathway> => {
     const postData = {
       name,
       description,
       is_active: isActive,
       metadata: JSON.stringify(metadata),
-      owner_id: ownerId || undefined,
+      external_id: externalId || undefined,
     };
 
     return (await this.postRequest('createPathway', postData, 'Unable to create Pathway')).json();
@@ -573,12 +575,14 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     disabledRuleIds?: [number],
     isActive?: boolean,
     ownerId?: string,
+    externalId?: string,
   ): Promise<IRawAppUserPathway> => {
     const patchData = {
       ...(currentStageSlug ? { current_stage_slug: currentStageSlug } : {}),
       ...(disabledRuleIds ? { disabled_rule_ids: disabledRuleIds } : {}),
       ...(isActive === undefined ? {} : { is_active: isActive }),
       ...(ownerId ? { owner_id: ownerId } : {}),
+      ...(externalId ? { external_id: externalId } : {}),
     };
 
     return (

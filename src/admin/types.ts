@@ -188,6 +188,7 @@ export interface IRawAppUserPathway {
   current_stage_slug: string;
   disabled_rule_ids: number[];
   owner_id: string;
+  external_id?: string;
 }
 
 export interface IAppUserPathway {
@@ -197,6 +198,7 @@ export interface IAppUserPathway {
   currentStageSlug: string;
   disabledRuleIds: number[];
   ownerId?: string;
+  externalId?: string;
 }
 
 export interface IRawAppUserJourney {
@@ -229,6 +231,7 @@ export interface IAppUserPathwayData {
   currentStageSlug: string;
   disabledRuleIds: number[];
   ownerId?: string;
+  externalId?: string;
 }
 
 export interface IPathway {
