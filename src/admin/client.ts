@@ -319,6 +319,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       description,
       is_active: isActive,
       metadata: JSON.stringify(metadata),
+      owner_id: ownerId,
       external_id: externalId || undefined,
     };
 
