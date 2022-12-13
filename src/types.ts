@@ -23,21 +23,21 @@ export interface IJourneyEntryStageTransition {
   previousStageSlug: string;
 }
 
-export interface IJourneyEntry {
+interface IJourneyEntryBase {
   id: number;
   type: string;
   eventDatetime: string;
   createdOn: string;
 }
 
-export interface IJourneyEntryRaw {
+interface IJourneyEntryRawBase {
   id: number;
   type: string;
   event_datetime: string;
   created_on: string;
 }
 
-export interface IJourneyEntryStageTransition extends IJourneyEntry {
+export interface IJourneyEntryStageTransition extends IJourneyEntryBase {
   type: 'stage_transition';
   pathwayId: number;
   newStageName: string;
@@ -46,7 +46,7 @@ export interface IJourneyEntryStageTransition extends IJourneyEntry {
   previousStageSlug: string;
 }
 
-export interface IJourneyEntryStageTransitionRaw extends IJourneyEntryRaw {
+export interface IJourneyEntryStageTransitionRaw extends IJourneyEntryRawBase {
   type: 'stage_transition';
   data: {
     pathway_id: number;
@@ -57,7 +57,7 @@ export interface IJourneyEntryStageTransitionRaw extends IJourneyEntryRaw {
   };
 }
 
-export interface IJourneyEntryRuleExecution extends IJourneyEntry {
+export interface IJourneyEntryRuleExecution extends IJourneyEntryBase {
   type: 'rule_execution';
   data: {
     ruleId: number;
@@ -74,7 +74,7 @@ export interface IJourneyEntryRuleExecution extends IJourneyEntry {
   };
 }
 
-export interface IJourneyEntryRuleExecutionRaw extends IJourneyEntryRaw {
+export interface IJourneyEntryRuleExecutionRaw extends IJourneyEntryRawBase {
   type: 'rule_execution';
   data: {
     rule_id: number;
@@ -91,38 +91,62 @@ export interface IJourneyEntryRuleExecutionRaw extends IJourneyEntryRaw {
   };
 }
 
-export interface IJourneyEntryAdhocMessageRaw extends IJourneyEntryRaw {
+export interface IJourneyEntryAdhocMessageRaw extends IJourneyEntryRawBase {
   type: 'adhoc_message';
   [key: string]: any;
 }
 
-export interface IJourneyEntryAdhocMessage extends IJourneyEntry {
+export interface IJourneyEntryAdhocMessage extends IJourneyEntryBase {
   type: 'adhoc_message';
   [key: string]: any;
 }
 
-export interface IJourneyEntryFormSubmittedRaw extends IJourneyEntryRaw {
+export interface IJourneyEntryFormSubmittedRaw extends IJourneyEntryRawBase {
   type: 'form_submitted';
   [key: string]: any;
 }
 
-export interface IJourneyEntryFormSubmitted extends IJourneyEntry {
+export interface IJourneyEntryFormSubmitted extends IJourneyEntryBase {
   type: 'form_submitted';
   [key: string]: any;
 }
+
+export interface IJourneyEntryOtherRaw extends IJourneyEntryRawBase {
+  type: 'other';
+  data: { [key: string]: any };
+}
+
+export interface IJourneyEntryOther extends IJourneyEntryBase {
+  type: 'other';
+  data: { [key: string]: any };
+}
+
+export type IJourneyEntryRaw =
+  | IJourneyEntryStageTransitionRaw
+  | IJourneyEntryRuleExecutionRaw
+  | IJourneyEntryAdhocMessageRaw
+  | IJourneyEntryFormSubmittedRaw
+  | IJourneyEntryOtherRaw;
+
+export type IJourneyEntry =
+  | IJourneyEntryStageTransition
+  | IJourneyEntryRuleExecution
+  | IJourneyEntryAdhocMessage
+  | IJourneyEntryFormSubmitted
+  | IJourneyEntryOther;
 
 export interface IJourneyEntriesResponse {
   count: number;
   next: string | null;
   previous: string | null;
-  results: Array<IJourneyEntryStageTransition | IJourneyEntryRuleExecution>;
+  results: IJourneyEntry[];
 }
 
 export interface IJourneyEntriesResponseRaw {
   count: number;
   next: string | null;
   previous: string | null;
-  results: Array<IJourneyEntryStageTransitionRaw | IJourneyEntryRuleExecutionRaw>;
+  results: IJourneyEntryRaw[];
 }
 
 export type IPathwayStageContent = {

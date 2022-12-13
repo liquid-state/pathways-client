@@ -9,18 +9,12 @@ import {
   IJourneyIndexEventRaw,
   IUpdatedJourneyIndexEvent,
   IUpdatedJourneyIndexEventRaw,
-  IJourneyEntryStageTransition,
-  IJourneyEntryRuleExecution,
-  IJourneyEntryStageTransitionRaw,
-  IJourneyEntryRuleExecutionRaw,
   IJourneyEntriesResponse,
   IPathway,
   IPathwayRaw,
   IOriginalPathway,
-  IJourneyEntryAdhocMessageRaw,
-  IJourneyEntryFormSubmitted,
-  IJourneyEntryFormSubmittedRaw,
-  IJourneyEntryAdhocMessage,
+  IJourneyEntryRaw,
+  IJourneyEntry,
 } from './types';
 
 interface IPathwaysClient {
@@ -90,17 +84,7 @@ const parseUpdatedIndexEvent = (
   value: event.value,
 });
 
-const parseJourneyEntry = (
-  entry:
-    | IJourneyEntryStageTransitionRaw
-    | IJourneyEntryRuleExecutionRaw
-    | IJourneyEntryAdhocMessageRaw
-    | IJourneyEntryFormSubmittedRaw,
-):
-  | IJourneyEntryStageTransition
-  | IJourneyEntryRuleExecution
-  | IJourneyEntryAdhocMessage
-  | IJourneyEntryFormSubmitted => {
+const parseJourneyEntry = (entry: IJourneyEntryRaw): IJourneyEntry => {
   switch (entry.type) {
     case 'stage_transition':
       return {
@@ -143,8 +127,14 @@ const parseJourneyEntry = (
         ...entry,
       };
     default: {
-      console.log('unknown entry type found - not parsed', entry);
-      return entry;
+      console.debug('Other entry type, parsed top level properties only.');
+      return {
+        id: entry.id,
+        type: entry.type,
+        eventDatetime: entry.event_datetime,
+        createdOn: entry.created_on,
+        data: entry.data,
+      };
     }
   }
 };
