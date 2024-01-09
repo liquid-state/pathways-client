@@ -325,6 +325,11 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
+"@liquid-gears/schemas@^0.1.1":
+  version "0.1.1"
+  resolved "https://lg-production-030723749642.d.codeartifact.ap-southeast-2.amazonaws.com/npm/liquid-gears/@liquid-gears/schemas/-/schemas-0.1.1.tgz#9771c8d7485880c4ec731c74f894643eb6f33d25"
+  integrity sha512-Q20taBIgQLs+JQYXt+3vCcGy3/esVyZiIVDTmEZx1TFm0GZEWns8dH1D/v4cTNWEa0BLTIte6hrM+Xn7+6qFbg==
+
 "@sinonjs/commons@^1.7.0":
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.7.0.tgz#f90ffc52a2e519f018b13b6c4da03cbff36ebed6"

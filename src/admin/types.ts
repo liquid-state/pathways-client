@@ -1,3 +1,6 @@
+import { NewEngagementCheck } from '@liquid-gears/schemas/dist/types/new-engagement-check';
+import { EngagementCheck } from '@liquid-gears/schemas/dist/types/engagement-check';
+
 export type MethodType = 'DELETE' | 'GET' | 'PATCH' | 'POST';
 export type WhatType = 'FEATURE_DOCUMENT' | 'FEATURE_FORM' | 'MESSAGE';
 export type WhenType = 'DELAY' | 'INDEX_EVENT' | 'STAGE_TRANSITION' | 'FORM_SUBMITTED';
@@ -95,6 +98,10 @@ export interface IPathwaysAdminClient {
     newStageSlug: string,
   ): Promise<string>;
   triggerAdhocRule(appUserId: string, appUserPathwayId: number, ruleId: number): Promise<string>;
+  createEngagementCheck(
+    pathwayId: number,
+    checkData: NewEngagementCheck,
+  ): Promise<EngagementCheck>;
 }
 
 export interface IPathwaysAdminService {

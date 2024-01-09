@@ -15,6 +15,8 @@ import {
   IRawRule,
   IRawPathway,
 } from './types';
+import { NewEngagementCheck } from '@liquid-gears/schemas/dist/types/new-engagement-check';
+import { EngagementCheck } from '@liquid-gears/schemas/dist/types/engagement-check';
 import { PathwaysAPIError, PathwaysError } from './utils';
 
 const defaultOptions = {
@@ -60,6 +62,11 @@ const pathMap: { [key: string]: string } = {
   transitionAppUserToPathwayStage:
     'appusers/{{appUserId}}/pathways/{{appUserPathwayId}}/transition/',
   triggerAdhocRule: 'appusers/{{appUserId}}/pathways/{{appUserPathwayId}}/trigger_adhoc_rule/',
+
+  createEngagementCheck: 'pathways/{{pathwayId}}/engagement-checks/',
+  patchEngagementCheck: 'pathways/{{pathwayId}}/engagement-checks/{{checkId}}/',
+  deleteEngagementCheck: 'pathways/{{pathwayId}}/engagement-checks/{{checkId}}/',
+  listEngagementChecks: 'pathways/{{pathwayId}}/engagement-checks/',
 };
 
 class PathwaysAdminClient implements IPathwaysAdminClient {
@@ -753,6 +760,68 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
         'Unable to trigger Adhoc Rule for Pathways service',
         undefined,
         { appUserId: `${appUserId}`, appUserPathwayId: `${appUserPathwayId}` },
+      )
+    ).json();
+  };
+
+  createEngagementCheck = async (
+    pathwayId: number,
+    checkData: NewEngagementCheck,
+  ): Promise<EngagementCheck> => {
+    // remove any undefined value by encoding and re-decoding to/from JSON
+    const engagement_events = checkData.engagement_events
+      ? JSON.stringify(checkData.engagement_events)
+      : undefined;
+    const what = checkData.what ? JSON.stringify(checkData.what) : undefined;
+    let postData = { ...checkData, engagement_events, what };
+    postData = JSON.parse(JSON.stringify(postData));
+    return (
+      await this.postRequest(
+        'createEngagementCheck',
+        postData,
+        'Unable to create new Engagement Check',
+        undefined,
+        { pathwayId: `${pathwayId}` },
+      )
+    ).json();
+  };
+
+  patchEngagementCheck = async (
+    pathwayId: number,
+    checkData: EngagementCheck,
+  ): Promise<EngagementCheck> => {
+    return (
+      await this.postRequest(
+        'patchEngagementCheck',
+        checkData,
+        'Unable to create new Engagement Check',
+        undefined,
+        {
+          pathwayId: `${pathwayId}`,
+          checkId: `${checkData.id}`,
+        },
+      )
+    ).json();
+  };
+
+  deleteEngagementCheck = async (pathwayId: number, checkId: number): Promise<boolean> => {
+    return await this.deleteRequest(
+      'deleteEngagementCheck',
+      'Unable to create new Engagement Check',
+      {
+        pathwayId: `${pathwayId}`,
+        checkId: `${checkId}`,
+      },
+    );
+  };
+
+  listEngagementChecks = async (pathwayId: number): Promise<EngagementCheck[]> => {
+    return (
+      await this.getRequest(
+        'listEngagementChecks',
+        'Unable to list new Engagement Check',
+        undefined,
+        { pathwayId: `${pathwayId}` },
       )
     ).json();
   };

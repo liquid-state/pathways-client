@@ -43,5 +43,8 @@
     "roots": [
       "<rootDir>/src"
     ]
+  },
+  "dependencies": {
+    "@liquid-gears/schemas": "^0.1.1"
   }
 }
