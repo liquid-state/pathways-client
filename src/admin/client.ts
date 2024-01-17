@@ -790,10 +790,17 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     pathwayId: number,
     checkData: EngagementCheck,
   ): Promise<EngagementCheck> => {
+    // remove any undefined value by encoding and re-decoding to/from JSON
+    const engagement_events = checkData.engagement_events
+      ? JSON.stringify(checkData.engagement_events)
+      : undefined;
+    const what = checkData.what ? JSON.stringify(checkData.what) : undefined;
+    let postData = { ...checkData, engagement_events, what };
+    postData = JSON.parse(JSON.stringify(postData));
     return (
       await this.patchRequest(
         'patchEngagementCheck',
-        checkData,
+        postData,
         'Unable to create new Engagement Check',
         {
           pathwayId: `${pathwayId}`,
