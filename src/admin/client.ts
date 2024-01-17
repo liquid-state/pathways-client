@@ -791,11 +791,10 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     checkData: EngagementCheck,
   ): Promise<EngagementCheck> => {
     return (
-      await this.postRequest(
+      await this.patchRequest(
         'patchEngagementCheck',
         checkData,
         'Unable to create new Engagement Check',
-        undefined,
         {
           pathwayId: `${pathwayId}`,
           checkId: `${checkData.id}`,
