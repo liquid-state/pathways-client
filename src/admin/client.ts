@@ -583,7 +583,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       ...(disabledRuleIds ? { disabled_rule_ids: disabledRuleIds } : {}),
       ...(isActive === undefined ? {} : { is_active: isActive }),
       ...(ownerId ? { owner_id: ownerId } : {}),
-      ...(externalId ? { external_id: externalId } : {}),
+      ...(typeof externalId === 'undefined' ? {} : { external_id: externalId }),
     };
 
     return (
