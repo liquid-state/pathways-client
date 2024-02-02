@@ -829,7 +829,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       await this.getRequest(
         'listEngagementChecks',
         'Unable to list new Engagement Check',
-        { page: pageNumber },
+        { page: pageNumber || 1 },
         { pathwayId: `${pathwayId}` },
       )
     ).json();
