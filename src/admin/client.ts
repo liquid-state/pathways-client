@@ -821,12 +821,15 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     );
   };
 
-  listEngagementChecks = async (pathwayId: number): Promise<EngagementCheck[]> => {
+  listEngagementChecks = async (
+    pathwayId: number,
+    pageNumber?: number,
+  ): Promise<EngagementCheck[]> => {
     return (
       await this.getRequest(
         'listEngagementChecks',
         'Unable to list new Engagement Check',
-        undefined,
+        { page: pageNumber },
         { pathwayId: `${pathwayId}` },
       )
     ).json();
