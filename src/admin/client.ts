@@ -14,6 +14,9 @@ import {
   IRawStage,
   IRawRule,
   IRawPathway,
+  IRawPathwaySnapshot,
+  IRawSharedPathwaySnapshot,
+  IPathwaySnapshotData,
 } from './types';
 import { NewEngagementCheck } from '@liquid-gears/schemas/dist/types/new-engagement-check';
 import { EngagementCheck } from '@liquid-gears/schemas/dist/types/engagement-check';
@@ -67,6 +70,12 @@ const pathMap: { [key: string]: string } = {
   patchEngagementCheck: 'pathways/{{pathwayId}}/engagement-checks/{{checkId}}/',
   deleteEngagementCheck: 'pathways/{{pathwayId}}/engagement-checks/{{checkId}}/',
   listEngagementChecks: 'pathways/{{pathwayId}}/engagement-checks/',
+  listPathwaySnapshots: 'pathways/{{pathwayId}}/snapshots/',
+  createPathwaySnapshot: 'pathways/{{pathwayId}}/snapshots/',
+  sharePathwaySnapshot: 'pathways/{{pathwayId}}/snapshots/{{snapshotId}}/share/',
+  unsharePathwaySnapshot: 'pathways/{{pathwayId}}/snapshots/{{snapshotId}}/unshare/',
+  listSharedPathwaySnapshots: 'shared-snapshots/',
+  useSharedPathwaySnapshot: 'shared-snapshots/{{snapshotId}}/use/',
 };
 
 class PathwaysAdminClient implements IPathwaysAdminClient {
@@ -831,6 +840,89 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
         'Unable to list new Engagement Check',
         { page: pageNumber || 1 },
         { pathwayId: `${pathwayId}` },
+      )
+    ).json();
+  };
+
+  listPathwaySnapshots = async (pathwayId: number): Promise<IRawPathwaySnapshot[]> => {
+    return (
+      await this.getRequest(
+        'listPathwaySnapshots',
+        `Unable to get list of snapshots for Pathway ID ${pathwayId}`,
+        undefined,
+        { pathwayId: `${pathwayId}` },
+      )
+    ).json();
+  };
+
+  createPathwaySnapshot = async (
+    pathwayId: number,
+    snapshotData: IPathwaySnapshotData,
+  ): Promise<IRawPathwaySnapshot> => {
+    const postData = {
+      name: snapshotData.name,
+      description: snapshotData.description,
+    };
+
+    return (
+      await this.postRequest(
+        'createPathwaySnapshot',
+        postData,
+        `Unable to create snapshot for Pathway ID ${pathwayId}`,
+        undefined,
+        { pathwayId: `${pathwayId}` },
+      )
+    ).json();
+  };
+
+  sharePathwaySnapshot = async (
+    pathwayId: number,
+    snapshotId: number,
+  ): Promise<IRawPathwaySnapshot> => {
+    return (
+      await this.postRequest(
+        'sharePathwaySnapshot',
+        {},
+        `Unable to share snapshot ID ${snapshotId} for Pathway ID ${pathwayId}`,
+        undefined,
+        { pathwayId: `${pathwayId}`, snapshotId: `${snapshotId}` },
+      )
+    ).json();
+  };
+
+  unsharePathwaySnapshot = async (
+    pathwayId: number,
+    snapshotId: number,
+  ): Promise<IRawPathwaySnapshot> => {
+    return (
+      await this.postRequest(
+        'unsharePathwaySnapshot',
+        {},
+        `Unable to unshare snapshot ID ${snapshotId} for Pathway ID ${pathwayId}`,
+        undefined,
+        { pathwayId: `${pathwayId}`, snapshotId: `${snapshotId}` },
+      )
+    ).json();
+  };
+
+  listSharedPathwaySnapshots = async (): Promise<IRawSharedPathwaySnapshot[]> => {
+    return (
+      await this.getRequest('listSharedPathwaySnapshots', 'Unable to list shared snapshots')
+    ).json();
+  };
+
+  useSharedPathwaySnapshot = async (
+    snapshotId: number,
+    indexEventTypes: { [key: string]: string },
+  ): Promise<IRawSharedPathwaySnapshot> => {
+    const postData = { index_event_types: JSON.stringify(indexEventTypes) };
+    return (
+      await this.postRequest(
+        'useSharedPathwaySnapshot',
+        postData,
+        `Unable to use shared snapshot ID ${snapshotId}`,
+        undefined,
+        { snapshotId: `${snapshotId}` },
       )
     ).json();
   };

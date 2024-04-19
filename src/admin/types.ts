@@ -1,6 +1,8 @@
 import { NewEngagementCheck } from '@liquid-gears/schemas/dist/types/new-engagement-check';
 import { EngagementCheck } from '@liquid-gears/schemas/dist/types/engagement-check';
 
+// TODO: Use types library
+
 export type MethodType = 'DELETE' | 'GET' | 'PATCH' | 'POST';
 export type WhatType = 'FEATURE_DOCUMENT' | 'FEATURE_FORM' | 'MESSAGE';
 export type WhenType = 'DELAY' | 'INDEX_EVENT' | 'STAGE_TRANSITION' | 'FORM_SUBMITTED';
@@ -102,6 +104,18 @@ export interface IPathwaysAdminClient {
     pathwayId: number,
     checkData: NewEngagementCheck,
   ): Promise<EngagementCheck>;
+  listPathwaySnapshots(pathwayId: number): Promise<IRawPathwaySnapshot[]>;
+  createPathwaySnapshot(
+    pathwayId: number,
+    snapshotData: IPathwaySnapshotData,
+  ): Promise<IRawPathwaySnapshot>;
+  sharePathwaySnapshot(pathwayId: number, snapshotId: number): Promise<IRawPathwaySnapshot>;
+  unsharePathwaySnapshot(pathwayId: number, snapshotId: number): Promise<IRawPathwaySnapshot>;
+  listSharedPathwaySnapshots(): Promise<IRawSharedPathwaySnapshot[]>;
+  useSharedPathwaySnapshot(
+    snapshotId: number,
+    indexEventTypes: { [key: string]: string },
+  ): Promise<IRawSharedPathwaySnapshot>;
 }
 
 export interface IPathwaysAdminService {
@@ -167,6 +181,18 @@ export interface IPathwaysAdminService {
     newStageSlug: string,
   ): Promise<string>;
   triggerAdhocRule(appUserId: string, appUserPathwayId: number, ruleId: number): Promise<string>;
+  listPathwaySnapshots(pathwayId: number): Promise<IPathwaySnapshot[]>;
+  createPathwaySnapshot(
+    pathwayId: number,
+    snapshotData: IPathwaySnapshotData,
+  ): Promise<IPathwaySnapshot>;
+  sharePathwaySnapshot(pathwayId: number, snapshotId: number): Promise<IPathwaySnapshot>;
+  unsharePathwaySnapshot(pathwayId: number, snapshotId: number): Promise<IPathwaySnapshot>;
+  listSharedPathwaySnapshots(): Promise<ISharedPathwaySnapshot[]>;
+  useSharedPathwaySnapshot(
+    snapshotId: number,
+    indexEventTypes: { [key: string]: string },
+  ): Promise<ISharedPathwaySnapshot>;
 }
 
 export interface IRawAppUser {
@@ -372,4 +398,39 @@ export interface IRawPathway {
   is_active: boolean;
   is_deleted: boolean;
   language: string;
+}
+
+export interface IRawPathwaySnapshot extends IRawPathway {
+  is_snapshot: boolean;
+  is_shared_snapshot: boolean;
+  snapshot_number: number;
+  snapshot_name: string;
+  snapshot_description: string;
+}
+
+export interface IRawSharedPathwaySnapshot extends IRawPathwaySnapshot {
+  parent_organisation_slug: string;
+  parent_name: string;
+  parent_description: string;
+  parent_index_event_types: { [key: string]: string };
+}
+
+export interface IPathwaySnapshot extends IPathway {
+  isSnapshot: boolean;
+  isSharedSnapshot: boolean;
+  snapshotNumber: number;
+  snapshotName: string;
+  snapshotDescription: string;
+}
+
+export interface ISharedPathwaySnapshot extends IPathwaySnapshot {
+  parentOrganisationSlug: string;
+  parentName: string;
+  parentDescription: string;
+  parentIndexEventTypes: { [key: string]: string };
+}
+
+export interface IPathwaySnapshotData {
+  name: string;
+  description: string;
 }
