@@ -22,6 +22,11 @@ import {
   IRawRule,
   IRawPathway,
   IIndexEvent,
+  IRawPathwaySnapshot,
+  IRawSharedPathwaySnapshot,
+  IPathwaySnapshot,
+  ISharedPathwaySnapshot,
+  IPathwaySnapshotData,
 } from './types';
 import { PathwaysError } from './utils';
 
@@ -50,6 +55,46 @@ class PathwaysAdminService implements IPathwaysAdminService {
       currentStageSlug: current_stage_slug,
       disabledRuleIds: disabled_rule_ids,
       externalId: external_id,
+    };
+  };
+
+  private mapRawPathwaySnapshot = (rawSnapshot: IRawPathwaySnapshot): IPathwaySnapshot => {
+    const {
+      is_snapshot,
+      is_shared_snapshot,
+      snapshot_number,
+      snapshot_name,
+      snapshot_description,
+      ...rawPathway
+    } = rawSnapshot;
+
+    return {
+      ...this.mapRawPathway(rawPathway),
+      isSnapshot: is_snapshot,
+      isSharedSnapshot: is_shared_snapshot,
+      snapshotNumber: snapshot_number,
+      snapshotName: snapshot_name,
+      snapshotDescription: snapshot_description,
+    };
+  };
+
+  private mapRawSharedPathwaySnapshot = (
+    rawSnapshot: IRawSharedPathwaySnapshot,
+  ): ISharedPathwaySnapshot => {
+    const {
+      parent_organisation_slug,
+      parent_name,
+      parent_description,
+      parent_index_event_types,
+      ...rest
+    } = rawSnapshot;
+
+    return {
+      ...this.mapRawPathwaySnapshot(rest),
+      parentOrganisationSlug: parent_organisation_slug,
+      parentName: parent_name,
+      parentDescription: parent_description,
+      parentIndexEventTypes: parent_index_event_types,
     };
   };
 
@@ -383,6 +428,49 @@ class PathwaysAdminService implements IPathwaysAdminService {
     ruleId: number,
   ): Promise<string> => {
     return this.triggerAdhocRule(appUserId, appUserPathwayId, ruleId);
+  };
+
+  listPathwaySnapshots = async (pathwayId: number): Promise<IPathwaySnapshot[]> => {
+    const rawSnapshots = await this.client.listPathwaySnapshots(pathwayId);
+    return rawSnapshots.map(snapshot => this.mapRawPathwaySnapshot(snapshot));
+  };
+
+  createPathwaySnapshot = async (
+    pathwayId: number,
+    snapshotData: IPathwaySnapshotData,
+  ): Promise<IPathwaySnapshot> => {
+    const rawSnapshot = await this.client.createPathwaySnapshot(pathwayId, snapshotData);
+    return this.mapRawPathwaySnapshot(rawSnapshot);
+  };
+
+  sharePathwaySnapshot = async (
+    pathwayId: number,
+    snapshotId: number,
+  ): Promise<IPathwaySnapshot> => {
+    const rawSnapshot = await this.client.sharePathwaySnapshot(pathwayId, snapshotId);
+    return this.mapRawPathwaySnapshot(rawSnapshot);
+  };
+
+  unsharePathwaySnapshot = async (
+    pathwayId: number,
+    snapshotId: number,
+  ): Promise<IPathwaySnapshot> => {
+    const rawSnapshot = await this.client.unsharePathwaySnapshot(pathwayId, snapshotId);
+    return this.mapRawPathwaySnapshot(rawSnapshot);
+  };
+
+  listSharedPathwaySnapshots = async (): Promise<ISharedPathwaySnapshot[]> => {
+    const rawSnapshots = await this.client.listSharedPathwaySnapshots();
+    return rawSnapshots.map(snapshot => this.mapRawSharedPathwaySnapshot(snapshot));
+  };
+
+  useSharedPathwaySnapshot = async (
+    snapshotId: number,
+    indexEventTypes: { [key: string]: string },
+  ): Promise<ISharedPathwaySnapshot> => {
+    const postData = { index_event_types: JSON.stringify(indexEventTypes) };
+    const rawSnapshot = await this.client.useSharedPathwaySnapshot(snapshotId, postData);
+    return this.mapRawSharedPathwaySnapshot(rawSnapshot);
   };
 }
 
