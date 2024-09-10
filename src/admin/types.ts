@@ -116,6 +116,7 @@ export interface IPathwaysAdminClient {
     snapshotId: number,
     indexEventTypes: { [key: string]: string },
   ): Promise<IRawSharedPathwaySnapshot>;
+  actionJourneyEntry(appUserId: string, journeyId: string, entryId: string): Promise<Response>;
 }
 
 export interface IPathwaysAdminService {
@@ -193,6 +194,7 @@ export interface IPathwaysAdminService {
     snapshotId: number,
     indexEventTypes: { [key: string]: string },
   ): Promise<ISharedPathwaySnapshot>;
+  actionJourneyEntry(appUserId: string, journeyId: string, entryId: string): Promise<Response>;
 }
 
 export interface IRawAppUser {
@@ -299,6 +301,7 @@ export interface IRuleData {
   who: WhoType;
   whoDetail: { [key: string]: any };
   ownerId?: string;
+  audienceType?: string;
 }
 
 export interface IRule {
@@ -319,6 +322,7 @@ export interface IRule {
     type: WhoType;
     details: { [key: string]: any };
   };
+  audience_type: string;
 }
 
 export interface IStage {
@@ -384,6 +388,7 @@ export interface IRawRule {
   when_detail: { [key: string]: any };
   who: WhoType;
   who_detail: { [key: string]: any };
+  audience_type: string;
 }
 
 export interface IRawPathway {
