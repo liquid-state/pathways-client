@@ -76,6 +76,7 @@ const pathMap: { [key: string]: string } = {
   unsharePathwaySnapshot: 'pathways/{{pathwayId}}/snapshots/{{snapshotId}}/unshare/',
   listSharedPathwaySnapshots: 'shared-snapshots/',
   useSharedPathwaySnapshot: 'shared-snapshots/{{snapshotId}}/use/',
+  actionJourneyEntry: 'appusers/{{appUserId}}/journeys/{{journeyId}}/entries/{{entryId}}/action/',
 };
 
 class PathwaysAdminClient implements IPathwaysAdminClient {
@@ -392,6 +393,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       what_detail: JSON.stringify(ruleData.whatDetail),
       ...(ruleData.metadata ? { metadata: JSON.stringify(ruleData.metadata) } : {}),
       owner_id: ruleData.ownerId,
+      audience_type: ruleData.audienceType,
     };
     return (await this.postRequest('createRule', postData, 'Unable to create Rule')).json();
   };
@@ -733,6 +735,7 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
       when_detail: JSON.stringify(ruleData.whenDetail),
       what_detail: JSON.stringify(ruleData.whatDetail),
       ...(ruleData.metadata ? { metadata: JSON.stringify(ruleData.metadata) } : {}),
+      audience_type: ruleData.audienceType,
     };
     return (
       await this.patchRequest('patchRule', patchData, 'Unable to update Rule', {
@@ -923,6 +926,22 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
         `Unable to use shared snapshot ID ${snapshotId}`,
         undefined,
         { snapshotId: `${snapshotId}` },
+      )
+    ).json();
+  };
+
+  actionJourneyEntry = async (
+    appUserId: string,
+    journeyId: string,
+    entryId: string,
+  ): Promise<Response> => {
+    return (
+      await this.postRequest(
+        'actionJourneyEntry',
+        {},
+        `Unable to action journey entry ${journeyId}`,
+        undefined,
+        { appUserId: `${appUserId}`, journeyId: `${journeyId}`, entryId: `${entryId}` },
       )
     ).json();
   };

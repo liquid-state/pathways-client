@@ -472,6 +472,14 @@ class PathwaysAdminService implements IPathwaysAdminService {
     const rawSnapshot = await this.client.useSharedPathwaySnapshot(snapshotId, postData);
     return this.mapRawSharedPathwaySnapshot(rawSnapshot);
   };
+
+  actionJourneyEntry = async (
+    appUserId: string,
+    journeyId: string,
+    entryId: string,
+  ): Promise<Response> => {
+    return await this.client.actionJourneyEntry(appUserId, journeyId, entryId);
+  };
 }
 
 export default PathwaysAdminService;
