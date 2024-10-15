@@ -908,9 +908,13 @@ class PathwaysAdminClient implements IPathwaysAdminClient {
     ).json();
   };
 
-  listSharedPathwaySnapshots = async (): Promise<IRawSharedPathwaySnapshot[]> => {
+  listSharedPathwaySnapshots = async (page?: number): Promise<IRawSharedPathwaySnapshot[]> => {
     return (
-      await this.getRequest('listSharedPathwaySnapshots', 'Unable to list shared snapshots')
+      await this.getRequest(
+        'listSharedPathwaySnapshots',
+        'Unable to list shared snapshots',
+        this.buildQueryStringParameters({ page }),
+      )
     ).json();
   };
 

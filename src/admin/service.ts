@@ -459,8 +459,8 @@ class PathwaysAdminService implements IPathwaysAdminService {
     return this.mapRawPathwaySnapshot(rawSnapshot);
   };
 
-  listSharedPathwaySnapshots = async (): Promise<ISharedPathwaySnapshot[]> => {
-    const rawSnapshots = await this.client.listSharedPathwaySnapshots();
+  listSharedPathwaySnapshots = async (page?: number): Promise<ISharedPathwaySnapshot[]> => {
+    const rawSnapshots = await this.client.listSharedPathwaySnapshots(page);
     return rawSnapshots.map(snapshot => this.mapRawSharedPathwaySnapshot(snapshot));
   };
 
