@@ -111,7 +111,7 @@ export interface IPathwaysAdminClient {
   ): Promise<IRawPathwaySnapshot>;
   sharePathwaySnapshot(pathwayId: number, snapshotId: number): Promise<IRawPathwaySnapshot>;
   unsharePathwaySnapshot(pathwayId: number, snapshotId: number): Promise<IRawPathwaySnapshot>;
-  listSharedPathwaySnapshots(): Promise<IRawSharedPathwaySnapshot[]>;
+  listSharedPathwaySnapshots(page?: number): Promise<IRawSharedPathwaySnapshot[]>;
   useSharedPathwaySnapshot(
     snapshotId: number,
     indexEventTypes: { [key: string]: string },
@@ -189,7 +189,7 @@ export interface IPathwaysAdminService {
   ): Promise<IPathwaySnapshot>;
   sharePathwaySnapshot(pathwayId: number, snapshotId: number): Promise<IPathwaySnapshot>;
   unsharePathwaySnapshot(pathwayId: number, snapshotId: number): Promise<IPathwaySnapshot>;
-  listSharedPathwaySnapshots(): Promise<ISharedPathwaySnapshot[]>;
+  listSharedPathwaySnapshots(page?: number): Promise<ISharedPathwaySnapshot[]>;
   useSharedPathwaySnapshot(
     snapshotId: number,
     indexEventTypes: { [key: string]: string },
