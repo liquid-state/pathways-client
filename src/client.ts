@@ -32,6 +32,12 @@ interface IPathwaysClient {
     appUserPathwayId: number,
     newStageSlug: string,
   ): Promise<string>;
+  actionJourneyEntry(
+    appToken: string,
+    appUserId: string,
+    journeyId: string,
+    entryId: string,
+  ): Promise<Response>;
 }
 
 const defaultOptions = {
@@ -47,6 +53,8 @@ const pathMap: { [key: string]: string } = {
   originalPathway: 'apps/{{appToken}}/pathways/{{pathwayId}}/',
   transitionAppUserToPathwayStage:
     'apps/{{appToken}}/appusers/{{appUserId}}/pathways/{{appUserPathwayId}}/transition/',
+  actionJourneyEntry:
+    'apps/{{appToken}}/appusers/{{appUserId}}/journeys/{{journeyId}}/entries/{{entryId}}/action/',
 };
 
 const parsePathway = (pathway: IPathwayRaw): IPathway => ({
@@ -92,6 +100,7 @@ const parseJourneyEntry = (entry: IJourneyEntryRaw): IJourneyEntry => {
         type: entry.type,
         eventDatetime: entry.event_datetime,
         createdOn: entry.created_on,
+        isActioned: entry.is_actioned,
         pathwayId: entry.data.pathway_id,
         newStageName: entry.data.new_stage_name,
         newStageSlug: entry.data.new_stage_slug,
@@ -104,6 +113,7 @@ const parseJourneyEntry = (entry: IJourneyEntryRaw): IJourneyEntry => {
         type: entry.type,
         eventDatetime: entry.event_datetime,
         createdOn: entry.created_on,
+        isActioned: entry.is_actioned,
         data: {
           ruleId: entry.data.rule_id,
           ruleName: entry.data.rule_name,
@@ -118,12 +128,14 @@ const parseJourneyEntry = (entry: IJourneyEntryRaw): IJourneyEntry => {
       return {
         eventDatetime: entry.event_datetime,
         createdOn: entry.created_on,
+        isActioned: entry.is_actioned,
         ...entry,
       };
     case 'form_submitted':
       return {
         eventDatetime: entry.event_datetime,
         createdOn: entry.created_on,
+        isActioned: entry.is_actioned,
         ...entry,
       };
     default: {
@@ -133,6 +145,7 @@ const parseJourneyEntry = (entry: IJourneyEntryRaw): IJourneyEntry => {
         type: entry.type,
         eventDatetime: entry.event_datetime,
         createdOn: entry.created_on,
+        isActioned: entry.is_actioned,
         data: entry.data,
       };
     }
@@ -444,6 +457,23 @@ class PathwaysClient implements IPathwaysClient {
         { appToken, appUserId: `${appUserId}`, appUserPathwayId: `${appUserPathwayId}` },
       )
     ).text();
+  };
+
+  actionJourneyEntry = async (
+    appToken: string,
+    appUserId: string,
+    journeyId: string,
+    entryId: string,
+  ): Promise<Response> => {
+    return (
+      await this.postRequest(
+        'actionJourneyEntry',
+        {},
+        `Unable to action journey entry ${journeyId}`,
+        undefined,
+        { appToken, appUserId, journeyId, entryId },
+      )
+    ).json();
   };
 }
 
