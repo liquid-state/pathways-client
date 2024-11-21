@@ -32,12 +32,8 @@ interface IPathwaysClient {
     appUserPathwayId: number,
     newStageSlug: string,
   ): Promise<string>;
-  actionJourneyEntry(
-    appToken: string,
-    appUserId: string,
-    journeyId: string,
-    entryId: string,
-  ): Promise<Response>;
+  actionJourneyEntry(journeyId: string, entryId: string, identityId: string): Promise<Response>;
+  listAppUserJourneyEntriesFilteredByContentType(journeyId: string): Promise<any[]>;
 }
 
 const defaultOptions = {
@@ -53,8 +49,8 @@ const pathMap: { [key: string]: string } = {
   originalPathway: 'apps/{{appToken}}/pathways/{{pathwayId}}/',
   transitionAppUserToPathwayStage:
     'apps/{{appToken}}/appusers/{{appUserId}}/pathways/{{appUserPathwayId}}/transition/',
-  actionJourneyEntry:
-    'apps/{{appToken}}/appusers/{{appUserId}}/journeys/{{journeyId}}/entries/{{entryId}}/action/',
+  actionJourneyEntry: 'me/journey-entries/{{journeyId}}/{{entryId}}/action/',
+  listAppUserJourneyEntriesFilteredByContentType: 'me/journey-entries/{{journeyId}}/',
 };
 
 const parsePathway = (pathway: IPathwayRaw): IPathway => ({
@@ -460,20 +456,55 @@ class PathwaysClient implements IPathwaysClient {
   };
 
   actionJourneyEntry = async (
-    appToken: string,
-    appUserId: string,
     journeyId: string,
     entryId: string,
+    identityId: string,
   ): Promise<Response> => {
     return (
       await this.postRequest(
         'actionJourneyEntry',
         {},
         `Unable to action journey entry ${journeyId}`,
-        undefined,
-        { appToken, appUserId, journeyId, entryId },
+        { identity_id: identityId },
+        { journeyId, entryId },
       )
     ).json();
+  };
+
+  listAppUserJourneyEntriesFilteredByContentType = async (
+    journeyId: string,
+    isActioned?: string,
+    contentType?: string,
+  ): Promise<any[]> => {
+    const results = [];
+    let url: string | null = this.getUrl(
+      'listAppUserJourneyEntriesFilteredByContentType',
+      {
+        ...(isActioned !== undefined && { is_actioned: isActioned.toString() }),
+        ...(contentType !== undefined && { content_type: contentType.toString() }),
+      },
+      { journeyId },
+    );
+
+    while (url) {
+      const resp = await this.fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.jwt}`,
+        },
+      });
+
+      if (!resp.ok) {
+        throw PathwaysAPIError('Unable to get app user journey entries', resp);
+      }
+
+      const respData: any = await resp.json();
+      const parsed = parseEntriesResponse(respData);
+      results.push(...parsed.results);
+      url = respData.next;
+    }
+
+    return results;
   };
 }
 
