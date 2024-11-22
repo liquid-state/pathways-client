@@ -32,6 +32,8 @@ interface IPathwaysClient {
     appUserPathwayId: number,
     newStageSlug: string,
   ): Promise<string>;
+  actionJourneyEntry(journeyId: string, entryId: string, identityId: string): Promise<Response>;
+  listAppUserJourneyEntriesFilteredByContentType(journeyId: string): Promise<any[]>;
 }
 
 const defaultOptions = {
@@ -47,6 +49,8 @@ const pathMap: { [key: string]: string } = {
   originalPathway: 'apps/{{appToken}}/pathways/{{pathwayId}}/',
   transitionAppUserToPathwayStage:
     'apps/{{appToken}}/appusers/{{appUserId}}/pathways/{{appUserPathwayId}}/transition/',
+  actionJourneyEntry: 'me/journey-entries/{{journeyId}}/{{entryId}}/action/',
+  listAppUserJourneyEntriesFilteredByContentType: 'me/journey-entries/{{journeyId}}/',
 };
 
 const parsePathway = (pathway: IPathwayRaw): IPathway => ({
@@ -92,6 +96,7 @@ const parseJourneyEntry = (entry: IJourneyEntryRaw): IJourneyEntry => {
         type: entry.type,
         eventDatetime: entry.event_datetime,
         createdOn: entry.created_on,
+        isActioned: entry.is_actioned,
         pathwayId: entry.data.pathway_id,
         newStageName: entry.data.new_stage_name,
         newStageSlug: entry.data.new_stage_slug,
@@ -104,6 +109,7 @@ const parseJourneyEntry = (entry: IJourneyEntryRaw): IJourneyEntry => {
         type: entry.type,
         eventDatetime: entry.event_datetime,
         createdOn: entry.created_on,
+        isActioned: entry.is_actioned,
         data: {
           ruleId: entry.data.rule_id,
           ruleName: entry.data.rule_name,
@@ -118,12 +124,14 @@ const parseJourneyEntry = (entry: IJourneyEntryRaw): IJourneyEntry => {
       return {
         eventDatetime: entry.event_datetime,
         createdOn: entry.created_on,
+        isActioned: entry.is_actioned,
         ...entry,
       };
     case 'form_submitted':
       return {
         eventDatetime: entry.event_datetime,
         createdOn: entry.created_on,
+        isActioned: entry.is_actioned,
         ...entry,
       };
     default: {
@@ -133,6 +141,7 @@ const parseJourneyEntry = (entry: IJourneyEntryRaw): IJourneyEntry => {
         type: entry.type,
         eventDatetime: entry.event_datetime,
         createdOn: entry.created_on,
+        isActioned: entry.is_actioned,
         data: entry.data,
       };
     }
@@ -444,6 +453,58 @@ class PathwaysClient implements IPathwaysClient {
         { appToken, appUserId: `${appUserId}`, appUserPathwayId: `${appUserPathwayId}` },
       )
     ).text();
+  };
+
+  actionJourneyEntry = async (
+    journeyId: string,
+    entryId: string,
+    identityId: string,
+  ): Promise<Response> => {
+    return (
+      await this.postRequest(
+        'actionJourneyEntry',
+        {},
+        `Unable to action journey entry ${journeyId}`,
+        { identity_id: identityId },
+        { journeyId, entryId },
+      )
+    ).json();
+  };
+
+  listAppUserJourneyEntriesFilteredByContentType = async (
+    journeyId: string,
+    isActioned?: string,
+    contentType?: string,
+  ): Promise<any[]> => {
+    const results = [];
+    let url: string | null = this.getUrl(
+      'listAppUserJourneyEntriesFilteredByContentType',
+      {
+        ...(isActioned !== undefined && { is_actioned: isActioned.toString() }),
+        ...(contentType !== undefined && { content_type: contentType.toString() }),
+      },
+      { journeyId },
+    );
+
+    while (url) {
+      const resp = await this.fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.jwt}`,
+        },
+      });
+
+      if (!resp.ok) {
+        throw PathwaysAPIError('Unable to get app user journey entries', resp);
+      }
+
+      const respData: any = await resp.json();
+      const parsed = parseEntriesResponse(respData);
+      results.push(...parsed.results);
+      url = respData.next;
+    }
+
+    return results;
   };
 }
 
