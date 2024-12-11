@@ -110,6 +110,7 @@ const parseJourneyEntry = (entry: IJourneyEntryRaw): IJourneyEntry => {
         eventDatetime: entry.event_datetime,
         createdOn: entry.created_on,
         isActioned: entry.is_actioned,
+        actionedDate: entry.actioned_date,
         data: {
           ruleId: entry.data.rule_id,
           ruleName: entry.data.rule_name,
