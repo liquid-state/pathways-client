@@ -29,6 +29,7 @@ interface IJourneyEntryBase {
   eventDatetime: string;
   createdOn: string;
   isActioned: boolean;
+  actionedDate?: string;
 }
 
 interface IJourneyEntryRawBase {
@@ -37,6 +38,7 @@ interface IJourneyEntryRawBase {
   event_datetime: string;
   created_on: string;
   is_actioned: boolean;
+  actioned_date: string;
 }
 
 export interface IJourneyEntryStageTransition extends IJourneyEntryBase {
